@@ -1,7 +1,0 @@
-conversation_id,customer_id,session_start,duration_seconds,top_intent,turn_count,containment_status,final_sentiment
-BOT-701,CUST-1001,2026-08-05 10:14:22,145,WISMO Order Status,4,Contained,Positive
-BOT-702,CUST-1002,2026-08-05 10:28:10,320,Return Item Exception,8,Transferred to Agent,Negative
-BOT-703,CUST-1003,2026-08-05 11:05:44,95,Store Hours & Location,2,Contained,Positive
-BOT-704,CUST-1004,2026-08-04 14:18:30,210,Promo Code Discount Error,5,Contained,Neutral
-BOT-705,CUST-1005,2026-08-04 16:40:15,410,Damaged Goods Claim,9,Transferred to Agent,Negative
-BOT-706,CUST-1006,2026-08-03 09:12:00,60,Product Availability Inquiry,2,Abandoned,Neutral

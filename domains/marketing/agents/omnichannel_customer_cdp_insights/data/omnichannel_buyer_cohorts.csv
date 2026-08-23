@@ -1,5 +1,0 @@
-buyer_type,active_customers_count,annual_spend_per_customer_usd,annual_orders_count,spending_multiplier,gross_margin_contribution_usd
-Omnichannel (Store + Digital),320000,1850.0,14.2,3.25,248960000.0
-Store-Only Shoppers,650000,570.0,5.1,1.0,155610000.0
-Digital-Only Shoppers,480000,620.0,4.8,1.09,125024000.0
-Mobile App Power Users,180000,2240.0,18.5,3.93,169344000.0

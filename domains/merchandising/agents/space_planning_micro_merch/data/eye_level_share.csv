@@ -1,9 +1,0 @@
-sku_id,product_name,brand_name,shelf_tier,eye_level_facing_pct,weekly_sales_usd,category
-SKU-COF-01,Artisan Dark Roast 12oz,Summit Peak,Tier 3 (Eye Level),75.0,4850.0,Packaged Coffee
-SKU-COF-02,Organic Columbian Blend 12oz,Green Valley,Tier 3 (Eye Level),60.0,3920.0,Packaged Coffee
-SKU-COF-03,Breakfast Blend Pods 24ct,National Best,Tier 2 (Touch Level),25.0,2400.0,Packaged Coffee
-SKU-SNK-01,Kettle Cooked Sea Salt 8oz,CrispCraft,Tier 3 (Eye Level),80.0,5600.0,Snacks & Beverages
-SKU-SNK-02,Organic Tortilla Chips 10oz,SunHarvest,Tier 3 (Eye Level),65.0,4300.0,Snacks & Beverages
-SKU-SNK-03,BBQ Pretzel Twists 12oz,SnackZone,Tier 1 (Bottom Shelf),10.0,1150.0,Snacks & Beverages
-SKU-DAI-01,Cold Brew Latte 14oz,DairyFresh,Tier 3 (Eye Level),85.0,6200.0,Ready-to-Drink Dairy
-SKU-DAI-02,Oat Milk Mocha 14oz,PlantCraft,Tier 2 (Touch Level),40.0,3100.0,Ready-to-Drink Dairy

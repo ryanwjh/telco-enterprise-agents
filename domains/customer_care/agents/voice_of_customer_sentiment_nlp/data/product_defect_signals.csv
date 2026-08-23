@@ -1,5 +1,0 @@
-signal_id,sku,product_name,defect_category,complaint_frequency_7d,sentiment_drop_pct,alert_severity,first_detected_date
-SIG-401,SKU-001,Waterproof Shell Jacket,Zipper Seizing / Breakage,38,28.5,High,2026-07-28
-SIG-402,SKU-003,Wireless Noise-Cancelling Earbuds,Battery Rapid Drain,45,34.0,Critical,2026-07-25
-SIG-403,SKU-004,Organic Cotton Casual Tee,Collar Stitching Unravel,22,16.2,Medium,2026-08-01
-SIG-404,SKU-006,Stainless Steel Thermal Mug,Lid Seal Leakage,18,14.0,Low,2026-08-02

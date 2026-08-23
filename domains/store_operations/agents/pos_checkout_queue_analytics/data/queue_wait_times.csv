@@ -1,5 +1,0 @@
-queue_log_id,store_id,pos_lane_type,hour_interval,avg_queue_wait_seconds,max_queue_depth_customers,abandonment_rate_pct
-Q-LOG-101,STORE-101,Cashier Assisted,12:00-13:00,145.0,6,1.2
-Q-LOG-102,STORE-101,Self-Checkout (SCO),12:00-13:00,48.0,4,0.4
-Q-LOG-103,STORE-102,Cashier Assisted,17:00-18:00,265.0,10,3.8
-Q-LOG-104,STORE-102,Self-Checkout (SCO),17:00-18:00,82.0,5,0.9

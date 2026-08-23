@@ -1,5 +1,0 @@
-campaign_id,channel,campaign_name,send_timestamp,recipients_count,open_rate_pct,click_through_rate_pct,conversion_rate_pct
-CRM-EM-2026-01,Email,Weekly Circular VIP Early Access,2026-07-15 09:00:00,450000,34.2,4.8,1.85
-CRM-EM-2026-02,Email,Personalized Beauty Replenishment,2026-07-16 10:30:00,85000,48.5,9.2,4.4
-CRM-SMS-2026-01,SMS,Flash 2-Hour Flash Sale Alert,2026-07-18 17:00:00,120000,98.0,18.5,5.2
-CRM-SMS-2026-02,SMS,Order Shipped with Cross-Sell Link,2026-07-20 14:00:00,65000,99.1,24.0,6.8

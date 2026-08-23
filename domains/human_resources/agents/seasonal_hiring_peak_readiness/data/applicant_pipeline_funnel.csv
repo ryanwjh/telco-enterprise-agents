@@ -1,5 +1,0 @@
-stage_id,season_name,district_id,applications_received,screened_candidates,interviews_completed,offers_extended,offers_accepted,conversion_rate_pct
-STG-01,Holiday Peak 2026,DIST-01,380,245,160,110,95,25.0
-STG-02,Holiday Peak 2026,DIST-02,310,195,130,88,75,24.2
-STG-PREV1,Holiday Peak 2025,DIST-01,420,260,175,120,102,24.3
-STG-PREV2,Holiday Peak 2025,DIST-02,340,210,140,95,82,24.1

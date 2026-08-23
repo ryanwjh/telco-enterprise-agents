@@ -1,5 +1,0 @@
-supplier_id,supplier_name,country,risk_score,risk_tier,dual_source_qualified,lead_time_days
-SUP-101,Midwest Packaging Corp,USA,32.0,Low Risk,True,10
-SUP-102,Pacific Rim Electronics Ltd,Taiwan,68.5,Medium-High Risk,False,35
-SUP-103,Shenzhen Precision Molding,China,78.0,High Risk,False,45
-SUP-104,Bavaria Specialty Glass GmbH,Germany,41.0,Low-Medium Risk,True,25

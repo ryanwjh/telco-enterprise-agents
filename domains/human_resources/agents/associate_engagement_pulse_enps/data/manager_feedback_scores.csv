@@ -1,7 +1,0 @@
-manager_id,store_id,team_headcount,feedback_quarter,leadership_effectiveness_score,recognition_score,communication_score
-MGR-301,STORE-101,135,2026-Q2,88.5,85.0,89.0
-MGR-302,STORE-101,45,2026-Q2,84.0,82.0,86.0
-MGR-304,STORE-102,190,2026-Q2,92.0,90.5,93.0
-MGR-305,STORE-102,62,2026-Q2,89.0,87.0,90.0
-MGR-307,STORE-103,118,2026-Q2,74.5,70.0,76.0
-MGR-309,STORE-104,148,2026-Q2,86.0,83.5,88.0

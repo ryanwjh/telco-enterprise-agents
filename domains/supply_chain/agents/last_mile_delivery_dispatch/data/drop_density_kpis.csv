@@ -1,5 +1,0 @@
-zone_name,stops_per_hour,miles_between_stops,drop_density_rating
-Chicago Downtown Metro,6.67,0.8,High Density
-Chicago North Suburbs,5.38,1.48,Medium Density
-Chicago South Metro,5.57,1.15,Medium Density
-Milwaukee Metro,4.8,1.5,Low Density

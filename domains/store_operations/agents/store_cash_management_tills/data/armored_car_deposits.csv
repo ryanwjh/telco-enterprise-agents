@@ -1,5 +1,0 @@
-deposit_id,store_id,carrier_name,pickup_timestamp,manifest_bag_count,declared_deposit_usd,bank_verified_usd,deposit_cleared
-DEP-ARM-001,STORE-101,Brink's Commercial,2026-07-20 14:30:00,3,28500.0,28500.0,True
-DEP-ARM-002,STORE-102,Loomis Armored,2026-07-20 15:15:00,2,18200.0,18200.0,True
-DEP-ARM-003,STORE-103,GardaWorld Cash,2026-07-20 13:45:00,4,34800.0,34800.0,True
-DEP-ARM-004,STORE-104,Brink's Commercial,2026-07-20 16:00:00,2,19400.0,19400.0,True

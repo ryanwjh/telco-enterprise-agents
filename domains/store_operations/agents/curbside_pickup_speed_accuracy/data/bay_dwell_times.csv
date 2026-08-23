@@ -1,5 +1,0 @@
-bay_id,store_id,bay_number,date,total_cars_served,avg_wait_time_minutes,under_3_min_sla_pct,bay_utilization_pct
-BAY-STAT-01,STORE-101,Bay 01,2026-07-20,38,2.45,94.7,72.0
-BAY-STAT-02,STORE-101,Bay 02,2026-07-20,42,2.6,92.8,78.5
-BAY-STAT-03,STORE-102,Bay 01,2026-07-20,28,5.1,64.2,85.0
-BAY-STAT-04,STORE-102,Bay 02,2026-07-20,31,4.85,67.7,88.2

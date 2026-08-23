@@ -1,5 +1,0 @@
-container_id,port_name,terminal,dwell_days,free_time_days,dwell_status
-CNTR-88910,Port of Los Angeles,Pier 400,3.2,4.0,Within Free Time
-CNTR-88911,Port of Long Beach,Pier T,6.5,4.0,Excess Dwell
-CNTR-88912,Port of Seattle,Terminal 18,2.8,4.0,Within Free Time
-CNTR-88913,Port of Los Angeles,TraPac,5.8,4.0,Excess Dwell

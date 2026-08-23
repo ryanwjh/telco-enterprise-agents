@@ -1,9 +1,0 @@
-claim_id,store_id,district_id,claim_open_date,claim_status,medical_costs_incurred_usd,indemnity_costs_incurred_usd,total_incurred_claim_usd,claim_cause
-WC-9001,STORE-101,DIST-01,2026-01-20,Closed,3200.0,1100.0,4300.0,Lower Back Strain - Heavy Lifting
-WC-9002,STORE-101,DIST-01,2026-03-05,Closed,850.0,0.0,850.0,Finger Laceration - Box Cutter
-WC-9003,STORE-102,DIST-01,2026-02-14,Closed,2400.0,650.0,3050.0,Knee Contusion - Wet Floor Slip
-WC-9004,STORE-102,DIST-01,2026-04-22,Open,4100.0,1800.0,5900.0,Rotator Cuff Strain - Stocking
-WC-9005,STORE-103,DIST-02,2026-03-18,Open,5200.0,2400.0,7600.0,Lumbar Strain - Bulk Water Case
-WC-9006,STORE-103,DIST-02,2026-05-11,Open,8400.0,4200.0,12600.0,Toe Fracture - Flatbed Collision
-WC-9007,STORE-104,DIST-02,2026-04-05,Closed,620.0,0.0,620.0,Forearm Laceration - Glass
-WC-9008,STORE-104,DIST-02,2026-05-29,Open,2800.0,950.0,3750.0,Hip Contusion - Produce Floor Slip

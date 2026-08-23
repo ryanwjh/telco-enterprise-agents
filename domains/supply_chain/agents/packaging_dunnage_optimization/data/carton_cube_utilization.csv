@@ -1,5 +1,0 @@
-box_type_id,dimensions_in,total_orders_shipped,avg_cube_utilization_pct,target_cube_utilization_pct,void_fill_volume_pct
-BOX-S1,8x6x4,42000,84.5,85.0,15.5
-BOX-M2,14x10x6,68000,78.2,82.0,21.8
-BOX-L3,20x14x10,31000,64.0,75.0,36.0
-BOX-AUTO-OD,Dynamic Right-Sized,55000,92.5,90.0,7.5

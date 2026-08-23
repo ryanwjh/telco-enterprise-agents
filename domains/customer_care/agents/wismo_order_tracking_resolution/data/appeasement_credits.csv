@@ -1,6 +1,0 @@
-appeasement_id,order_id,customer_id,issue_date,credit_amount,appeasement_type,delay_duration_days,approved_by_agent_id
-APP-501,ORD-98402,CUST-1002,2026-08-05,15.0,Gift Card,3,AGT-101
-APP-502,ORD-98380,CUST-1008,2026-08-04,10.0,Shipping Refund,2,AGT-104
-APP-503,ORD-98345,CUST-1012,2026-08-03,25.0,Courtesy Promo Code,4,AGT-103
-APP-504,ORD-98310,CUST-1015,2026-08-02,20.0,Gift Card,3,AGT-102
-APP-505,ORD-98290,CUST-1020,2026-08-01,12.5,Shipping Refund,2,AGT-105

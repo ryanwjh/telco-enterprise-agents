@@ -1,5 +1,0 @@
-store_id,campaign_id,baseline_daily_traffic,exposed_daily_traffic,incremental_visitors_count,foot_traffic_lift_pct,cost_per_store_visit_usd
-STORE-101,GEO-LOC-01,3200,3680,480,15.0,5.1
-STORE-102,GEO-LOC-02,4100,4879,779,19.0,5.39
-STORE-103,GEO-LOC-03,3500,3920,420,12.0,4.29
-STORE-104,GEO-LOC-04,3800,4370,570,15.0,3.93

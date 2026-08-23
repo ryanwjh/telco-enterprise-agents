@@ -1,5 +1,0 @@
-audit_id,store_id,audit_date,auditor_name,auditor_title,overall_score_pct,customer_ready_score,safety_compliance_score,inventory_accuracy_score
-AUD-MGR-2026-01,STORE-101,2026-07-15,Marcus Vance,District Director,94.2,96.0,95.0,91.5
-AUD-MGR-2026-02,STORE-102,2026-07-16,Marcus Vance,District Director,78.5,76.0,82.0,77.5
-AUD-MGR-2026-03,STORE-103,2026-07-18,Elena Gomez,Regional VP,96.8,98.5,97.0,95.0
-AUD-MGR-2026-04,STORE-104,2026-07-20,Elena Gomez,Regional VP,81.0,80.0,84.5,78.5

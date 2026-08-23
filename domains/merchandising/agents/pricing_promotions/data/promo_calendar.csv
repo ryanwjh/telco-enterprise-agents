@@ -1,5 +1,0 @@
-promo_id,promo_name,start_date,end_date,discount_pct,scope_type,scope_value,promo_type
-PROMO-001,Rainy Season Kickoff,2026-06-01,2026-06-14,25.0,product,SKU-002,percent_off
-PROMO-002,Boot Clearance Push,2026-06-15,2026-06-28,15.0,product,SKU-005,percent_off
-PROMO-003,Footwear Category Days,2026-07-01,2026-07-10,20.0,category,Women's Footwear,percent_off
-PROMO-004,Outerwear Flash Sale,2026-07-11,2026-07-17,20.0,product,SKU-001,percent_off

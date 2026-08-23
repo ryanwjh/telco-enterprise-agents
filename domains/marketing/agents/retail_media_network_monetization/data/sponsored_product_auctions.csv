@@ -1,5 +1,0 @@
-auction_id,search_query,placement_slot,winning_advertiser_id,clearing_cpc_usd,bid_floor_cpc_usd,auction_timestamp,quality_score
-AUC-SP-101,organic oat milk 64oz,Search Result Top 01,ADV-RMN-003,1.85,1.2,2026-07-20 11:15:00,9.4
-AUC-SP-102,laundry detergent pods,Search Result Top 01,ADV-RMN-001,3.4,2.5,2026-07-20 11:20:00,9.8
-AUC-SP-103,usb c fast charger 65w,PDP Cross-Sell Carousel,ADV-RMN-004,2.15,1.5,2026-07-20 11:25:00,8.9
-AUC-SP-104,hydrating face cleanser,Category Page Banner,ADV-RMN-002,2.9,2.0,2026-07-20 11:30:00,9.2

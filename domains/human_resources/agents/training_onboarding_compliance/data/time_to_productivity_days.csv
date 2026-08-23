@@ -1,9 +1,0 @@
-role_title,department,store_id,cohort_month,avg_days_to_standard_speed,benchmark_target_days,scan_rate_at_30_days_pct
-Cashier,Cashier & Front End,STORE-101,2026-04,18,21,98.5
-Cashier,Cashier & Front End,STORE-102,2026-04,17,21,101.2
-Cashier,Cashier & Front End,STORE-103,2026-04,20,21,95.0
-Overnight Stocker,Stocking & Logistics,STORE-101,2026-04,24,28,96.0
-Overnight Stocker,Stocking & Logistics,STORE-102,2026-04,22,28,102.5
-Deli Specialist,Grocery & Perishables,STORE-101,2026-04,26,30,94.8
-Deli Specialist,Grocery & Perishables,STORE-102,2026-04,25,30,98.0
-BOPIS Order Picker,Store Operations,STORE-101,2026-04,14,14,104.0

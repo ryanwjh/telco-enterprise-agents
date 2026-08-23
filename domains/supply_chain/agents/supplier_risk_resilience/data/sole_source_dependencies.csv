@@ -1,4 +1,0 @@
-component_id,component_name,supplier_name,annual_spend_usd,criticality,time_to_qualify_backup_months
-COMP-BOT-01,Proprietary Glass Beverage Bottle,Shenzhen Precision Molding,2400000.0,Critical,6
-COMP-CHIP-02,Smart Sensor IoT Microchip,Pacific Rim Electronics Ltd,1850000.0,Critical,8
-COMP-BOX-03,Corrugated Master Box 18x12,Midwest Packaging Corp,950000.0,Standard,1

@@ -1,9 +1,0 @@
-survey_id,agent_id,queue_id,date,csat_score,nps_rating,resolution_satisfied,customer_verbatim
-SRV-1001,AGT-101,Q-101,2026-08-05,5,10,True,Sarah resolved my order address issue immediately. Excellent help!
-SRV-1002,AGT-102,Q-101,2026-08-05,3,6,False,Took too long to find my promo discount.
-SRV-1003,AGT-103,Q-102,2026-08-04,5,9,True,Billing discrepancy corrected without hassle.
-SRV-1004,AGT-104,Q-103,2026-08-04,4,8,True,Tracked down my delayed courier package.
-SRV-1005,AGT-105,Q-104,2026-08-03,5,10,True,Super fast chat assistance on size exchange.
-SRV-1006,AGT-106,Q-104,2026-08-03,4,8,True,Helpful chat guidance.
-SRV-1007,AGT-107,Q-105,2026-08-02,5,10,True,Loyalty points credited promptly.
-SRV-1008,AGT-108,Q-106,2026-08-01,5,10,True,Outstanding VIP white glove concierge service!

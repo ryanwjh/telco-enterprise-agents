@@ -1,1695 +1,423 @@
-# Registry of agents sharing the `retail_ent_agents` BigQuery dataset, and the tables each owns.
-#
-# Every domain agent loads its data/*.csv seed files into this one shared dataset (see
-# docs/superpowers/specs/2026-07-25-retail-merchandising-adk-agents-design.md section 6a, updated
-# 2026-07-26 -- local-only doc, gitignored, not on a fresh clone) via
-# `_shared/scripts/load_agent_data.py`. Collisions are prevented structurally, not
-# just by convention: every domain gets a fixed 4-letter `domain_id` here (under `domains:`) and
-# every agent gets a fixed 4-letter `agent_id` (under `agents:`), and the loader prefixes every
-# table it loads for that agent with `<domain_id>_<agent_id>_`. This means agents can freely use
-# the same logical table name (e.g. two agents both calling something "sales_by_sku" in their own
-# data/ folder) without colliding — they land as distinct physical tables (e.g.
-# `merc_aspl_sales_by_sku` vs `<other_domain>_<other_agent>_sales_by_sku`).
-#
-# `tables:` below lists each agent's LOGICAL table names (== its data/*.csv file stems, unprefixed).
-# The actual BigQuery table name is always `<domain_id>_<agent_id>_<logical_name>` — that's what
-# belongs in a data_insights.yaml's authorized-table list, not the bare logical name.
-#
-# Each agent's data is self-contained, even when its real-world content overlaps with another
-# agent's (e.g. `pricing_promotions`'s `product_catalog` holds the same 6 products as
-# `assortment_planning`'s `product_catalog`) — this is deliberate duplication, not an oversight.
-# An agent's `tables:` entries are always its own independent physical tables, loaded from its own
-# `data/*.csv` files; never design an agent to read another agent's tables cross-agent (each
-# agent's service account only ever gets table-level IAM on its own tables).
-#
-# Both `domain_id` and `agent_id` must be exactly 4 lowercase letters and, once assigned, must
-# never change — table names loaded under the old id would silently orphan. `agent_id` is also
-# required to be unique across the *entire* registry, not just within its own domain.
-#
-# Total Catalog: 100 Agents across 9 Strategic Retail Domains (21 Deployed + 79 Roadmap).
-
-dataset: retail_ent_agents
-
+dataset: telco_ent_agents
 domains:
-  merchandising:
-    domain_id: merc
-    display_name: Merchandising
-  supply_chain:
-    domain_id: spch
-    display_name: Supply Chain
-  store_operations:
-    domain_id: stop
-    display_name: Store Operations
-  e_commerce:
-    domain_id: ecom
-    display_name: E-Commerce
-  marketing:
-    domain_id: mktg
-    display_name: Marketing
-  finance:
-    domain_id: finc
-    display_name: Finance
-  customer_care:
-    domain_id: care
-    display_name: Customer Care
-  human_resources:
-    domain_id: hrwm
-    display_name: Human Resources
-  sustainability_compliance:
-    domain_id: esgc
-    display_name: Sustainability & Compliance
-
+  consumer_marketing:
+    domain_id: cmkt
+    display_name: Consumer Marketing
+  onboarding_provisioning:
+    domain_id: onpr
+    display_name: Onboarding & Provisioning
+  subscriber_crm:
+    domain_id: scrm
+    display_name: Subscriber CRM
+  netops_aiops:
+    domain_id: ntop
+    display_name: NetOps & AIOps
+  daas_camara:
+    domain_id: daas
+    display_name: DaaS & CAMARA
 agents:
-  # =========================================================================
-  # 1. MERCHANDISING DOMAIN (`domain_id: merc`) - 14 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Assortment Planning
-  # Answers SKU rationalization, category space productivity ($/sq.ft),
-  # and assortment breadth vs. depth optimization questions.
-  # -------------------------------------------------------------------------
-  assortment_planning:
-    display_name: "Merchandising: Assortment Planning"
-    domain: merchandising
-    agent_id: aspl
-    location: us-central1
-    tables:
-      - product_catalog             # -> merc_aspl_product_catalog
-      - sales_by_sku                 # -> merc_aspl_sales_by_sku
-      - planogram_space_allocation   # -> merc_aspl_planogram_space_allocation
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Pricing & Promotions
-  # Analyzes promotional price elasticity, baseline sales lift vs. cannibalization,
-  # and promotional calendar scheduling efficiency.
-  # -------------------------------------------------------------------------
-  pricing_promotions:
-    display_name: "Merchandising: Pricing & Promotions"
-    domain: merchandising
-    agent_id: prpm
-    location: us-central1
-    tables:
-      - product_catalog             # -> merc_prpm_product_catalog
-      - price_history               # -> merc_prpm_price_history
-      - promo_calendar              # -> merc_prpm_promo_calendar
-      - promo_sales_lift            # -> merc_prpm_promo_sales_lift
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Sell-Through & Inventory Health
-  # Tracks weekly store sell-through %, stock turns, aging inventory tiers
-  # (0-30, 31-60, 61-90, 90+ days), and markdown trigger thresholds.
-  # -------------------------------------------------------------------------
-  sell_through_inventory_health:
-    display_name: "Merchandising: Sell-Through & Inventory Health"
-    domain: merchandising
-    agent_id: stih
-    location: us-central1
-    tables:
-      - product_catalog             # -> merc_stih_product_catalog
-      - store_inventory             # -> merc_stih_store_inventory
-      - sell_through_weekly         # -> merc_stih_sell_through_weekly
-      - aging_inventory_summary     # -> merc_stih_aging_inventory_summary
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Vendor Negotiation & Rebates
-  # Evaluates volume rebate tier progress, co-op marketing fund claims,
-  # payment terms realization, and vendor net cost settlements.
-  # -------------------------------------------------------------------------
-  vendor_negotiation_rebates:
-    display_name: "Merchandising: Vendor Negotiation & Rebates"
-    domain: merchandising
-    agent_id: vreb
-    location: us-central1
-    tables:
-      - vendors                     # -> merc_vreb_vendors
-      - rebate_agreements           # -> merc_vreb_rebate_agreements
-      - coop_marketing_funds        # -> merc_vreb_coop_marketing_funds
-      - vendor_settlements          # -> merc_vreb_vendor_settlements
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Markdown & Clearance Optimization
-  # Optimizes end-of-season markdown discount ladders, terminal velocity,
-  # salvage recovery %, and clearance budget burn.
-  # -------------------------------------------------------------------------
-  markdown_clearance_optimization:
-    display_name: "Merchandising: Markdown & Clearance Optimization"
-    domain: merchandising
-    agent_id: mcle
-    location: us-central1
-    tables:
-      - clearance_catalog           # -> merc_mcle_clearance_catalog
-      - markdown_ladders            # -> merc_mcle_markdown_ladders
-      - clearance_velocity_weekly   # -> merc_mcle_clearance_velocity_weekly
-      - salvage_liquidation_recovery # -> merc_mcle_salvage_liquidation_recovery
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Price Matching & Competitor Intel
-  # Monitors competitor price index parity (CPI), store POS price match claims $,
-  # and competitor stockout holding margin opportunities.
-  # -------------------------------------------------------------------------
-  price_matching_competitor_intel:
-    display_name: "Merchandising: Price Matching & Competitor Intel"
-    domain: merchandising
-    agent_id: pmci
-    location: us-central1
-    tables:
-      - competitor_price_feed       # -> merc_pmci_competitor_price_feed
-      - price_index_summary         # -> merc_pmci_price_index_summary
-      - pos_price_match_claims      # -> merc_pmci_pos_price_match_claims
-      - competitor_stock_alerts     # -> merc_pmci_competitor_stock_alerts
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Space Planning & Micro-Merchandising
-  # Optimizes linear shelf space elasticity, fixture capacity utilization,
-  # and eye-level shelf share to maximize dollar sales per square/linear foot.
-  # -------------------------------------------------------------------------
-  space_planning_micro_merch:
-    display_name: "Merchandising: Space Planning & Micro-Merchandising"
-    domain: merchandising
-    agent_id: spmm
-    location: us-central1
-    tables:
-      - shelf_fixtures              # -> merc_spmm_shelf_fixtures
-      - planogram_compliance        # -> merc_spmm_planogram_compliance
-      - space_elasticity            # -> merc_spmm_space_elasticity
-      - eye_level_share             # -> merc_spmm_eye_level_share
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Private Brand Development
-  # Tracks own-brand volume penetration %, gross margin premium over national brands,
-  # and co-packer cost of goods (COGS) variance.
-  # -------------------------------------------------------------------------
-  private_brand_development:
-    display_name: "Merchandising: Private Brand Development"
-    domain: merchandising
-    agent_id: pbde
-    location: us-central1
-    tables:
-      - private_label_products      # -> merc_pbde_private_label_products
-      - brand_penetration           # -> merc_pbde_brand_penetration
-      - co_packer_costs             # -> merc_pbde_co_packer_costs
-      - margin_premium              # -> merc_pbde_margin_premium
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Seasonal Transition Planning
-  # Manages pre-season inventory build curves, hard exit target dates,
-  # and weather-correlated seasonal demand shifts.
-  # -------------------------------------------------------------------------
-  seasonal_transition_planning:
-    display_name: "Merchandising: Seasonal Transition Planning"
-    domain: merchandising
-    agent_id: strp
-    location: us-central1
-    tables:
-      - seasonal_catalog            # -> merc_strp_seasonal_catalog
-      - seasonal_curves             # -> merc_strp_seasonal_curves
-      - launch_exit_milestones      # -> merc_strp_launch_exit_milestones
-      - weather_impact_index        # -> merc_strp_weather_impact_index
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Category Growth Strategy
-  # Analyzes category role matrix (Destination, Routine, Seasonal, Convenience),
-  # market share vs. TAM, and cross-category basket affinity.
-  # -------------------------------------------------------------------------
-  category_growth_strategy:
-    display_name: "Merchandising: Category Growth Strategy"
-    domain: merchandising
-    agent_id: cgst
-    location: us-central1
-    tables:
-      - category_market_share       # -> merc_cgst_category_market_share
-      - basket_penetration          # -> merc_cgst_basket_penetration
-      - category_role_matrix        # -> merc_cgst_category_role_matrix
-      - whitespace_gaps             # -> merc_cgst_whitespace_gaps
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Size & Case Pack Optimization
-  # Optimizes size curve demand by geography, broken size run stockout rates,
-  # and master case-pack replenishment fit.
-  # -------------------------------------------------------------------------
-  size_pack_optimization:
-    display_name: "Merchandising: Size & Case Pack Optimization"
-    domain: merchandising
-    agent_id: spop
-    location: us-central1
-    tables:
-      - size_curves                 # -> merc_spop_size_curves
-      - broken_size_runs            # -> merc_spop_broken_size_runs
-      - regional_size_skew          # -> merc_spop_regional_size_skew
-      - case_pack_multiples         # -> merc_spop_case_pack_multiples
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Item Lifecycle & SKU Rationalization
-  # Evaluates new product launch ramp (weeks 1-12), SKU cannibalization index,
-  # and slow-mover delisting phaseout triggers.
-  # -------------------------------------------------------------------------
-  item_lifecycle_rationalization:
-    display_name: "Merchandising: Item Lifecycle & SKU Rationalization"
-    domain: merchandising
-    agent_id: ilrt
-    location: us-central1
-    tables:
-      - new_item_scorecard          # -> merc_ilrt_new_item_scorecard
-      - sku_cannibalization         # -> merc_ilrt_sku_cannibalization
-      - delisting_triggers          # -> merc_ilrt_delisting_triggers
-      - phaseout_inventory          # -> merc_ilrt_phaseout_inventory
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Trade Spend & Allowance Effectiveness
-  # Evaluates vendor trade promotion ROI, scan allowance audit reconciliation,
-  # and net incremental volume lift %.
-  # -------------------------------------------------------------------------
-  trade_spend_effectiveness:
-    display_name: "Merchandising: Trade Spend & Allowance Effectiveness"
-    domain: merchandising
-    agent_id: tsef
-    location: us-central1
-    tables:
-      - trade_promotions            # -> merc_tsef_trade_promotions
-      - scan_allowances             # -> merc_tsef_scan_allowances
-      - incremental_volume_lift     # -> merc_tsef_incremental_volume_lift
-      - cannibalization_costs       # -> merc_tsef_cannibalization_costs
-
-  # -------------------------------------------------------------------------
-  # Merchandising: Localized Assortment Clustering
-  # Manages demographic store clustering, local artisan vendor participation,
-  # and micro-climate product customization rules.
-  # -------------------------------------------------------------------------
-  localized_curation_clustering:
-    display_name: "Merchandising: Localized Assortment Clustering"
-    domain: merchandising
-    agent_id: lccu
-    location: us-central1
-    tables:
-      - store_demographics          # -> merc_lccu_store_demographics
-      - local_vendor_catalog        # -> merc_lccu_local_vendor_catalog
-      - regional_taste_affinity     # -> merc_lccu_regional_taste_affinity
-      - cluster_assortment_rules    # -> merc_lccu_cluster_assortment_rules
-
-  # =========================================================================
-  # 2. SUPPLY CHAIN & LOGISTICS DOMAIN (`domain_id: spch`) - 14 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Vendor Performance
-  # Measures supplier On-Time In-Full (OTIF) delivery compliance, lead time
-  # variance, and vendor scorecard ratings.
-  # -------------------------------------------------------------------------
-  vendor_performance:
-    display_name: "Supply Chain: Vendor Performance"
-    domain: supply_chain
-    agent_id: vepe
-    location: us-central1
-    tables:
-      - product_catalog             # -> spch_vepe_product_catalog
-      - vendors                     # -> spch_vepe_vendors
-      - purchase_orders             # -> spch_vepe_purchase_orders
-      - vendor_scorecard            # -> spch_vepe_vendor_scorecard
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Inventory Planning
-  # Manages network weeks of supply (WOS), reorder points, AI demand
-  # forecasting (`AI.FORECAST`), and buffer stock allocation.
-  # -------------------------------------------------------------------------
-  inventory_planning:
-    display_name: "Supply Chain: Inventory Planning"
-    domain: supply_chain
-    agent_id: inpl
-    location: us-central1
-    tables:
-      - product_catalog             # -> spch_inpl_product_catalog
-      - inventory_position          # -> spch_inpl_inventory_position
-      - demand_history              # -> spch_inpl_demand_history
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Logistics Operations
-  # Tracks carrier on-time transit %, freight cost per mile, transit lane
-  # congestion, and shipment delay exception root causes.
-  # -------------------------------------------------------------------------
-  logistics_operations:
-    display_name: "Supply Chain: Logistics Operations"
-    domain: supply_chain
-    agent_id: logi
-    location: us-central1
-    tables:
-      - product_catalog             # -> spch_logi_product_catalog
-      - carriers                    # -> spch_logi_carriers
-      - transit_lanes               # -> spch_logi_transit_lanes
-      - shipments                   # -> spch_logi_shipments
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Warehouse & DC Operations
-  # Monitors DC dock turn times, dock-to-stock processing hours, pick/pack
-  # accuracy %, and storage pallet capacity utilization.
-  # -------------------------------------------------------------------------
-  warehouse_dc_operations:
-    display_name: "Supply Chain: Warehouse & DC Operations"
-    domain: supply_chain
-    agent_id: wdco
-    location: us-central1
-    tables:
-      - facilities                  # -> spch_wdco_facilities
-      - daily_throughput            # -> spch_wdco_daily_throughput
-      - pick_pack_performance       # -> spch_wdco_pick_pack_performance
-      - capacity_utilization        # -> spch_wdco_capacity_utilization
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Returns & Reverse Logistics
-  # Analyzes store and channel return rates, return reason Pareto breakdowns,
-  # restock cycle time, and liquidation salvage disposition.
-  # -------------------------------------------------------------------------
-  returns_reverse_logistics:
-    display_name: "Supply Chain: Returns & Reverse Logistics"
-    domain: supply_chain
-    agent_id: rlog
-    location: us-central1
-    tables:
-      - stores_channels             # -> spch_rlog_stores_channels
-      - returns_monthly             # -> spch_rlog_returns_monthly
-      - return_reasons              # -> spch_rlog_return_reasons
-      - reverse_disposition         # -> spch_rlog_reverse_disposition
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Inbound Freight Optimization
-  # Optimizes inbound freight cost per hundredweight (CWT), container dwell time,
-  # and port demurrage/detention penalty avoidance.
-  # -------------------------------------------------------------------------
-  inbound_freight_optimization:
-    display_name: "Supply Chain: Inbound Freight Optimization"
-    domain: supply_chain
-    agent_id: ifop
-    location: us-central1
-    tables:
-      - freight_shipments           # -> spch_ifop_freight_shipments
-      - lane_rate_benchmarks        # -> spch_ifop_lane_rate_benchmarks
-      - container_dwell_times       # -> spch_ifop_container_dwell_times
-      - demurrage_fees              # -> spch_ifop_demurrage_fees
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Last-Mile Delivery & Dispatch
-  # Tracks cost per delivery drop $, customer delivery window SLA adherence %,
-  # route stop density, and driver fleet efficiency.
-  # -------------------------------------------------------------------------
-  last_mile_delivery_dispatch:
-    display_name: "Supply Chain: Last-Mile Delivery & Dispatch"
-    domain: supply_chain
-    agent_id: lmdd
-    location: us-central1
-    tables:
-      - delivery_routes             # -> spch_lmdd_delivery_routes
-      - drop_density_kpis           # -> spch_lmdd_drop_density_kpis
-      - delivery_window_slas        # -> spch_lmdd_delivery_window_slas
-      - fleet_telematics            # -> spch_lmdd_fleet_telematics
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Cold Chain Temperature Compliance
-  # Monitors refrigeration temperature excursions, perishable product remaining
-  # shelf life (RSL), and in-transit spoilage losses.
-  # -------------------------------------------------------------------------
-  cold_chain_temperature_compliance:
-    display_name: "Supply Chain: Cold Chain Temperature Compliance"
-    domain: supply_chain
-    agent_id: cctc
-    location: us-central1
-    tables:
-      - temperature_logs            # -> spch_cctc_temperature_logs
-      - perishable_products         # -> spch_cctc_perishable_products
-      - cold_storage_sensors        # -> spch_cctc_cold_storage_sensors
-      - spoilage_excursions         # -> spch_cctc_spoilage_excursions
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Multi-Echelon Safety Stock
-  # Optimizes safety stock inventory positioning across DC, regional hub, and
-  # store nodes while balancing service level targets vs. holding cost.
-  # -------------------------------------------------------------------------
-  multi_echelon_safety_stock:
-    display_name: "Supply Chain: Multi-Echelon Safety Stock"
-    domain: supply_chain
-    agent_id: mess
-    location: us-central1
-    tables:
-      - network_nodes               # -> spch_mess_network_nodes
-      - safety_stock_policies       # -> spch_mess_safety_stock_policies
-      - lead_time_volatility        # -> spch_mess_lead_time_volatility
-      - holding_cost_tradeoffs      # -> spch_mess_holding_cost_tradeoffs
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Supplier Risk & Resilience
-  # Evaluates single-source vendor vulnerabilities, geopolitical supply disruption
-  # risk, and supplier financial solvency ratings.
-  # -------------------------------------------------------------------------
-  supplier_risk_resilience:
-    display_name: "Supply Chain: Supplier Risk & Resilience"
-    domain: supply_chain
-    agent_id: srre
-    location: us-central1
-    tables:
-      - supplier_risk_profiles      # -> spch_srre_supplier_risk_profiles
-      - sole_source_dependencies    # -> spch_srre_sole_source_dependencies
-      - disruption_scenarios        # -> spch_srre_disruption_scenarios
-      - financial_health_scores     # -> spch_srre_financial_health_scores
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Cross-Dock & Flow-Through Velocity
-  # Tracks trailer-to-trailer cross-dock dwell time (<4 hrs), pre-distribution
-  # allocation accuracy, and yard staging bottlenecks.
-  # -------------------------------------------------------------------------
-  cross_dock_flow_through:
-    display_name: "Supply Chain: Cross-Dock & Flow-Through Velocity"
-    domain: supply_chain
-    agent_id: cdft
-    location: us-central1
-    tables:
-      - cross_dock_manifests        # -> spch_cdft_cross_dock_manifests
-      - flow_through_staging        # -> spch_cdft_flow_through_staging
-      - yard_dwell_hours            # -> spch_cdft_yard_dwell_hours
-      - direct_store_allocations    # -> spch_cdft_direct_store_allocations
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Customs & Import Tariff Compliance
-  # Manages Harmonized Tariff Schedule (HTS) accuracy, duty drawback recovery $,
-  # and customs import clearance hold times.
-  # -------------------------------------------------------------------------
-  customs_import_tariff_compliance:
-    display_name: "Supply Chain: Customs & Import Tariff Compliance"
-    domain: supply_chain
-    agent_id: citc
-    location: us-central1
-    tables:
-      - import_entries              # -> spch_citc_import_entries
-      - hts_tariff_schedules        # -> spch_citc_hts_tariff_schedules
-      - customs_duties_paid         # -> spch_citc_customs_duties_paid
-      - port_clearance_holds        # -> spch_citc_port_clearance_holds
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: DC Automation & Robotics KPIs
-  # Measures automated storage & retrieval (ASRS) uptime, robotic pick units
-  # per hour (UPH), and preventative maintenance MTBF.
-  # -------------------------------------------------------------------------
-  dc_automation_robotics_kpis:
-    display_name: "Supply Chain: DC Automation & Robotics KPIs"
-    domain: supply_chain
-    agent_id: dark
-    location: us-central1
-    tables:
-      - automation_systems          # -> spch_dark_automation_systems
-      - asrs_uptime_logs            # -> spch_dark_asrs_uptime_logs
-      - robotic_pick_rates          # -> spch_dark_robotic_pick_rates
-      - maintenance_workorders      # -> spch_dark_maintenance_workorders
-
-  # -------------------------------------------------------------------------
-  # Supply Chain: Packaging & Dunnage Optimization
-  # Optimizes carton cube utilization %, dimensional weight (DIM) surcharge
-  # penalties, and void-fill packaging material costs.
-  # -------------------------------------------------------------------------
-  packaging_dunnage_optimization:
-    display_name: "Supply Chain: Packaging & Dunnage Optimization"
-    domain: supply_chain
-    agent_id: pdop
-    location: us-central1
-    tables:
-      - carton_cube_utilization     # -> spch_pdop_carton_cube_utilization
-      - dim_weight_penalties        # -> spch_pdop_dim_weight_penalties
-      - packaging_materials_cost    # -> spch_pdop_packaging_materials_cost
-      - damage_by_packaging         # -> spch_pdop_damage_by_packaging
-
-  # =========================================================================
-  # 3. STORE OPERATIONS DOMAIN (`domain_id: stop`) - 11 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Labor Productivity
-  # Tracks sales per labor hour (SPLH), hourly traffic-to-staff alignment %,
-  # and store department overtime budget variances.
-  # -------------------------------------------------------------------------
-  labor_productivity:
-    display_name: "Store Operations: Labor Productivity"
-    domain: store_operations
-    agent_id: lprd
-    location: us-central1
-    tables:
-      - stores                      # -> stop_lprd_stores
-      - hourly_foot_traffic         # -> stop_lprd_hourly_foot_traffic
-      - hourly_staff_shifts         # -> stop_lprd_hourly_staff_shifts
-      - store_labor_budgets         # -> stop_lprd_store_labor_budgets
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Store Fulfillment & Execution
-  # Evaluates Buy-Online-Pick-Up-In-Store (BOPIS) fulfillment turnaround SLA,
-  # pick/pack accuracy %, and fulfillment cancellation rates.
-  # -------------------------------------------------------------------------
-  store_fulfillment_execution:
-    display_name: "Store Operations: Store Fulfillment & Execution"
-    domain: store_operations
-    agent_id: sfex
-    location: us-central1
-    tables:
-      - stores                      # -> stop_sfex_stores
-      - bopis_orders                # -> stop_sfex_bopis_orders
-      - fulfillment_slas            # -> stop_sfex_fulfillment_slas
-      - pick_accuracy_summary       # -> stop_sfex_pick_accuracy_summary
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Loss Prevention & Shrinkage
-  # Analyzes monthly store shrinkage %, shrink by cause (theft, damage, admin),
-  # high-risk category losses, and register audit exceptions.
-  # -------------------------------------------------------------------------
-  loss_prevention_shrinkage:
-    display_name: "Store Operations: Loss Prevention & Shrinkage"
-    domain: store_operations
-    agent_id: lpsh
-    location: us-central1
-    tables:
-      - stores                      # -> stop_lpsh_stores
-      - shrinkage_monthly           # -> stop_lpsh_shrinkage_monthly
-      - category_shrink             # -> stop_lpsh_category_shrink
-      - audit_exceptions            # -> stop_lpsh_audit_exceptions
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Visual Merchandising Compliance
-  # Tracks promotional signage execution %, endcap display compliance score,
-  # and planogram photo audit defect rates.
-  # -------------------------------------------------------------------------
-  visual_merchandising_compliance:
-    display_name: "Store Operations: Planogram & Visual Merchandising Compliance"
-    domain: store_operations
-    agent_id: vmco
-    location: us-central1
-    tables:
-      - display_audits              # -> stop_vmco_display_audits
-      - planogram_photo_evals       # -> stop_vmco_planogram_photo_evals
-      - signage_execution           # -> stop_vmco_signage_execution
-      - endcap_compliance           # -> stop_vmco_endcap_compliance
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Energy & Facilities Maintenance
-  # Monitors store energy intensity (kWh/sq.ft), refrigeration sensor alarms,
-  # and HVAC maintenance workorder mean time to repair (MTTR).
-  # -------------------------------------------------------------------------
-  energy_facilities_maintenance:
-    display_name: "Store Operations: Store Energy & Facilities Maintenance"
-    domain: store_operations
-    agent_id: efma
-    location: us-central1
-    tables:
-      - energy_consumption_kwh      # -> stop_efma_energy_consumption_kwh
-      - refrigeration_sensors       # -> stop_efma_refrigeration_sensors
-      - workorders_maintenance      # -> stop_efma_workorders_maintenance
-      - facility_budgets            # -> stop_efma_facility_budgets
-
-  # -------------------------------------------------------------------------
-  # Store Operations: POS & Checkout Queue Analytics
-  # Analyzes peak checkout queue wait times, self-checkout (SCO) intervention
-  # rates, and cashier scan speed (items per minute).
-  # -------------------------------------------------------------------------
-  pos_checkout_queue_analytics:
-    display_name: "Store Operations: POS & Checkout Queue Analytics"
-    domain: store_operations
-    agent_id: pcqa
-    location: us-central1
-    tables:
-      - queue_wait_times            # -> stop_pcqa_queue_wait_times
-      - self_checkout_interventions # -> stop_pcqa_self_checkout_interventions
-      - cashier_scan_speed          # -> stop_pcqa_cashier_scan_speed
-      - lane_throughput             # -> stop_pcqa_lane_throughput
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Cash Management & Till Balancing
-  # Tracks cash drawer over/short discrepancies, armored car deposit pickups,
-  # and counterfeit bill detection logs.
-  # -------------------------------------------------------------------------
-  store_cash_management_tills:
-    display_name: "Store Operations: Store Cash Management & Till Balancing"
-    domain: store_operations
-    agent_id: scmt
-    location: us-central1
-    tables:
-      - cash_drawer_reconciliation  # -> stop_scmt_cash_drawer_reconciliation
-      - over_short_events           # -> stop_scmt_over_short_events
-      - armored_car_deposits        # -> stop_scmt_armored_car_deposits
-      - till_audits                 # -> stop_scmt_till_audits
-
-  # -------------------------------------------------------------------------
-  # Store Operations: In-Store Omnichannel Returns
-  # Measures Buy-Online-Return-In-Store (BORIS) handling time, rapid same-day
-  # restock %, and store-level return fraud patterns.
-  # -------------------------------------------------------------------------
-  omnichannel_returns_in_store:
-    display_name: "Store Operations: In-Store Omnichannel Returns & BORIS"
-    domain: store_operations
-    agent_id: oris
-    location: us-central1
-    tables:
-      - boris_transactions         # -> stop_oris_boris_transactions
-      - return_fraud_flags          # -> stop_oris_return_fraud_flags
-      - restock_turnaround_hours    # -> stop_oris_restock_turnaround_hours
-      - store_salvage_bins          # -> stop_oris_store_salvage_bins
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Store Safety & Incident Management
-  # Tracks customer slip-and-fall incidents, OSHA recordables, hazard corrective
-  # action closure speed, and store liability claim dollars.
-  # -------------------------------------------------------------------------
-  store_safety_incident_management:
-    display_name: "Store Operations: Store Safety & Incident Management"
-    domain: store_operations
-    agent_id: ssim
-    location: us-central1
-    tables:
-      - safety_incidents            # -> stop_ssim_safety_incidents
-      - hazard_corrections          # -> stop_ssim_hazard_corrections
-      - osha_recordables            # -> stop_ssim_osha_recordables
-      - liability_claims            # -> stop_ssim_liability_claims
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Curbside Pickup Speed & Accuracy
-  # Measures customer arrival-to-trunk delivery time (<3 mins), order substitution
-  # acceptance %, and runner dispatch bottlenecks.
-  # -------------------------------------------------------------------------
-  curbside_pickup_speed_accuracy:
-    display_name: "Store Operations: Curbside Pickup Speed & Accuracy"
-    domain: store_operations
-    agent_id: cpsa
-    location: us-central1
-    tables:
-      - curbside_arrivals           # -> stop_cpsa_curbside_arrivals
-      - bay_dwell_times             # -> stop_cpsa_bay_dwell_times
-      - substitution_approvals      # -> stop_cpsa_substitution_approvals
-      - runner_dispatch             # -> stop_cpsa_runner_dispatch
-
-  # -------------------------------------------------------------------------
-  # Store Operations: Store Manager Operational Audits
-  # Evaluates store 360 operational audit scorecards, backroom clutter scores,
-  # price tag scan accuracy %, and health inspection readiness.
-  # -------------------------------------------------------------------------
-  store_manager_operational_audit:
-    display_name: "Store Operations: Store Manager Operational Audits"
-    domain: store_operations
-    agent_id: smoa
-    location: us-central1
-    tables:
-      - store_audit_scores          # -> stop_smoa_store_audit_scores
-      - backroom_clutter_index      # -> stop_smoa_backroom_clutter_index
-      - price_tag_accuracy          # -> stop_smoa_price_tag_accuracy
-      - health_inspections          # -> stop_smoa_health_inspections
-
-  # =========================================================================
-  # 4. E-COMMERCE & DIGITAL CHANNELS DOMAIN (`domain_id: ecom`) - 11 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: Cart & Checkout Analytics
-  # Tracks digital checkout funnel drop-offs, cart abandonment %, payment
-  # gateway declines, and promo code validation errors.
-  # -------------------------------------------------------------------------
-  cart_checkout_analytics:
-    display_name: "E-Commerce: Cart & Checkout Analytics"
-    domain: e_commerce
-    agent_id: ccan
-    location: us-central1
-    tables:
-      - digital_funnel              # -> ecom_ccan_digital_funnel
-      - cart_abandonment            # -> ecom_ccan_cart_abandonment
-      - payment_exceptions          # -> ecom_ccan_payment_exceptions
-      - promo_code_validation       # -> ecom_ccan_promo_code_validation
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: Product Discovery & Analytics
-  # Analyzes site search conversion rate, zero-result search recovery,
-  # recommendation carousel CTR %, and personalized revenue lift.
-  # -------------------------------------------------------------------------
-  search_merchandising_personalization:
-    display_name: "E-Commerce: Product Discovery & Analytics"
-    domain: e_commerce
-    agent_id: smep
-    location: us-central1
-    tables:
-      - search_queries_monthly      # -> ecom_smep_search_queries_monthly
-      - zero_results_terms          # -> ecom_smep_zero_results_terms
-      - recommendations_perf        # -> ecom_smep_recommendations_perf
-      - personalization_lift        # -> ecom_smep_personalization_lift
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: Payment Gateway & Fraud Risk
-  # Monitors payment gateway authorization rates %, chargeback dispute win rates,
-  # 3D Secure friction drop-offs, and fraud scoring false positives.
-  # -------------------------------------------------------------------------
-  payment_gateway_fraud_risk:
-    display_name: "E-Commerce: Payment Gateway & Fraud Risk"
-    domain: e_commerce
-    agent_id: pgfr
-    location: us-central1
-    tables:
-      - payment_transactions        # -> ecom_pgfr_payment_transactions
-      - chargebacks_disputes        # -> ecom_pgfr_chargebacks_disputes
-      - fraud_risk_scores           # -> ecom_pgfr_fraud_risk_scores
-      - three_ds_dropoffs           # -> ecom_pgfr_three_ds_dropoffs
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: 3P Marketplace Seller Performance
-  # Tracks marketplace 3P seller defect rates (target <1%), commission net
-  # revenues, catalog sync latency, and seller fulfillment SLAs.
-  # -------------------------------------------------------------------------
-  marketplace_seller_performance:
-    display_name: "E-Commerce: 3P Marketplace Seller Performance"
-    domain: e_commerce
-    agent_id: mspe
-    location: us-central1
-    tables:
-      - marketplace_sellers         # -> ecom_mspe_marketplace_sellers
-      - seller_order_defect_rates   # -> ecom_mspe_seller_order_defect_rates
-      - seller_commissions          # -> ecom_mspe_seller_commissions
-      - catalog_sync_status         # -> ecom_mspe_catalog_sync_status
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: Mobile App Conversion & Engagement
-  # Evaluates native mobile app DAU/MAU, push notification conversion rates,
-  # and in-app crash-free session metrics (99.9%).
-  # -------------------------------------------------------------------------
-  mobile_app_conversion_retention:
-    display_name: "E-Commerce: Mobile App Conversion & Engagement"
-    domain: e_commerce
-    agent_id: macr
-    location: us-central1
-    tables:
-      - app_sessions                # -> ecom_macr_app_sessions
-      - push_notification_campaigns # -> ecom_macr_push_notification_campaigns
-      - app_funnel_steps            # -> ecom_macr_app_funnel_steps
-      - app_crash_logs              # -> ecom_macr_app_crash_logs
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: Digital Web Performance & Vitals
-  # Analyzes Core Web Vitals (LCP, INP, CLS), page speed impact on bounce rate,
-  # CDN cache hit ratios, and API 5xx error spikes.
-  # -------------------------------------------------------------------------
-  digital_site_performance_vitals:
-    display_name: "E-Commerce: Digital Web Performance & Vitals"
-    domain: e_commerce
-    agent_id: dspv
-    location: us-central1
-    tables:
-      - core_web_vitals             # -> ecom_dspv_core_web_vitals
-      - page_load_latency           # -> ecom_dspv_page_load_latency
-      - cdn_cache_metrics           # -> ecom_dspv_cdn_cache_metrics
-      - server_error_5xx_logs       # -> ecom_dspv_server_error_5xx_logs
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: PDP Optimization & Media Engagement
-  # Tracks product detail page (PDP) add-to-cart rates, rich media/video
-  # interactions, size-guide usage, and customer review sentiment.
-  # -------------------------------------------------------------------------
-  product_detail_page_optimization:
-    display_name: "E-Commerce: PDP Optimization & Media Engagement"
-    domain: e_commerce
-    agent_id: pdpo
-    location: us-central1
-    tables:
-      - pdp_views_and_adds          # -> ecom_pdpo_pdp_views_and_adds
-      - rich_media_interactions     # -> ecom_pdpo_rich_media_interactions
-      - size_guide_usage            # -> ecom_pdpo_size_guide_usage
-      - customer_review_scores      # -> ecom_pdpo_customer_review_scores
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: Subscription & Recurring Orders
-  # Manages Subscribe & Save recurring revenue (MRR), monthly subscriber churn,
-  # skip/pause retention strategies, and subscriber lifetime value.
-  # -------------------------------------------------------------------------
-  subscription_recurring_orders:
-    display_name: "E-Commerce: Subscription & Recurring Orders"
-    domain: e_commerce
-    agent_id: sror
-    location: us-central1
-    tables:
-      - active_subscriptions        # -> ecom_sror_active_subscriptions
-      - monthly_churn_cohorts       # -> ecom_sror_monthly_churn_cohorts
-      - skip_pause_frequency        # -> ecom_sror_skip_pause_frequency
-      - subscriber_clv              # -> ecom_sror_subscriber_clv
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: Digital Promo & Coupon Abuse
-  # Detects coupon stacking exploits, bot/scraper promotional traffic,
-  # unauthorized affiliate coupon claims, and digital margin leaks.
-  # -------------------------------------------------------------------------
-  digital_promotions_coupon_abuse:
-    display_name: "E-Commerce: Digital Promo & Coupon Abuse"
-    domain: e_commerce
-    agent_id: dpca
-    location: us-central1
-    tables:
-      - coupon_redemptions          # -> ecom_dpca_coupon_redemptions
-      - stacked_promotions          # -> ecom_dpca_stacked_promotions
-      - bot_traffic_sessions        # -> ecom_dpca_bot_traffic_sessions
-      - affiliate_code_attribution  # -> ecom_dpca_affiliate_code_attribution
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: B2B Wholesale Portal Analytics
-  # Evaluates B2B corporate customer quote-to-order cycle time, credit limit
-  # utilization, and bulk volume tier pricing uptake.
-  # -------------------------------------------------------------------------
-  b2b_wholesale_portal_analytics:
-    display_name: "E-Commerce: B2B Wholesale Portal Analytics"
-    domain: e_commerce
-    agent_id: bwpa
-    location: us-central1
-    tables:
-      - b2b_accounts                # -> ecom_bwpa_b2b_accounts
-      - quote_to_order_funnel       # -> ecom_bwpa_quote_to_order_funnel
-      - credit_limit_utilization    # -> ecom_bwpa_credit_limit_utilization
-      - bulk_order_reorders         # -> ecom_bwpa_bulk_order_reorders
-
-  # -------------------------------------------------------------------------
-  # E-Commerce: SEO Health & Web Accessibility
-  # Monitors organic SERP impressions/clicks, schema product rich snippets,
-  # technical SEO crawl errors, and WCAG accessibility compliance scores.
-  # -------------------------------------------------------------------------
-  web_accessibility_seo_health:
-    display_name: "E-Commerce: SEO Health & Web Accessibility"
-    domain: e_commerce
-    agent_id: wash
-    location: us-central1
-    tables:
-      - organic_search_indexation   # -> ecom_wash_organic_search_indexation
-      - seo_crawl_errors            # -> ecom_wash_seo_crawl_errors
-      - schema_product_markup       # -> ecom_wash_schema_product_markup
-      - wcag_compliance_audits      # -> ecom_wash_wcag_compliance_audits
-
-  # =========================================================================
-  # 5. MARKETING & RETAIL MEDIA DOMAIN (`domain_id: mktg`) - 10 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # Marketing: Campaign Performance & ROI
-  # Tracks marketing channel ROAS (Paid Search, Social, Display, Video),
-  # customer acquisition cost (CAC), and campaign revenue lift.
-  # -------------------------------------------------------------------------
-  campaign_performance_roi:
-    display_name: "Marketing: Campaign Performance & ROI"
-    domain: marketing
-    agent_id: cpro
-    location: us-central1
-    tables:
-      - campaigns                   # -> mktg_cpro_campaigns
-      - ad_spend_channels           # -> mktg_cpro_ad_spend_channels
-      - campaign_conversions        # -> mktg_cpro_campaign_conversions
-      - channel_roas_targets        # -> mktg_cpro_channel_roas_targets
-
-  # -------------------------------------------------------------------------
-  # Marketing: Customer Lifecycle & Loyalty
-  # Evaluates Customer Lifetime Value (CLV), RFM customer segmentation migration,
-  # loyalty tier reward redemptions, and predictive churn risk.
-  # -------------------------------------------------------------------------
-  customer_lifecycle_loyalty:
-    display_name: "Marketing: Customer Lifecycle & Loyalty"
-    domain: marketing
-    agent_id: cloy
-    location: us-central1
-    tables:
-      - customers                   # -> mktg_cloy_customers
-      - rfm_segments                # -> mktg_cloy_rfm_segments
-      - loyalty_tiers               # -> mktg_cloy_loyalty_tiers
-      - clv_history                 # -> mktg_cloy_clv_history
-
-  # -------------------------------------------------------------------------
-  # Marketing: Retail Media Network Monetization
-  # Analyzes Retail Media ad revenue $, sponsored product search auction yields
-  # (CPC/eCPM), and brand advertiser ROAS delivery reports.
-  # -------------------------------------------------------------------------
-  retail_media_network_monetization:
-    display_name: "Marketing: Retail Media Network & Sponsored Ad Yield"
-    domain: marketing
-    agent_id: rmnm
-    location: us-central1
-    tables:
-      - rmn_advertisers             # -> mktg_rmnm_rmn_advertisers
-      - sponsored_product_auctions  # -> mktg_rmnm_sponsored_product_auctions
-      - cpc_cpm_yields              # -> mktg_rmnm_cpc_cpm_yields
-      - advertiser_roas_reports     # -> mktg_rmnm_advertiser_roas_reports
-
-  # -------------------------------------------------------------------------
-  # Marketing: Customer Churn & Win-Back Analytics
-  # Calculates 30/60/90-day churn probability scores, lapse intervals by category,
-  # and dynamic win-back promo margin costs vs. reactivation lift.
-  # -------------------------------------------------------------------------
-  customer_churn_winback_analytics:
-    display_name: "Marketing: Churn Prediction & Win-Back Triggers"
-    domain: marketing
-    agent_id: ccwa
-    location: us-central1
-    tables:
-      - churn_risk_scores           # -> mktg_ccwa_churn_risk_scores
-      - lapse_intervals_by_dept     # -> mktg_ccwa_lapse_intervals_by_dept
-      - winback_campaign_offers     # -> mktg_ccwa_winback_campaign_offers
-      - reactivation_cohorts        # -> mktg_ccwa_reactivation_cohorts
-
-  # -------------------------------------------------------------------------
-  # Marketing: CRM, Email & SMS Orchestration
-  # Tracks revenue per email/SMS send ($), automated cart/browse abandon journey
-  # conversions, unsubscribe rates, and domain deliverability health.
-  # -------------------------------------------------------------------------
-  email_sms_crm_orchestration:
-    display_name: "Marketing: CRM, Email & SMS Campaign Orchestration"
-    domain: marketing
-    agent_id: esco
-    location: us-central1
-    tables:
-      - crm_campaign_sends          # -> mktg_esco_crm_campaign_sends
-      - lifecycle_journey_steps     # -> mktg_esco_lifecycle_journey_steps
-      - unsubscribe_bounce_rates    # -> mktg_esco_unsubscribe_bounce_rates
-      - revenue_per_recipient       # -> mktg_esco_revenue_per_recipient
-
-  # -------------------------------------------------------------------------
-  # Marketing: Influencer & Creator Campaign ROI
-  # Measures influencer effective cost per acquisition (eCPA), creator affiliate
-  # promo code sales $, and earned media value (EMV).
-  # -------------------------------------------------------------------------
-  influencer_creator_campaign_roi:
-    display_name: "Marketing: Influencer & Creator Campaign ROI"
-    domain: marketing
-    agent_id: iccr
-    location: us-central1
-    tables:
-      - creator_partnerships        # -> mktg_iccr_creator_partnerships
-      - affiliate_coupon_tracking   # -> mktg_iccr_affiliate_coupon_tracking
-      - seeding_product_costs       # -> mktg_iccr_seeding_product_costs
-      - earned_media_value          # -> mktg_iccr_earned_media_value
-
-  # -------------------------------------------------------------------------
-  # Marketing: Customer Acquisition Cost (CAC) & Payback
-  # Evaluates blended vs. paid CAC by acquisition channel, CAC payback horizon
-  # (months), and first-to-second order acceleration velocity.
-  # -------------------------------------------------------------------------
-  customer_acquisition_cost_cac:
-    display_name: "Marketing: CAC Payback Velocity & Unit Economics"
-    domain: marketing
-    agent_id: cacc
-    location: us-central1
-    tables:
-      - paid_marketing_spend        # -> mktg_cacc_paid_marketing_spend
-      - new_customer_cohorts        # -> mktg_cacc_new_customer_cohorts
-      - cac_by_channel              # -> mktg_cacc_cac_by_channel
-      - payback_period_months       # -> mktg_cacc_payback_period_months
-
-  # -------------------------------------------------------------------------
-  # Marketing: Omnichannel CDP & Customer Identity
-  # Measures customer identity resolution match rates %, omnichannel shopper
-  # 3x spending multiplier vs. single-channel, and cross-shopping journeys.
-  # -------------------------------------------------------------------------
-  omnichannel_customer_cdp_insights:
-    display_name: "Marketing: Omnichannel CDP & Customer Identity"
-    domain: marketing
-    agent_id: ocdi
-    location: us-central1
-    tables:
-      - identity_graph_matches      # -> mktg_ocdi_identity_graph_matches
-      - omnichannel_buyer_cohorts   # -> mktg_ocdi_omnichannel_buyer_cohorts
-      - store_to_web_cross_shop     # -> mktg_ocdi_store_to_web_cross_shop
-      - channel_affinity            # -> mktg_ocdi_channel_affinity
-
-  # -------------------------------------------------------------------------
-  # Marketing: Geotargeted & Localized Marketing
-  # Analyzes store radius digital geotargeting, physical store foot-traffic lift
-  # from mobile ads, and localized weather-triggered promotions.
-  # -------------------------------------------------------------------------
-  geotargeted_local_marketing:
-    display_name: "Marketing: Geotargeted & Local Store Marketing"
-    domain: marketing
-    agent_id: gtlm
-    location: us-central1
-    tables:
-      - store_trade_areas           # -> mktg_gtlm_store_trade_areas
-      - local_digital_campaigns     # -> mktg_gtlm_local_digital_campaigns
-      - store_foot_traffic_lift     # -> mktg_gtlm_store_foot_traffic_lift
-      - geo_promo_conversions       # -> mktg_gtlm_geo_promo_conversions
-
-  # -------------------------------------------------------------------------
-  # Marketing: Brand Health & Social Sentiment
-  # Measures Net Brand Sentiment Score (NBSS), social listening Share of Voice
-  # (SOV) vs. competitors, and crisis response sentiment recovery.
-  # -------------------------------------------------------------------------
-  brand_health_social_sentiment:
-    display_name: "Marketing: Brand Health & Social Sentiment"
-    domain: marketing
-    agent_id: bhss
-    location: us-central1
-    tables:
-      - brand_sentiment_tracker     # -> mktg_bhss_brand_sentiment_tracker
-      - social_listening_mentions   # -> mktg_bhss_social_listening_mentions
-      - share_of_voice_competitors  # -> mktg_bhss_share_of_voice_competitors
-      - brand_advocacy_scores       # -> mktg_bhss_brand_advocacy_scores
-
-  # =========================================================================
-  # 6. FINANCE, REAL ESTATE & ACCOUNTING DOMAIN (`domain_id: finc`) - 11 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # Finance: Gross Margin & Profitability
-  # Tracks gross margin rate %, dollar margin, COGS variance, markdown discount
-  # erosion, and product category margin targets.
-  # -------------------------------------------------------------------------
-  gross_margin_profitability:
-    display_name: "Finance: Gross Margin & Profitability"
-    domain: finance
-    agent_id: gmpr
-    location: us-central1
-    tables:
-      - stores                      # -> finc_gmpr_stores
-      - product_cost_master         # -> finc_gmpr_product_cost_master
-      - sales_profitability         # -> finc_gmpr_sales_profitability
-      - category_margin_targets     # -> finc_gmpr_category_margin_targets
-
-  # -------------------------------------------------------------------------
-  # Finance: Store P&L & Operating Costs
-  # Answers store-level P&L, net sales, 4-wall gross profit, store EBITDA, and
-  # OpEx variance (labor, occupancy rent, utilities).
-  # -------------------------------------------------------------------------
-  store_pnl_operating_costs:
-    display_name: "Finance: Store P&L & Operating Costs"
-    domain: finance
-    agent_id: spnl
-    location: us-central1
-    tables:
-      - stores                      # -> finc_spnl_stores
-      - monthly_pnl                 # -> finc_spnl_monthly_pnl
-      - opex_categories             # -> finc_spnl_opex_categories
-      - profitability_targets       # -> finc_spnl_profitability_targets
-
-  # -------------------------------------------------------------------------
-  # Finance: Working Capital & Cash Flow
-  # Analyzes Cash Conversion Cycle (CCC), Days Sales Outstanding (DSO), Days
-  # Payable Outstanding (DPO), AR/AP aging, and liquidity cash flow forecasts.
-  # -------------------------------------------------------------------------
-  working_capital_cashflow:
-    display_name: "Finance: Working Capital & Cash Flow"
-    domain: finance
-    agent_id: wcap
-    location: us-central1
-    tables:
-      - cash_conversion_cycle       # -> finc_wcap_cash_conversion_cycle
-      - accounts_receivable_aging   # -> finc_wcap_accounts_receivable_aging
-      - accounts_payable_aging      # -> finc_wcap_accounts_payable_aging
-      - liquidity_forecast          # -> finc_wcap_liquidity_forecast
-
-  # -------------------------------------------------------------------------
-  # Finance: Store Real Estate & Lease Management
-  # Evaluates store lease terms, occupancy cost ratios (% of sales), percentage
-  # rent overage thresholds, and co-tenancy clause triggers.
-  # -------------------------------------------------------------------------
-  store_real_estate_lease_mgmt:
-    display_name: "Finance: Store Real Estate & Lease Management"
-    domain: finance
-    agent_id: srel
-    location: us-central1
-    tables:
-      - store_leases                # -> finc_srel_store_leases
-      - occupancy_costs             # -> finc_srel_occupancy_costs
-      - percentage_rent_overages    # -> finc_srel_percentage_rent_overages
-      - co_tenancy_clauses          # -> finc_srel_co_tenancy_clauses
-
-  # -------------------------------------------------------------------------
-  # Finance: CAPEX & Store Remodel ROI
-  # Measures store remodel CAPEX budget variance, Internal Rate of Return (IRR %),
-  # and post-remodel sales lift vs. un-remodeled control stores.
-  # -------------------------------------------------------------------------
-  capex_store_remodel_roi:
-    display_name: "Finance: CAPEX & Store Remodel ROI"
-    domain: finance
-    agent_id: csrr
-    location: us-central1
-    tables:
-      - remodel_projects            # -> finc_csrr_remodel_projects
-      - capex_expenditures          # -> finc_csrr_capex_expenditures
-      - post_remodel_sales_lift     # -> finc_csrr_post_remodel_sales_lift
-      - irr_payback_tracking        # -> finc_csrr_irr_payback_tracking
-
-  # -------------------------------------------------------------------------
-  # Finance: Inventory Valuation & LCM Provisions
-  # Manages Lower of Cost or Market (LCM) reserves, inventory write-down
-  # provisions $, shrink accruals, and FIFO vs. standard cost adjustments.
-  # -------------------------------------------------------------------------
-  inventory_valuation_provisions:
-    display_name: "Finance: Inventory Valuation & LCM Provisions"
-    domain: finance
-    agent_id: ivpr
-    location: us-central1
-    tables:
-      - inventory_cost_layers       # -> finc_ivpr_inventory_cost_layers
-      - lcm_valuation_reserves      # -> finc_ivpr_lcm_valuation_reserves
-      - shrink_financial_accruals   # -> finc_ivpr_shrink_financial_accruals
-      - write_down_schedules        # -> finc_ivpr_write_down_schedules
-
-  # -------------------------------------------------------------------------
-  # Finance: Vendor Recovery Audit & Overpayments
-  # Identifies duplicate invoice payments, vendor compliance chargeback fines,
-  # post-audit pricing discrepancies, and unearned cash discount losses.
-  # -------------------------------------------------------------------------
-  vendor_recovery_audit_compliance:
-    display_name: "Finance: Vendor Recovery Audit & Overpayments"
-    domain: finance
-    agent_id: vrac
-    location: us-central1
-    tables:
-      - disputed_invoices           # -> finc_vrac_disputed_invoices
-      - duplicate_payment_scans     # -> finc_vrac_duplicate_payment_scans
-      - vendor_compliance_fines     # -> finc_vrac_vendor_compliance_fines
-      - unearned_cash_discounts     # -> finc_vrac_unearned_cash_discounts
-
-  # -------------------------------------------------------------------------
-  # Finance: Sales Tax Nexus & Jurisdictional Filings
-  # Monitors state/local economic nexus thresholds, sales tax audit liability
-  # reserves, and reseller exemption certificate expiration dates.
-  # -------------------------------------------------------------------------
-  sales_tax_nexus_compliance:
-    display_name: "Finance: Sales Tax Nexus & Jurisdictional Filings"
-    domain: finance
-    agent_id: stnc
-    location: us-central1
-    tables:
-      - jurisdictional_tax_rules    # -> finc_stnc_jurisdictional_tax_rules
-      - economic_nexus_thresholds   # -> finc_stnc_economic_nexus_thresholds
-      - tax_exemption_certificates  # -> finc_stnc_tax_exemption_certificates
-      - audit_liability_provisions  # -> finc_stnc_audit_liability_provisions
-
-  # -------------------------------------------------------------------------
-  # Finance: FP&A Corporate Budget & Variance
-  # Tracks corporate cost center SG&A variance vs. budget, rolling 12-month
-  # consolidated EBITDA forecasts, and corporate headcount run rates.
-  # -------------------------------------------------------------------------
-  corporate_budget_variance_fpna:
-    display_name: "Finance: FP&A Corporate Budget & Variance"
-    domain: finance
-    agent_id: cbvf
-    location: us-central1
-    tables:
-      - corporate_cost_centers      # -> finc_cbvf_corporate_cost_centers
-      - budget_vs_actual_opex       # -> finc_cbvf_budget_vs_actual_opex
-      - rolling_ebitda_forecasts    # -> finc_cbvf_rolling_ebitda_forecasts
-      - headcount_run_rates         # -> finc_cbvf_headcount_run_rates
-
-  # -------------------------------------------------------------------------
-  # Finance: Gift Card Breakage & Liability Accounting
-  # Calculates unredeemed gift card outstanding liabilities, historical dormancy
-  # decay curves, recognized breakage income, and state escheatment filings.
-  # -------------------------------------------------------------------------
-  gift_card_breakage_liability:
-    display_name: "Finance: Gift Card Breakage & Liability Accounting"
-    domain: finance
-    agent_id: gcbl
-    location: us-central1
-    tables:
-      - gift_card_issuances         # -> finc_gcbl_gift_card_issuances
-      - outstanding_card_balances   # -> finc_gcbl_outstanding_card_balances
-      - dormancy_decay_curves       # -> finc_gcbl_dormancy_decay_curves
-      - breakage_income_recognized  # -> finc_gcbl_breakage_income_recognized
-
-  # -------------------------------------------------------------------------
-  # Finance: FX Hedging & Landed Cost Exposure
-  # Monitors foreign exchange currency exposure on global purchase orders,
-  # landed cost FX variance $, and hedging contract mark-to-market valuations.
-  # -------------------------------------------------------------------------
-  foreign_exchange_landed_costs:
-    display_name: "Finance: FX Hedging & Landed Cost Exposure"
-    domain: finance
-    agent_id: felc
-    location: us-central1
-    tables:
-      - fx_hedging_contracts        # -> finc_felc_fx_hedging_contracts
-      - currency_exposure_by_vendor # -> finc_felc_currency_exposure_by_vendor
-      - landed_cost_fx_variance     # -> finc_felc_landed_cost_fx_variance
-      - mark_to_market_gains        # -> finc_felc_mark_to_market_gains
-
-  # =========================================================================
-  # 7. CUSTOMER CARE & EXPERIENCE DOMAIN (`domain_id: care`) - 10 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # Customer Care: Contact Center Performance & FCR
-  # Measures contact center First Contact Resolution (FCR %), Average Handle
-  # Time (AHT), agent occupancy rates, and post-call CSAT ratings.
-  # -------------------------------------------------------------------------
-  contact_center_agent_performance:
-    display_name: "Customer Care: Contact Center Performance & FCR"
-    domain: customer_care
-    agent_id: ccap
-    location: us-central1
-    tables:
-      - call_center_queues          # -> care_ccap_call_center_queues
-      - agent_interaction_metrics   # -> care_ccap_agent_interaction_metrics
-      - first_contact_resolution    # -> care_ccap_first_contact_resolution
-      - csat_survey_scores          # -> care_ccap_csat_survey_scores
-
-  # -------------------------------------------------------------------------
-  # Customer Care: WISMO & Order Inquiries
-  # Evaluates "Where Is My Order" inbound ticket volume, carrier tracking alert
-  # deflection %, and customer appeasement credit costs $.
-  # -------------------------------------------------------------------------
-  wismo_order_tracking_resolution:
-    display_name: "Customer Care: WISMO & Order Inquiries"
-    domain: customer_care
-    agent_id: wotr
-    location: us-central1
-    tables:
-      - wismo_inquiries             # -> care_wotr_wismo_inquiries
-      - carrier_tracking_events     # -> care_wotr_carrier_tracking_events
-      - automated_deflections       # -> care_wotr_automated_deflections
-      - appeasement_credits         # -> care_wotr_appeasement_credits
-
-  # -------------------------------------------------------------------------
-  # Customer Care: Voice of Customer & NLP Sentiment
-  # Analyzes Net Promoter Score (NPS), automated issue topic clustering (sizing,
-  # defects, delivery delays), and product complaint trend spikes.
-  # -------------------------------------------------------------------------
-  voice_of_customer_sentiment_nlp:
-    display_name: "Customer Care: Voice of Customer & NLP Sentiment"
-    domain: customer_care
-    agent_id: vocs
-    location: us-central1
-    tables:
-      - customer_feedback_transcripts # -> care_vocs_customer_feedback_transcripts
-      - nps_sentiment_topics        # -> care_vocs_nps_sentiment_topics
-      - product_defect_signals      # -> care_vocs_product_defect_signals
-      - channel_sentiment_trends    # -> care_vocs_channel_sentiment_trends
-
-  # -------------------------------------------------------------------------
-  # Customer Care: Product Warranty & Claims
-  # Tracks extended warranty attachment rates %, manufacturer warranty claim
-  # recovery $, and repair center cycle turnaround days.
-  # -------------------------------------------------------------------------
-  product_warranty_claims_repair:
-    display_name: "Customer Care: Product Warranty & Claims"
-    domain: customer_care
-    agent_id: pwcr
-    location: us-central1
-    tables:
-      - warranty_registrations      # -> care_pwcr_warranty_registrations
-      - repair_claims_processed     # -> care_pwcr_repair_claims_processed
-      - vendor_warranty_recovery    # -> care_pwcr_vendor_warranty_recovery
-      - replacement_costs           # -> care_pwcr_replacement_costs
-
-  # -------------------------------------------------------------------------
-  # Customer Care: AI Bot Containment & Escalations
-  # Measures conversational AI containment rates (>65%), intent recognition
-  # accuracy, and negative sentiment escalation handoffs to human agents.
-  # -------------------------------------------------------------------------
-  ai_chatbot_deflection_handoff:
-    display_name: "Customer Care: AI Bot Containment & Escalations"
-    domain: customer_care
-    agent_id: acdh
-    location: us-central1
-    tables:
-      - bot_conversations           # -> care_acdh_bot_conversations
-      - intent_recognition_accuracy # -> care_acdh_intent_recognition_accuracy
-      - containment_deflections     # -> care_acdh_containment_deflections
-      - human_escalation_logs       # -> care_acdh_human_escalation_logs
-
-  # -------------------------------------------------------------------------
-  # Customer Care: VIP & High-CLV Concierge
-  # Tracks high-CLV customer inquiry response SLAs (<5 mins), concierge-assisted
-  # personal shopping sales $, and VIP tier retention rates.
-  # -------------------------------------------------------------------------
-  vip_clientele_concierge_support:
-    display_name: "Customer Care: VIP & High-CLV Concierge"
-    domain: customer_care
-    agent_id: vccs
-    location: us-central1
-    tables:
-      - vip_customer_profiles       # -> care_vccs_vip_customer_profiles
-      - concierge_service_requests  # -> care_vccs_concierge_service_requests
-      - dedicated_agent_sla         # -> care_vccs_dedicated_agent_sla
-      - assisted_sales_revenue      # -> care_vccs_assisted_sales_revenue
-
-  # -------------------------------------------------------------------------
-  # Customer Care: Return Exceptions & Appeals
-  # Evaluates disputed out-of-policy return approvals, appeasement concession
-  # costs $, and serial returner abuse detection patterns.
-  # -------------------------------------------------------------------------
-  returns_appeals_exception_desk:
-    display_name: "Customer Care: Return Exceptions & Appeals"
-    domain: customer_care
-    agent_id: raed
-    location: us-central1
-    tables:
-      - out_of_policy_returns       # -> care_raed_out_of_policy_returns
-      - appeasement_exceptions      # -> care_raed_appeasement_exceptions
-      - serial_returner_flags       # -> care_raed_serial_returner_flags
-      - concession_cost_summary     # -> care_raed_concession_cost_summary
-
-  # -------------------------------------------------------------------------
-  # Customer Care: Social Support & Public Sentiment
-  # Monitors public social media complaint response SLAs (<15 mins), public-to-private
-  # de-escalation rates %, and social direct-message commerce conversions.
-  # -------------------------------------------------------------------------
-  omnichannel_social_support_desk:
-    display_name: "Customer Care: Social Support & Public Sentiment"
-    domain: customer_care
-    agent_id: ossd
-    location: us-central1
-    tables:
-      - social_media_tickets        # -> care_ossd_social_media_tickets
-      - public_response_speed       # -> care_ossd_public_response_speed
-      - escalation_sentiment_shift  # -> care_ossd_escalation_sentiment_shift
-      - dm_commerce_inquiries       # -> care_ossd_dm_commerce_inquiries
-
-  # -------------------------------------------------------------------------
-  # Customer Care: Store Helpdesk & POS Support
-  # Evaluates store associate POS register outage resolution MTTR, hardware/scanner
-  # ticket volume, and recurring store software bug pain points.
-  # -------------------------------------------------------------------------
-  store_associate_support_hotline:
-    display_name: "Customer Care: Store Helpdesk & POS Support"
-    domain: customer_care
-    agent_id: sash
-    location: us-central1
-    tables:
-      - store_helpdesk_tickets      # -> care_sash_store_helpdesk_tickets
-      - pos_hardware_outages        # -> care_sash_pos_hardware_outages
-      - ticket_mttr_by_region       # -> care_sash_ticket_mttr_by_region
-      - recurring_system_bugs       # -> care_sash_recurring_system_bugs
-
-  # -------------------------------------------------------------------------
-  # Customer Care: Damaged Goods Claims & Recovery
-  # Tracks damaged-in-transit claims cycle time, carrier liability reimbursement $,
-  # and customer replacement order dispatch velocity.
-  # -------------------------------------------------------------------------
-  damaged_goods_claims_resolution:
-    display_name: "Customer Care: Damaged Goods Claims & Recovery"
-    domain: customer_care
-    agent_id: dgcr
-    location: us-central1
-    tables:
-      - damage_photo_submissions    # -> care_dgcr_damage_photo_submissions
-      - carrier_damage_claims       # -> care_dgcr_carrier_damage_claims
-      - customer_replacement_orders # -> care_dgcr_customer_replacement_orders
-      - salvage_disposition         # -> care_dgcr_salvage_disposition
-
-  # =========================================================================
-  # 8. HUMAN RESOURCES & WORKFORCE MANAGEMENT DOMAIN (`domain_id: hrwm`) - 9 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # HR: Store Associate Turnover & Retention
-  # Measures 90-day new hire retention rate, annualized store associate turnover %,
-  # and exit interview sentiment themes by store district.
-  # -------------------------------------------------------------------------
-  store_associate_turnover_retention:
-    display_name: "HR: Store Associate Turnover & Retention"
-    domain: human_resources
-    agent_id: satr
-    location: us-central1
-    tables:
-      - headcount_rosters           # -> hrwm_satr_headcount_rosters
-      - associate_terminations      # -> hrwm_satr_associate_terminations
-      - 90_day_retention_cohorts    # -> hrwm_satr_90_day_retention_cohorts
-      - exit_interview_topics       # -> hrwm_satr_exit_interview_topics
-
-  # -------------------------------------------------------------------------
-  # HR: Scheduling Fairness & Predictive Hours
-  # Tracks predictive schedule publication lead time (14+ days), fair workweek /
-  # clopening penalty avoidance, and shift swap fulfillment rates.
-  # -------------------------------------------------------------------------
-  workforce_scheduling_fairness:
-    display_name: "HR: Scheduling Fairness & Predictive Hours"
-    domain: human_resources
-    agent_id: wsfa
-    location: us-central1
-    tables:
-      - published_schedules         # -> hrwm_wsfa_published_schedules
-      - fair_workweek_compliance    # -> hrwm_wsfa_fair_workweek_compliance
-      - shift_swap_fulfillment      # -> hrwm_wsfa_shift_swap_fulfillment
-      - clopening_violations        # -> hrwm_wsfa_clopening_violations
-
-  # -------------------------------------------------------------------------
-  # HR: Training & Onboarding Compliance
-  # Monitors food safety / equipment certification compliance (100%), LMS course
-  # completion speeds, and time-to-associate-productivity days.
-  # -------------------------------------------------------------------------
-  training_onboarding_compliance:
-    display_name: "HR: Training & Onboarding Compliance"
-    domain: human_resources
-    agent_id: tocp
-    location: us-central1
-    tables:
-      - lms_course_completions      # -> hrwm_tocp_lms_course_completions
-      - mandatory_certifications    # -> hrwm_tocp_mandatory_certifications
-      - time_to_productivity_days   # -> hrwm_tocp_time_to_productivity_days
-      - safety_training_records     # -> hrwm_tocp_safety_training_records
-
-  # -------------------------------------------------------------------------
-  # HR: Workplace Safety & Workers' Comp
-  # Evaluates Total Recordable Incident Rate (TRIR), Days Away/Restricted/Transferred
-  # (DART), workers' comp claims cost $, and safety audit compliance.
-  # -------------------------------------------------------------------------
-  workplace_safety_workers_comp:
-    display_name: "HR: Workplace Safety & Workers' Comp"
-    domain: human_resources
-    agent_id: wswc
-    location: us-east4
-    tables:
-      - osha_recordable_logs        # -> hrwm_wswc_osha_recordable_logs
-      - lost_workday_cases          # -> hrwm_wswc_lost_workday_cases
-      - workers_comp_claims         # -> hrwm_wswc_workers_comp_claims
-      - safety_audit_compliance     # -> hrwm_wswc_safety_audit_compliance
-
-  # -------------------------------------------------------------------------
-  # HR: Store Leadership Bench & Succession
-  # Tracks Assistant Store Manager promotion readiness scores, store manager
-  # vacancy duration (days), and internal leadership promotion rates %.
-  # -------------------------------------------------------------------------
-  store_manager_bench_succession:
-    display_name: "HR: Store Leadership Bench & Succession"
-    domain: human_resources
-    agent_id: smbs
-    location: us-east4
-    tables:
-      - manager_performance_ratings # -> hrwm_smbs_manager_performance_ratings
-      - bench_readiness_pipeline    # -> hrwm_smbs_bench_readiness_pipeline
-      - internal_promotion_rates    # -> hrwm_smbs_internal_promotion_rates
-      - store_manager_vacancy_days  # -> hrwm_smbs_store_manager_vacancy_days
-
-  # -------------------------------------------------------------------------
-  # HR: Seasonal Hiring & Peak Readiness
-  # Measures holiday hiring target vs. actual headcount, background check turnaround
-  # days, and seasonal applicant funnel conversion rates.
-  # -------------------------------------------------------------------------
-  seasonal_hiring_peak_readiness:
-    display_name: "HR: Seasonal Hiring & Peak Readiness"
-    domain: human_resources
-    agent_id: shpr
-    location: us-east4
-    tables:
-      - seasonal_requisitions       # -> hrwm_shpr_seasonal_requisitions
-      - applicant_pipeline_funnel   # -> hrwm_shpr_applicant_pipeline_funnel
-      - background_check_turnaround # -> hrwm_shpr_background_check_turnaround
-      - peak_staffing_readiness     # -> hrwm_shpr_peak_staffing_readiness
-
-  # -------------------------------------------------------------------------
-  # HR: Associate Pulse & eNPS Analytics
-  # Analyzes Employee Net Promoter Score (eNPS), store team sentiment indexes,
-  # manager feedback scores, and associate flight risk indicators.
-  # -------------------------------------------------------------------------
-  associate_engagement_pulse_enps:
-    display_name: "HR: Associate Pulse & eNPS Analytics"
-    domain: human_resources
-    agent_id: aepe
-    location: us-east4
-    tables:
-      - enps_survey_responses       # -> hrwm_aepe_enps_survey_responses
-      - department_sentiment_index  # -> hrwm_aepe_department_sentiment_index
-      - manager_feedback_scores     # -> hrwm_aepe_manager_feedback_scores
-      - flight_risk_indicators      # -> hrwm_aepe_flight_risk_indicators
-
-  # -------------------------------------------------------------------------
-  # HR: Labor Union & CBA Compliance
-  # Tracks collective bargaining agreement (CBA) grievance logs, grievance
-  # resolution SLAs, and seniority shift bidding audit compliance.
-  # -------------------------------------------------------------------------
-  labor_union_compliance_cba:
-    display_name: "HR: Labor Union & CBA Compliance"
-    domain: human_resources
-    agent_id: lucc
-    location: us-east4
-    tables:
-      - cba_agreements              # -> hrwm_lucc_cba_agreements
-      - union_grievance_logs        # -> hrwm_lucc_union_grievance_logs
-      - grievance_resolution_slas   # -> hrwm_lucc_grievance_resolution_slas
-      - seniority_shift_bids        # -> hrwm_lucc_seniority_shift_bids
-
-  # -------------------------------------------------------------------------
-  # HR: Frontline Wage & Market Benchmarks
-  # Measures competitive hourly wage benchmarks by metro area, minimum wage statutory
-  # increase budget impacts, and store wage compression indexes.
-  # -------------------------------------------------------------------------
-  frontline_wage_market_benchmarks:
-    display_name: "HR: Frontline Wage & Market Benchmarks"
-    domain: human_resources
-    agent_id: fwmb
-    location: us-east4
-    tables:
-      - wage_tiers_by_role          # -> hrwm_fwmb_wage_tiers_by_role
-      - metro_wage_benchmarks       # -> hrwm_fwmb_metro_wage_benchmarks
-      - minimum_wage_impact_models  # -> hrwm_fwmb_minimum_wage_impact_models
-      - wage_compression_index      # -> hrwm_fwmb_wage_compression_index
-
-  # =========================================================================
-  # 9. SUSTAINABILITY, ESG & COMPLIANCE DOMAIN (`domain_id: esgc`) - 10 AGENTS
-  # =========================================================================
-
-  # -------------------------------------------------------------------------
-  # ESG: Carbon Footprint & Scope Emissions
-  # Measures Scope 1, Scope 2, and Scope 3 greenhouse gas (GHG) CO2e emissions
-  # (metric tons), progress vs. net-zero targets, and supply chain carbon intensity.
-  # -------------------------------------------------------------------------
-  carbon_footprint_scope_emissions:
-    display_name: "ESG: Carbon Footprint & Scope Emissions"
-    domain: sustainability_compliance
-    agent_id: cfse
-    location: us-central1
-    tables:
-      - scope1_fleet_facilities     # -> esgc_cfse_scope1_fleet_facilities
-      - scope2_electricity_grid     # -> esgc_cfse_scope2_electricity_grid
-      - scope3_supply_chain_lifecycle # -> esgc_cfse_scope3_supply_chain_lifecycle
-      - net_zero_targets            # -> esgc_cfse_net_zero_targets
-
-  # -------------------------------------------------------------------------
-  # ESG: Food Waste Reduction & Diversion
-  # Tracks perishable food shrink %, dynamic freshness markdown rescues $,
-  # food bank donation volumes (lbs), and landfill composting diversion %.
-  # -------------------------------------------------------------------------
-  food_waste_spoilage_reduction:
-    display_name: "ESG: Food Waste Reduction & Diversion"
-    domain: sustainability_compliance
-    agent_id: fwsr
-    location: us-central1
-    tables:
-      - perishable_spoilage_logs    # -> esgc_fwsr_perishable_spoilage_logs
-      - dynamic_markdown_rescues    # -> esgc_fwsr_dynamic_markdown_rescues
-      - food_bank_donations_lbs     # -> esgc_fwsr_food_bank_donations_lbs
-      - compost_landfill_diversion  # -> esgc_fwsr_compost_landfill_diversion
-
-  # -------------------------------------------------------------------------
-  # ESG: Sustainable Packaging & Circularity
-  # Monitors post-consumer recycled (PCR) packaging content %, single-use plastic
-  # elimination milestones, and reusable container cycle turns.
-  # -------------------------------------------------------------------------
-  sustainable_packaging_circularity:
-    display_name: "ESG: Sustainable Packaging & Circularity"
-    domain: sustainability_compliance
-    agent_id: spci
-    location: us-central1
-    tables:
-      - packaging_material_specs    # -> esgc_spci_packaging_material_specs
-      - pcr_recycled_content_pct    # -> esgc_spci_pcr_recycled_content_pct
-      - single_use_plastic_elimination # -> esgc_spci_single_use_plastic_elimination
-      - reusable_tote_cycles        # -> esgc_spci_reusable_tote_cycles
-
-  # -------------------------------------------------------------------------
-  # ESG: Ethical Sourcing & Labor Audits
-  # Evaluates supplier ethical social audit compliance (Sedex / SMETA), zero-tolerance
-  # human rights violations (0), and corrective action plan closure rates.
-  # -------------------------------------------------------------------------
-  ethical_sourcing_labor_audits:
-    display_name: "ESG: Ethical Sourcing & Labor Audits"
-    domain: sustainability_compliance
-    agent_id: esla
-    location: us-central1
-    tables:
-      - supplier_social_audits      # -> esgc_esla_supplier_social_audits
-      - sedex_smeta_scores          # -> esgc_esla_sedex_smeta_scores
-      - zero_tolerance_violations   # -> esgc_esla_zero_tolerance_violations
-      - corrective_action_plans     # -> esgc_esla_corrective_action_plans
-
-  # -------------------------------------------------------------------------
-  # ESG: Product Safety & Recall Execution
-  # Measures regulatory product recall quarantine speed (<24 hrs to 100% shelf quarantine),
-  # customer notification reach %, and quarantined stock disposition audits.
-  # -------------------------------------------------------------------------
-  product_safety_recall_readiness:
-    display_name: "ESG: Product Safety & Recall Execution"
-    domain: sustainability_compliance
-    agent_id: psrr
-    location: us-central1
-    tables:
-      - regulatory_recall_notices   # -> esgc_psrr_regulatory_recall_notices
-      - store_quarantine_execution  # -> esgc_psrr_store_quarantine_execution
-      - customer_notification_reach # -> esgc_psrr_customer_notification_reach
-      - disposition_destruction_logs # -> esgc_psrr_disposition_destruction_logs
-
-  # -------------------------------------------------------------------------
-  # ESG: Renewable Energy & Grid Transition
-  # Tracks on-site solar generation (MWh), Power Purchase Agreement (PPA) renewable
-  # procurement %, and battery storage peak demand charge savings $.
-  # -------------------------------------------------------------------------
-  energy_renewable_grid_transition:
-    display_name: "ESG: Renewable Energy & Grid Transition"
-    domain: sustainability_compliance
-    agent_id: ergt
-    location: us-central1
-    tables:
-      - onsite_solar_generation     # -> esgc_ergt_onsite_solar_generation
-      - ppa_renewable_contracts     # -> esgc_ergt_ppa_renewable_contracts
-      - peak_demand_shaving         # -> esgc_ergt_peak_demand_shaving
-      - battery_storage_kwh         # -> esgc_ergt_battery_storage_kwh
-
-  # -------------------------------------------------------------------------
-  # ESG: Water Conservation & Facility Audits
-  # Monitors facility water usage intensity (gallons/sq.ft), cooling tower water
-  # recycling efficiency, and high-stress watershed facility risk audits.
-  # -------------------------------------------------------------------------
-  water_conservation_facility_audit:
-    display_name: "ESG: Water Conservation & Facility Audits"
-    domain: sustainability_compliance
-    agent_id: wcfa
-    location: us-central1
-    tables:
-      - facility_water_meters       # -> esgc_wcfa_facility_water_meters
-      - cooling_tower_efficiency    # -> esgc_wcfa_cooling_tower_efficiency
-      - rainwater_harvesting_logs   # -> esgc_wcfa_rainwater_harvesting_logs
-      - watershed_stress_index      # -> esgc_wcfa_watershed_stress_index
-
-  # -------------------------------------------------------------------------
-  # ESG: Restricted Substances (RSL) & Chemical Safety
-  # Tracks Restricted Substances List (RSL / REACH / Prop 65) lab test pass rates %,
-  # vendor compliance certificate renewals, and hazardous chemical phaseouts.
-  # -------------------------------------------------------------------------
-  chemical_restricted_substances_rsl:
-    display_name: "ESG: Restricted Substances (RSL) & Chemical Safety"
-    domain: sustainability_compliance
-    agent_id: crsr
-    location: us-central1
-    tables:
-      - rsl_testing_results         # -> esgc_crsr_rsl_testing_results
-      - chemical_compliance_certificates # -> esgc_crsr_chemical_compliance_certificates
-      - prop65_reach_screenings     # -> esgc_crsr_prop65_reach_screenings
-      - hazardous_phaseout_plans    # -> esgc_crsr_hazardous_phaseout_plans
-
-  # -------------------------------------------------------------------------
-  # ESG: Supplier Diversity & Equity Spend
-  # Measures diverse supplier spend (Minority, Women, Veteran, LGBTQ+ owned)
-  # as % of total corporate procurement, and vendor incubation programs.
-  # -------------------------------------------------------------------------
-  dei_supplier_diversity_spend:
-    display_name: "ESG: Supplier Diversity & Equity Spend"
-    domain: sustainability_compliance
-    agent_id: dsds
-    location: us-central1
-    tables:
-      - diverse_supplier_master     # -> esgc_dsds_diverse_supplier_master
-      - procurement_spend_by_tier   # -> esgc_dsds_procurement_spend_by_tier
-      - diversity_category_targets  # -> esgc_dsds_diversity_category_targets
-      - vendor_incubation_programs  # -> esgc_dsds_vendor_incubation_programs
-
-  # -------------------------------------------------------------------------
-  # ESG: Extended Producer Responsibility (EPR) & Resale
-  # Tracks state/national EPR packaging compliance fees $, customer take-back
-  # tonnage, and circular economy garment/electronics resale recovery revenue.
-  # -------------------------------------------------------------------------
-  extended_producer_responsibility_epr:
-    display_name: "ESG: Extended Producer Responsibility (EPR) & Resale"
-    domain: sustainability_compliance
-    agent_id: epre
-    location: us-central1
-    tables:
-      - epr_packaging_fees_paid     # -> esgc_epre_epr_packaging_fees_paid
-      - take_back_program_tonnage   # -> esgc_epre_take_back_program_tonnage
-      - textile_electronic_resale   # -> esgc_epre_textile_electronic_resale
-      - circular_recovery_revenue   # -> esgc_epre_circular_recovery_revenue
+  family_plan_upsell:
+    display_name: 'Consumer Marketing: Family Plan Upsell'
+    domain: consumer_marketing
+    agent_id: famu
+    location: us-central1
+    tables:
+    - subscriber_lines
+    - data_sharing_pools
+    - plan_upsell_eligibility
+  retail_store_placement:
+    display_name: 'Consumer Marketing: Retail Store Placement'
+    domain: consumer_marketing
+    agent_id: rtsp
+    location: us-central1
+    tables:
+    - geospatial_footfall
+    - store_kiosk_locations
+    - market_catchment_demographics
+  five_g_handset_upgrade:
+    display_name: 'Consumer Marketing: 5G Handset Upgrade'
+    domain: consumer_marketing
+    agent_id: fghu
+    location: us-central1
+    tables:
+    - device_fleet_inventory
+    - network_coverage_5g
+    - upgrade_incentive_campaigns
+  volte_compliance_grey_market:
+    display_name: 'Consumer Marketing: VoLTE Compliance & Grey Market'
+    domain: consumer_marketing
+    agent_id: vcgm
+    location: us-central1
+    tables:
+    - imei_tac_database
+    - network_registration_logs
+    - device_retirement_notices
+  international_call_pack:
+    display_name: 'Consumer Marketing: International Call Pack'
+    domain: consumer_marketing
+    agent_id: icpk
+    location: us-central1
+    tables:
+    - international_cdr_usage
+    - roaming_calling_zones
+    - discount_rate_plans
+  cloud_storage_upsell:
+    display_name: 'Consumer Marketing: Cloud Storage Upsell'
+    domain: consumer_marketing
+    agent_id: cstu
+    location: us-central1
+    tables:
+    - device_storage_telemetry
+    - cloud_backup_subscriptions
+    - storage_tier_conversions
+  tourist_welcome_roaming:
+    display_name: 'Consumer Marketing: Tourist Welcome & Roaming'
+    domain: consumer_marketing
+    agent_id: twro
+    location: us-central1
+    tables:
+    - inbound_roamer_events
+    - tourist_pass_catalog
+    - multilingual_welcome_conversions
+  self_serve_device_specs:
+    display_name: 'Consumer Marketing: Self-Serve Device Specs'
+    domain: consumer_marketing
+    agent_id: ssds
+    location: us-central1
+    tables:
+    - handset_specifications
+    - digital_comparison_sessions
+    - customer_device_affinities
+  five_g_home_broadband_upsell:
+    display_name: 'Consumer Marketing: 5G Home Broadband Upsell'
+    domain: consumer_marketing
+    agent_id: fghb
+    location: us-central1
+    tables:
+    - fiber_constrained_addresses
+    - fwa_5g_signal_metrics
+    - home_broadband_orders
+  in_the_moment_data_boost:
+    display_name: 'Consumer Marketing: In-the-Moment Data Boost'
+    domain: consumer_marketing
+    agent_id: imdb
+    location: us-central1
+    tables:
+    - subscriber_data_allowances
+    - hourly_depletion_velocity
+    - ondemand_topup_campaigns
+  five_g_gaming_qos_package:
+    display_name: 'Consumer Marketing: 5G Gaming QoS Package'
+    domain: consumer_marketing
+    agent_id: fgqp
+    location: us-central1
+    tables:
+    - cloud_gaming_session_telemetry
+    - network_slice_allocations
+    - gaming_qos_subscriptions
+  airport_roaming_pass:
+    display_name: 'Consumer Marketing: Airport Roaming Pass'
+    domain: consumer_marketing
+    agent_id: arps
+    location: us-central1
+    tables:
+    - airport_geofence_triggers
+    - outbound_roaming_passes
+    - traveler_pack_activations
+  competitor_churn_insights:
+    display_name: 'Consumer Marketing: Competitor Churn Insights'
+    domain: consumer_marketing
+    agent_id: cpci
+    location: us-central1
+    tables:
+    - port_out_mnp_requests
+    - competitor_campaign_intel
+    - churn_driver_correlations
+  prepaid_to_postpaid:
+    display_name: 'Consumer Marketing: Prepaid to Postpaid'
+    domain: consumer_marketing
+    agent_id: prpo
+    location: us-central1
+    tables:
+    - prepaid_recharge_history
+    - clv_scoring_models
+    - postpaid_migration_offers
+  streaming_subhub_bundles:
+    display_name: 'Consumer Marketing: Streaming SubHub Bundles'
+    domain: consumer_marketing
+    agent_id: sshb
+    location: us-central1
+    tables:
+    - ott_traffic_consumption
+    - content_partner_catalogs
+    - subhub_unified_billings
+  smartwatch_onenumber_esim:
+    display_name: 'Consumer Marketing: Smartwatch OneNumber eSIM'
+    domain: consumer_marketing
+    agent_id: swoe
+    location: us-central1
+    tables:
+    - connected_device_pairings
+    - onenumber_esim_profiles
+    - wearable_addon_subscriptions
+  work_from_home_broadband:
+    display_name: 'Consumer Marketing: Work-From-Home Broadband'
+    domain: consumer_marketing
+    agent_id: wfmb
+    location: us-central1
+    tables:
+    - enterprise_vpn_telemetry
+    - dedicated_wfh_broadband_plans
+    - dual_sim_hybrid_orders
+  social_media_pass:
+    display_name: 'Consumer Marketing: Social Media Pass'
+    domain: consumer_marketing
+    agent_id: smpk
+    location: us-central1
+    tables:
+    - social_app_data_usage
+    - zerorated_pass_subscriptions
+    - genz_campaign_conversions
+  secondary_tablet_sim:
+    display_name: 'Consumer Marketing: Secondary Tablet SIM'
+    domain: consumer_marketing
+    agent_id: stsm
+    location: us-central1
+    tables:
+    - tablet_imei_attachments
+    - multi_device_data_share
+    - secondary_sim_activations
+  postcode_coverage_outages:
+    display_name: 'Onboarding & Provisioning: Postcode Coverage & Outages'
+    domain: onboarding_provisioning
+    agent_id: pcoo
+    location: us-central1
+    tables:
+    - address_geocodes
+    - cell_coverage_ratios
+    - planned_outage_schedules
+  esim_device_compatibility:
+    display_name: 'Onboarding & Provisioning: eSIM Device Compatibility'
+    domain: onboarding_provisioning
+    agent_id: esdc
+    location: us-central1
+    tables:
+    - device_eid_database
+    - esim_activation_matrix
+    - digital_onboarding_sessions
+  mnp_number_porting_tracker:
+    display_name: 'Onboarding & Provisioning: MNP Number Porting Tracker'
+    domain: onboarding_provisioning
+    agent_id: mnpt
+    location: us-central1
+    tables:
+    - donor_network_responses
+    - porting_clearinghouse_logs
+    - activation_sla_metrics
+  fiber_fwa_self_install:
+    display_name: 'Onboarding & Provisioning: Fiber & FWA Self-Install'
+    domain: onboarding_provisioning
+    agent_id: ffsi
+    location: us-central1
+    tables:
+    - cpe_ont_telemetry
+    - self_install_diagnostic_steps
+    - technician_escalation_records
+  kyc_digital_identity_verification:
+    display_name: 'Onboarding & Provisioning: KYC Digital Identity Verification'
+    domain: onboarding_provisioning
+    agent_id: kdiv
+    location: us-central1
+    tables:
+    - kyc_document_validations
+    - biometric_match_scores
+    - fraud_risk_evaluations
+  multi_service_bundle_activation:
+    display_name: 'Onboarding & Provisioning: Multi-Service Bundle Activation'
+    domain: onboarding_provisioning
+    agent_id: msba
+    location: us-central1
+    tables:
+    - bundle_order_orchestrations
+    - provisioning_gateway_events
+    - activation_exception_queues
+  multi_line_account_management:
+    display_name: 'Subscriber CRM: Multi-Line Account Management'
+    domain: subscriber_crm
+    agent_id: mlam
+    location: us-central1
+    tables:
+    - account_line_hierarchies
+    - shared_pool_usages
+    - billing_inquiry_summaries
+  proactive_retention_save_offers:
+    display_name: 'Subscriber CRM: Proactive Retention Save Offers'
+    domain: subscriber_crm
+    agent_id: prso
+    location: us-central1
+    tables:
+    - subscriber_churn_propensities
+    - save_discount_matrices
+    - retention_agent_concessions
+  smart_ivr_outage_deflection:
+    display_name: 'Subscriber CRM: Smart IVR Outage Deflection'
+    domain: subscriber_crm
+    agent_id: siod
+    location: us-central1
+    tables:
+    - incoming_caller_clis
+    - active_cell_incident_maps
+    - automated_ivr_deflections
+  bill_shock_charge_breakdown:
+    display_name: 'Subscriber CRM: Bill Shock Charge Breakdown'
+    domain: subscriber_crm
+    agent_id: bscb
+    location: us-central1
+    tables:
+    - monthly_billing_cdrs
+    - roaming_overage_details
+    - goodwill_adjustment_ledgers
+  vas_subscription_manager:
+    display_name: 'Subscriber CRM: VAS Subscription Manager'
+    domain: subscriber_crm
+    agent_id: vass
+    location: us-central1
+    tables:
+    - active_vas_services
+    - partner_content_charges
+    - subscription_cancellation_logs
+  vip_high_arpu_concierge:
+    display_name: 'Subscriber CRM: VIP & High-ARPU Concierge'
+    domain: subscriber_crm
+    agent_id: vipr
+    location: us-central1
+    tables:
+    - platinum_subscriber_rosters
+    - dedicated_concierge_tickets
+    - sla_resolution_timelines
+  voice_of_customer_telco_sentiment:
+    display_name: 'Subscriber CRM: Voice of Customer Telco Sentiment'
+    domain: subscriber_crm
+    agent_id: voct
+    location: us-central1
+    tables:
+    - csat_nps_survey_responses
+    - nlp_sentiment_topic_clusters
+    - agent_interaction_transcripts
+  payment_arrangement_promise_to_pay:
+    display_name: 'Subscriber CRM: Payment Arrangement & Promise to Pay'
+    domain: subscriber_crm
+    agent_id: papp
+    location: us-central1
+    tables:
+    - delinquent_account_aging
+    - promise_to_pay_commitments
+    - service_restoration_triggers
+  fcaps_alarm_noise_reduction:
+    display_name: 'NetOps & AIOps: FCAPS Alarm Noise Reduction'
+    domain: netops_aiops
+    agent_id: fcap
+    location: us-central1
+    tables:
+    - raw_snmp_alarm_streams
+    - alarm_correlation_rules
+    - actionable_incident_clusters
+  automated_gemini_pir_generator:
+    display_name: 'NetOps & AIOps: Automated Gemini PIR Generator'
+    domain: netops_aiops
+    agent_id: gpir
+    location: us-central1
+    tables:
+    - major_incident_timelines
+    - slack_chat_engineering_logs
+    - root_cause_corrective_actions
+  cell_tower_congestion_analytics:
+    display_name: 'NetOps & AIOps: Cell Tower Congestion Analytics'
+    domain: netops_aiops
+    agent_id: ctca
+    location: us-central1
+    tables:
+    - ran_sector_prb_utilization
+    - voice_drop_call_rates
+    - capacity_expansion_priorities
+  fiber_backhaul_latency_optimization:
+    display_name: 'NetOps & AIOps: Fiber Backhaul Latency Optimization'
+    domain: netops_aiops
+    agent_id: fblo
+    location: us-central1
+    tables:
+    - optical_transceiver_telemetry
+    - latency_jitter_measurements
+    - rerouting_path_optimizations
+  predictive_hardware_maintenance:
+    display_name: 'NetOps & AIOps: Predictive Hardware Maintenance'
+    domain: netops_aiops
+    agent_id: phwm
+    location: us-central1
+    tables:
+    - baseband_temperature_sensors
+    - fan_power_degradation_metrics
+    - preventative_work_orders
+  site_power_energy_efficiency:
+    display_name: 'NetOps & AIOps: Site Power & Energy Efficiency'
+    domain: netops_aiops
+    agent_id: spee
+    location: us-central1
+    tables:
+    - cell_site_kwh_consumption
+    - dynamic_sleep_mode_schedules
+    - solar_battery_telemetries
+  stadium_arena_crowd_density:
+    display_name: 'DaaS & CAMARA: Stadium & Arena Crowd Density'
+    domain: daas_camara
+    agent_id: sacd
+    location: us-central1
+    tables:
+    - anonymized_cell_attachments
+    - venue_geofence_boundaries
+    - hourly_crowd_density_aggregates
+  sim_swap_fraud_prevention_api:
+    display_name: 'DaaS & CAMARA: SIM Swap Fraud Prevention API'
+    domain: daas_camara
+    agent_id: ssfp
+    location: us-central1
+    tables:
+    - sim_swap_event_timestamps
+    - banking_api_query_logs
+    - fraud_verification_audit_trail
+  number_verification_api:
+    display_name: 'DaaS & CAMARA: Number Verification API'
+    domain: daas_camara
+    agent_id: nvap
+    location: us-central1
+    tables:
+    - camara_auth_token_requests
+    - carrier_billing_id_matches
+    - api_monetization_ledgers
+  device_location_verification_api:
+    display_name: 'DaaS & CAMARA: Device Location Verification API'
+    domain: daas_camara
+    agent_id: dlva
+    location: us-central1
+    tables:
+    - location_verification_queries
+    - geofence_match_results
+    - enterprise_sla_tracking
+  quality_on_demand_qod_api:
+    display_name: 'DaaS & CAMARA: Quality on Demand (QoD) API'
+    domain: daas_camara
+    agent_id: qoda
+    location: us-central1
+    tables:
+    - qod_slice_session_requests
+    - guaranteed_bandwidth_metrics
+    - developer_api_billings
+  device_swap_roaming_status_api:
+    display_name: 'DaaS & CAMARA: Device Swap & Roaming Status API'
+    domain: daas_camara
+    agent_id: dsrs
+    location: us-central1
+    tables:
+    - device_imei_change_events
+    - international_roaming_registrations
+    - partner_verification_records

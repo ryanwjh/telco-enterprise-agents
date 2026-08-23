@@ -1,7 +1,0 @@
-candidate_id,current_store_id,target_role,readiness_status,mobility_preference,development_plan_status
-MGR-302,STORE-101,Store Manager,Ready Now,District & Surrounding Metro,Completed - Ready for Placement
-MGR-305,STORE-102,Store Manager,Ready Now,Regional Mobility (Any Location),Completed - Ready for Placement
-MGR-308,STORE-103,Store Manager,Ready in 1-2 Years,District 02 Only,In Progress - Capstone Retail Finance
-MGR-310,STORE-104,Store Manager,Ready Now,District & Surrounding Metro,Completed - Ready for Placement
-MGR-303,STORE-101,Assistant Store Manager,Ready Now,Store 101 / Store 102,Completed - Ready for Placement
-MGR-306,STORE-102,Assistant Store Manager,Ready in 1-2 Years,District 01 Only,In Progress - Labor Scheduling Mastery

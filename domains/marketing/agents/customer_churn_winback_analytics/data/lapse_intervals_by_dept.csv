@@ -1,5 +1,0 @@
-department,median_repurchase_days,churn_threshold_days,active_customers_count,lapsing_customers_count,lapsing_rate_pct
-Fresh Grocery & Staples,12,35,145000,11600,8.0
-Apparel & Footwear,45,120,98000,17640,18.0
-Beauty & Skincare,38,90,72000,10800,15.0
-Home & Electronics,90,240,54000,12960,24.0

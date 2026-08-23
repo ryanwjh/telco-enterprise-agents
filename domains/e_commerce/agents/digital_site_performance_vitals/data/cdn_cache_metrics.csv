@@ -1,4 +1,0 @@
-date,edge_region,total_requests,cache_hits,cache_misses,hit_ratio_pct,bandwidth_saved_gb
-2026-07-01,North_America,42000000,39480000,2520000,94.0,18500
-2026-07-01,Europe,18500000,16835000,1665000,91.0,7600
-2026-07-01,Asia_Pacific,12000000,10560000,1440000,88.0,4800

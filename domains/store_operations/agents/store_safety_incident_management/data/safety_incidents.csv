@@ -1,5 +1,0 @@
-incident_id,store_id,incident_type,incident_date,incident_location,injured_party,medical_attention_required,weather_contributor
-INC-SAF-001,STORE-101,Slip and Fall,2026-07-12,Produce Department Wet Floor,Customer,True,Rainy Outdoor
-INC-SAF-002,STORE-102,Merchandise Fall from Shelf,2026-07-15,Aisle 09 High Rack,Associate,False,None
-INC-SAF-003,STORE-103,Box Cutter Laceration,2026-07-18,Stockroom Unloading Bay,Associate,True,None
-INC-SAF-004,STORE-104,Parking Lot Trip Hazard,2026-07-19,Curbside Pickup Row 2,Customer,False,Pothole

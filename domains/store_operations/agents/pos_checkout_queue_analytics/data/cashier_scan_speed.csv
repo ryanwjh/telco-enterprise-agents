@@ -1,5 +1,0 @@
-record_id,store_id,cashier_id,shift_date,items_scanned_count,active_scan_minutes,items_per_minute_ipm,tender_time_seconds
-IPM-REC-01,STORE-101,EMP-8841,2026-07-20,2150,95.0,22.63,24.5
-IPM-REC-02,STORE-101,EMP-7723,2026-07-20,1640,90.0,18.22,31.0
-IPM-REC-03,STORE-102,EMP-9021,2026-07-20,1280,85.0,15.06,42.0
-IPM-REC-04,STORE-102,EMP-6632,2026-07-20,2420,100.0,24.2,21.0

@@ -1,4 +1,0 @@
-account_id,order_id,sku_count,total_units,tier_discount_applied,repeat_order_interval_days
-B2B-101,B2B-ORD-401,24,1800,Tier3_20pct,21
-B2B-102,B2B-ORD-402,12,850,Tier2_15pct,30
-B2B-103,B2B-ORD-403,8,420,Tier1_10pct,45

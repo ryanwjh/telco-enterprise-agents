@@ -1,4 +1,0 @@
-carrier_name,total_packages,dim_weight_assessed_packages,dim_weight_penalties_usd,avg_dim_penalty_per_pkg_usd
-UPS Ground,95000,28500,42750.0,1.5
-FedEx Home Delivery,82000,22140,35424.0,1.6
-USPS Priority Mail,19000,3420,4104.0,1.2

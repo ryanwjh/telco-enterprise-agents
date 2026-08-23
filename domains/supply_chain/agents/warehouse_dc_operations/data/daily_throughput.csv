@@ -1,4 +1,0 @@
-dc_id,date,inbound_shipments_count,inbound_units_received,outbound_shipments_count,outbound_units_shipped,dock_to_stock_hours,avg_dock_turn_minutes
-DC-001,2026-07-24,25,12500,40,18000,3.5,45
-DC-002,2026-07-24,38,24000,65,32000,2.8,38
-DC-003,2026-07-24,18,15000,22,14000,5.2,75

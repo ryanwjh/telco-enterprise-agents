@@ -1,4 +1,0 @@
-allocation_id,product_category,total_pre_allocated_units,scanned_units,allocation_accuracy_pct
-ALLOC-01,Beverages,12000,11985,99.87
-ALLOC-02,Snacks,8500,8480,99.76
-ALLOC-03,Seasonal Decor,6200,6140,99.03

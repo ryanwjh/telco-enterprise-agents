@@ -1,5 +1,0 @@
-carrier_id,carrier_name,transport_mode,sla_on_time_pct,avg_cost_per_mile
-CARRIER-001,Apex Freight Systems,TRUCKLOAD,94.5,2.85
-CARRIER-002,SwiftTrans Logistics,INTERMODAL,82.0,2.10
-CARRIER-003,Coastal Express Cargo,LTL,78.5,3.40
-CARRIER-004,National Parcel Post,PARCEL,96.0,4.15

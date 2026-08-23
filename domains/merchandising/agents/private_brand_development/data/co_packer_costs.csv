@@ -1,9 +1,0 @@
-co_packer_id,co_packer_name,private_sku_id,ingredient_cost_usd,packaging_cost_usd,labor_overhead_usd,total_unit_cogs_usd,cogs_variance_pct
-CP-801,Midwest Food Co-Packers,PL-PAN-101,4.1,1.2,0.9,6.2,3.5
-CP-801,Midwest Food Co-Packers,PL-PAN-102,1.35,0.45,0.3,2.1,-1.2
-CP-802,Great Lakes Snacks LLC,PL-SNK-201,0.95,0.4,0.3,1.65,4.2
-CP-802,Great Lakes Snacks LLC,PL-SNK-202,0.6,0.25,0.2,1.05,1.0
-CP-803,Valley Dairy Processors,PL-DAI-301,2.3,0.5,0.35,3.15,-0.5
-CP-803,Valley Dairy Processors,PL-DAI-302,1.15,0.3,0.25,1.7,2.1
-CP-804,PureBev Bottling Works,PL-BEV-401,1.2,0.6,0.35,2.15,5.8
-CP-805,EcoClean Manufacturing,PL-HPC-501,3.6,1.3,0.9,5.8,-2.4

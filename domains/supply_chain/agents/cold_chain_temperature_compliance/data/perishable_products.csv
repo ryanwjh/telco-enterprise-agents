@@ -1,5 +1,0 @@
-sku_id,category,product_name,total_shelf_life_days,avg_rsl_at_dc_receipt_days,min_acceptable_rsl_days
-SKU-COLD-01,Organic Dairy,Whole Organic Milk 1Gal,21,16.8,14
-SKU-COLD-02,Fresh Poultry,Boneless Chicken Breast 2lb,12,9.5,8
-SKU-COLD-03,Prepared Salads,Caesar Salad Bowl 10oz,10,7.2,6
-SKU-COLD-04,Specialty Cheese,Artisan Gouda Wheel 8oz,60,52.0,40

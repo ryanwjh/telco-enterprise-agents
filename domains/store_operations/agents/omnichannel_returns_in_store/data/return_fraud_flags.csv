@@ -1,5 +1,0 @@
-flag_id,store_id,customer_id,transaction_date,flag_type,risk_score,receipt_verified,manager_override_required
-FRD-FLG-01,STORE-101,CUST-99214,2026-07-20,Wardrobing (Tag Attached Re-hang),84.5,True,True
-FRD-FLG-02,STORE-102,CUST-11823,2026-07-20,Frequent No-Receipt Return,91.0,False,True
-FRD-FLG-03,STORE-103,CUST-44819,2026-07-19,Serial Returner (>40% Return Rate),68.0,True,False
-FRD-FLG-04,STORE-104,CUST-77291,2026-07-18,Counterfeit Receipt Barcode,96.5,False,True

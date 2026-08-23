@@ -1,6 +1,0 @@
-agreement_id,vendor_id,fiscal_year,tier_1_threshold_spend,tier_1_rebate_pct,tier_2_threshold_spend,tier_2_rebate_pct,current_ytd_spend,current_rebate_tier
-REB-001,VND-001,2026,500000.0,3.0,1000000.0,5.0,1250000.0,Tier 2
-REB-002,VND-002,2026,400000.0,2.5,800000.0,4.5,650000.0,Tier 1
-REB-003,VND-003,2026,300000.0,2.0,600000.0,4.0,450000.0,Tier 1
-REB-004,VND-004,2026,500000.0,3.0,1000000.0,5.0,350000.0,Base
-REB-005,VND-005,2026,250000.0,1.5,500000.0,3.0,520000.0,Tier 2

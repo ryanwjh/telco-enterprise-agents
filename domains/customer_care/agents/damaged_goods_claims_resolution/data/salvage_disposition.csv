@@ -1,6 +1,0 @@
-salvage_id,sku,category,damaged_units_count,disposition_type,salvage_recovery_amount,original_retail_value
-SAL-401,SKU-001,Apparel & Outerwear,28,Liquidated / Secondary Market,1120.0,3920.0
-SAL-402,SKU-002,Footwear,18,Liquidated / Secondary Market,540.0,1800.0
-SAL-403,SKU-003,Consumer Electronics,35,Recycled E-Waste Recovery,700.0,4200.0
-SAL-404,SKU-005,Wearable Tech,22,Refurbished Secondary Grade B,1320.0,3300.0
-SAL-405,SKU-006,Home & Hydration,15,Destroyed & Scrapped,0.0,450.0

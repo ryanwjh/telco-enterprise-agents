@@ -1,6 +1,0 @@
-customer_id,return_rate_l12m_pct,total_returns_count,total_purchases_count,wardrobing_risk_score,is_flagged_for_abuse,account_action_taken
-CUST-901,78.5,44,56,88,True,Restricted to In-Store Returns Only
-CUST-902,65.0,26,40,72,True,Warning Notification Sent
-CUST-903,82.0,50,61,94,True,Free Return Shipping Revoked
-CUST-904,25.0,10,40,18,False,None - Normal Profile
-CUST-905,15.0,6,40,10,False,None - Normal Profile

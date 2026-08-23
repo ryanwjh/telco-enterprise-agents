@@ -1,6 +1,0 @@
-promo_id,vendor_id,scan_rate_per_unit_usd,claimed_allowance_usd,verified_pos_allowance_usd,variance_usd,audit_status
-PRM-2026-01,VEND-CPG-101,0.5,42500.0,41200.0,-1300.0,Approved with Adjustment
-PRM-2026-02,VEND-CPG-102,0.4,24800.0,24650.0,-150.0,Approved
-PRM-2026-03,VEND-CPG-103,0.45,18000.0,17920.0,-80.0,Approved
-PRM-2026-04,VEND-CPG-104,0.6,30000.0,26800.0,-3200.0,Under Dispute
-PRM-2026-05,VEND-CPG-105,0.5,15000.0,14850.0,-150.0,Approved

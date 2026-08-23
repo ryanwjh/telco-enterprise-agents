@@ -1,7 +1,0 @@
-record_id,store_id,training_module,training_date,attendees_count,quiz_pass_rate_pct,trainer_name
-TRN-801,STORE-101,Ergonomic Lifting & Pallet Jack Operation,2026-05-10,24,100.0,D. Vance
-TRN-802,STORE-101,Bloodborne Pathogens & Spill Response,2026-05-18,32,96.9,S. Martinez
-TRN-803,STORE-102,Ergonomic Lifting & Pallet Jack Operation,2026-05-12,30,100.0,R. Jenkins
-TRN-804,STORE-102,Ladder Safety & Overhead Storage,2026-05-24,28,100.0,R. Jenkins
-TRN-805,STORE-103,Emergency Evacuation & Fire Safety,2026-06-02,40,97.5,M. Taylor
-TRN-806,STORE-104,Active Threat Preparedness Drill,2026-06-08,48,100.0,K. Patel

@@ -1,7 +1,0 @@
-vendor_id,facility_location,audit_date,audit_firm,audit_type,audit_score,audit_rating,re_audit_due_date
-VEND-1001,Vietnam - Binh Duong Facility,2026-03-12,Bureau Veritas,SMETA 4-Pillar,94.5,A - Full Compliance,2028-03-12
-VEND-1001,Cambodia - Phnom Penh Plant,2026-04-18,Intertek,SMETA 4-Pillar,88.0,B - Minor Corrective Action,2027-04-18
-VEND-1002,USA - Ohio Packaging Works,2026-01-20,SGS Global,Sedex 2-Pillar,98.0,A - Full Compliance,2029-01-20
-VEND-1003,Mexico - Monterrey Clean Plant,2026-02-14,Elevance Audit,SMETA 4-Pillar,91.5,A - Full Compliance,2028-02-14
-VEND-1004,Taiwan - Hsinchu Tech Park,2026-05-10,TUV Rheinland,RBA Validated Audit,95.0,A - Full Compliance,2028-05-10
-VEND-1004,Malaysia - Penang Assembly,2026-06-05,SGS Global,RBA Validated Audit,84.0,B - Minor Corrective Action,2027-06-05

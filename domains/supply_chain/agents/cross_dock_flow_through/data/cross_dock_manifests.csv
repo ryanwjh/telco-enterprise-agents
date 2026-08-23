@@ -1,5 +1,0 @@
-manifest_id,facility_id,inbound_trailer_id,outbound_trailer_id,total_pallets,dwell_turn_hours,target_turn_hours,status,on_target_flag
-XD-MAN-101,DC-01,TR-IN-881,TR-OUT-501,24,2.8,4.0,Completed,True
-XD-MAN-102,DC-01,TR-IN-882,TR-OUT-502,26,3.4,4.0,Completed,True
-XD-MAN-103,DC-02,TR-IN-883,TR-OUT-503,22,5.2,4.0,Completed - Delayed,False
-XD-MAN-104,DC-01,TR-IN-884,TR-OUT-504,28,3.1,4.0,In-Progress,True

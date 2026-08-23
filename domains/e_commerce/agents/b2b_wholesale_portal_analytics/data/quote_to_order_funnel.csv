@@ -1,5 +1,0 @@
-quote_id,account_id,quote_date,quote_amount,negotiated_discount_pct,order_converted,conversion_days
-QTE-801,B2B-101,2026-07-02,85000.00,18.5,true,3
-QTE-802,B2B-102,2026-07-05,42000.00,15.0,true,5
-QTE-803,B2B-103,2026-07-08,19500.00,12.0,true,2
-QTE-804,B2B-104,2026-07-12,68000.00,22.0,false,14

@@ -1,5 +1,0 @@
-promo_code,store_id,promo_type,redemptions_in_store,in_store_sales_usd,aov_usd,new_local_customers_pct
-LOCAL10-CHI,STORE-101,Store-Exclusive $10 Off $50,640,44800.0,70.0,38.5
-LOCAL10-NY,STORE-102,Store-Exclusive $10 Off $50,980,76440.0,78.0,42.0
-LOCAL10-DFW,STORE-103,Store-Exclusive $10 Off $50,520,33800.0,65.0,34.0
-LOCAL10-ATL,STORE-104,Store-Exclusive $10 Off $50,710,48280.0,68.0,36.5

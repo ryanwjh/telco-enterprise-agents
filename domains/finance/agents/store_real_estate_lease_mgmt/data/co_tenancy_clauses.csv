@@ -1,9 +1,0 @@
-clause_id,store_id,mall_center_name,required_anchor_tenant,anchor_occupancy_status,co_tenancy_threshold_pct,current_center_occupancy_pct,remedy_invoked,rent_reduction_pct,clause_trigger_date
-COT_3000,STR_100,Metro Galleria 1,Major Dept Store 1,Vacant (Closed),75.0,68.5,Substitute Rent Invoked (50% Base),50.0,2026-03-15
-COT_3001,STR_101,Metro Galleria 2,Major Dept Store 2,Occupied,75.0,82.0,None,0.0,
-COT_3002,STR_102,Metro Galleria 3,Major Dept Store 3,Occupied,75.0,82.0,None,0.0,
-COT_3003,STR_103,Metro Galleria 4,Major Dept Store 4,Vacant (Closed),75.0,68.5,Substitute Rent Invoked (50% Base),50.0,2026-03-15
-COT_3004,STR_104,Metro Galleria 5,Major Dept Store 5,Occupied,75.0,82.0,None,0.0,
-COT_3005,STR_105,Metro Galleria 6,Major Dept Store 6,Occupied,75.0,82.0,None,0.0,
-COT_3006,STR_106,Metro Galleria 7,Major Dept Store 7,Vacant (Closed),75.0,68.5,Substitute Rent Invoked (50% Base),50.0,2026-03-15
-COT_3007,STR_107,Metro Galleria 8,Major Dept Store 8,Occupied,75.0,82.0,None,0.0,

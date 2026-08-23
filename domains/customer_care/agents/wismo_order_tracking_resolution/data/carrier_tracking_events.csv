@@ -1,6 +1,0 @@
-tracking_number,order_id,carrier_code,event_timestamp,event_type,event_location,is_delayed,delay_reason
-TRK-FDX-101,ORD-98401,FedEx,2026-08-04 14:22:00,Hub Scan,Memphis TN Hub,True,Severe Weather Congestion
-TRK-UPS-102,ORD-98402,UPS,2026-08-04 09:15:00,Sorting Exception,Louisville KY DC,True,Mechanical Belt Sort Failure
-TRK-USP-103,ORD-98403,USPS,2026-08-04 08:30:00,Out for Delivery,Chicago IL Local,False,None
-TRK-FDX-104,ORD-98404,FedEx,2026-08-03 18:45:00,In Transit,Dallas TX Hub,True,Highway Transport Delay
-TRK-DHL-105,ORD-98405,DHL,2026-08-02 11:10:00,Customs Hold,Cincinnati OH Gateway,True,Documentation Review

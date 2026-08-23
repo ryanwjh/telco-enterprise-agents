@@ -1,5 +1,0 @@
-cap_id,vendor_id,non_conformance_issue,severity,issue_date,target_closure_date,actual_closure_date,verification_status
-CAP-101,VEND-1001,Emergency Exit Signage Blocked in Warehouse C,Medium,2026-04-18,2026-05-18,2026-05-02,Resolved & Closed
-CAP-102,VEND-1001,Eye-Wash Station Inspection Log Gap,Low,2026-04-18,2026-05-30,2026-05-10,Resolved & Closed
-CAP-103,VEND-1004,Chemical Secondary Containment Pallet Crack,Medium,2026-06-05,2026-07-05,2026-06-20,Resolved & Closed
-CAP-104,VEND-1004,Noise Level Signage Missing in Stamping Bay,Low,2026-06-05,2026-07-15,2026-07-01,Resolved & Closed

@@ -1,5 +1,0 @@
-boris_id,store_id,order_channel,return_timestamp,product_category,refund_amount_usd,return_reason,processing_time_mins
-BORIS-101,STORE-101,E-Commerce Web,2026-07-20 11:20:00,Women's Apparel,89.5,Fit / Size Too Small,2.8
-BORIS-102,STORE-101,Mobile App,2026-07-20 13:45:00,Consumer Electronics,249.0,Changed Mind,4.1
-BORIS-103,STORE-102,E-Commerce Web,2026-07-20 15:10:00,Footwear,120.0,Defective Stitching,3.5
-BORIS-104,STORE-102,Marketplace 3P,2026-07-20 16:30:00,Home Appliances,185.0,Missing Accessories,5.2

@@ -1,6 +1,0 @@
-store_id,district_id,department,starting_cashier_wage_usd,team_lead_starting_wage_usd,compression_gap_usd,compression_risk_status
-STORE-101,DIST-01,Cashier & Front End,17.0,21.0,4.0,Healthy (>= $3.50 Gap)
-STORE-101,DIST-01,Grocery & Perishables,18.0,21.5,3.5,Healthy (>= $3.50 Gap)
-STORE-102,DIST-01,Cashier & Front End,16.5,20.5,4.0,Healthy (>= $3.50 Gap)
-STORE-103,DIST-02,Cashier & Front End,17.5,19.5,2.0,Moderate Compression (< $2.50 Gap)
-STORE-104,DIST-02,Cashier & Front End,16.5,20.5,4.0,Healthy (>= $3.50 Gap)

@@ -1,5 +1,0 @@
-match_id,unified_customer_id,matched_identifiers,confidence_score_pct,identity_source,created_timestamp
-ID-M-001,UC-884912,Email + Mobile SHA256 + Store Loyalty Card,99.4,Deterministic POS Match,2026-07-20 10:00:00
-ID-M-002,UC-772104,Cookie ID + IP Subnet + Shipping Address,86.5,Probabilistic CDP Stitch,2026-07-20 10:15:00
-ID-M-003,UC-993811,Mobile App Device ID + Apple Pay Token,96.8,Deterministic App Auth,2026-07-20 10:30:00
-ID-M-004,UC-551920,Email + In-Store Wi-Fi Portal Login,94.2,Deterministic Store Login,2026-07-20 10:45:00

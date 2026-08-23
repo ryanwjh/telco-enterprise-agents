@@ -1,5 +1,0 @@
-dispatch_id,store_id,runner_associate_id,shift_date,orders_delivered_count,avg_stage_to_car_seconds,customer_rating_avg
-RUN-DISP-01,STORE-101,EMP-7714,2026-07-20,36,68.0,4.92
-RUN-DISP-02,STORE-101,EMP-8829,2026-07-20,32,72.5,4.88
-RUN-DISP-03,STORE-102,EMP-9912,2026-07-20,24,142.0,4.35
-RUN-DISP-04,STORE-102,EMP-6601,2026-07-20,22,135.0,4.4

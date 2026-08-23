@@ -1,9 +1,0 @@
-customer_account_id,customer_name,current_balance,aging_1_30_days,aging_31_60_days,aging_61_90_days,aging_over_90_days,bad_debt_risk_flag
-CUST-101,Apex Retail Group,45000.00,30000.00,15000.00,0.00,0.00,FALSE
-CUST-102,Summit Department Stores,120000.00,50000.00,40000.00,20000.00,10000.00,TRUE
-CUST-103,Beacon Superstores,85000.00,60000.00,25000.00,0.00,0.00,FALSE
-CUST-104,Cascade Outlets,32000.00,20000.00,8000.00,4000.00,0.00,FALSE
-CUST-105,Metro Hypermarket,150000.00,90000.00,40000.00,20000.00,0.00,FALSE
-CUST-106,Pinnacle Boutiques,28000.00,5000.00,8000.00,10000.00,5000.00,TRUE
-CUST-107,Urban Trends Co,64000.00,44000.00,20000.00,0.00,0.00,FALSE
-CUST-108,Horizon Retailers,95000.00,55000.00,25000.00,10000.00,5000.00,FALSE

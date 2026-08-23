@@ -1,8 +1,0 @@
-store_id,store_name,metro_area,cluster_tier,median_household_income_usd,urban_density_score,diversity_index
-STORE-101,Downtown Flagship,Chicago Metro,Urban High-Density,115000,9.4,0.78
-STORE-102,Suburban Galleria,Chicago Suburbs,Suburban Family,98000,5.2,0.52
-STORE-103,North Shore Center,Milwaukee Metro,Suburban Affluent,142000,4.8,0.44
-STORE-104,River North Market,Chicago Urban,Urban High-Density,128000,9.8,0.81
-STORE-105,Fox Valley Plaza,Western Suburbs,Suburban Value,74000,4.1,0.62
-STORE-201,Midtown Urban Hub,Minneapolis Metro,Urban High-Density,108000,8.9,0.72
-STORE-204,Highland Park Square,Saint Paul,Suburban Affluent,135000,5.5,0.49

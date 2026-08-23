@@ -1,7 +1,0 @@
-screening_id,store_id,candidate_role,submission_date,completion_date,turnaround_days,status,vendor_name
-BGC-8801,STORE-101,Seasonal Cashier,2026-06-01,2026-06-03,2.0,Clear,Sterling Talent Solutions
-BGC-8802,STORE-101,Seasonal Stocker,2026-06-02,2026-06-05,3.0,Clear,Sterling Talent Solutions
-BGC-8803,STORE-102,Seasonal Cashier,2026-06-04,2026-06-06,2.0,Clear,Sterling Talent Solutions
-BGC-8804,STORE-102,Seasonal Fulfillment,2026-06-05,2026-06-08,3.0,Clear,Sterling Talent Solutions
-BGC-8805,STORE-103,Seasonal Cashier,2026-06-08,2026-06-11,3.0,Clear,Sterling Talent Solutions
-BGC-8806,STORE-104,Seasonal Cashier,2026-06-10,2026-06-12,2.0,Clear,Sterling Talent Solutions

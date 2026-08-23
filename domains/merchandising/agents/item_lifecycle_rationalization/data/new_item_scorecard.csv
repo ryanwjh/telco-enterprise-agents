@@ -1,7 +1,0 @@
-sku_id,product_name,category,launch_week,target_velocity_units,actual_velocity_units,performance_index,success_tier
-SKU-NEW-01,Artisan Cold Brew Oat Latte 12oz,Beverages,4,35.0,42.0,120.0,Tier 1 Outperformer
-SKU-NEW-02,Truffle & Herb Popcorn 5oz,Snacks,6,28.0,31.5,112.5,Tier 1 Outperformer
-SKU-NEW-03,Plant-Based Sausage Patties 8oz,Frozen,8,22.0,14.0,63.6,Tier 3 Underperformer
-SKU-NEW-04,Organic Elderberry Immune Shot 2oz,Health,10,40.0,38.0,95.0,Tier 2 On-Track
-SKU-NEW-05,Grain-Free Cassava Crackers 6oz,Snacks,12,25.0,11.2,44.8,Tier 4 Delist Candidate
-SKU-NEW-06,Kombucha Ginger Lemon 16oz,Beverages,8,30.0,33.0,110.0,Tier 1 Outperformer

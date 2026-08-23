@@ -1,5 +1,0 @@
-claim_id,store_id,incident_type,claim_status,claimant_type,incurred_cost_usd,settlement_amount_usd,insurance_carrier
-CLM-LIAB-101,STORE-101,Customer Slip & Fall,Settled,Customer,6500.0,4200.0,Travelers Commercial
-CLM-LIAB-102,STORE-102,Vehicle Damage in Parking Lot,Open - Investigating,Customer,1800.0,0.0,Travelers Commercial
-CLM-LIAB-103,STORE-103,Associate Workers Comp,Open - Active Care,Associate,8400.0,0.0,Liberty Mutual
-CLM-LIAB-104,STORE-104,Customer Cart Collision,Closed - Denied,Customer,350.0,0.0,Travelers Commercial

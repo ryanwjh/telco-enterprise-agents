@@ -1,7 +1,0 @@
-provision_id,state_code,audit_period_years,estimated_exposure_amount,reserve_accrual_balance,open_state_audit_flag,statute_of_limitations_year,provision_status
-PRV_100,CA,2022-2025,408310.16,408310.16,NO,2027,Reserved Under ASC 450
-PRV_101,TX,2022-2025,191661.83,191661.83,YES,2027,Reserved Under ASC 450
-PRV_102,NY,2022-2025,244556.35,244556.35,NO,2027,Reserved Under ASC 450
-PRV_103,FL,2022-2025,359154.42,359154.42,YES,2027,Reserved Under ASC 450
-PRV_104,IL,2022-2025,240305.77,240305.77,NO,2027,Reserved Under ASC 450
-PRV_105,WA,2022-2025,375302.27,375302.27,YES,2027,Reserved Under ASC 450

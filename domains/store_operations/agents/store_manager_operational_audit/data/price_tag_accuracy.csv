@@ -1,5 +1,0 @@
-scan_batch_id,store_id,department,audited_items_count,shelf_tag_match_count,price_accuracy_pct,undercharge_errors,overcharge_errors
-TAG-ACC-101,STORE-101,Grocery,250,248,99.2,1,1
-TAG-ACC-102,STORE-102,Apparel,200,186,93.0,9,5
-TAG-ACC-103,STORE-103,Health & Beauty,300,298,99.33,1,1
-TAG-ACC-104,STORE-104,Home Goods,180,169,93.89,7,4

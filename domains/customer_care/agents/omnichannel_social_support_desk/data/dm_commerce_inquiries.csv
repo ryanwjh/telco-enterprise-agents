@@ -1,6 +1,0 @@
-dm_id,platform,customer_handle,inquiry_date,inquiry_intent,converted_to_sale,attributed_order_value
-DM-801,Instagram,@fashionista_claire,2026-08-05,Outfit Matching Advice,True,285.0
-DM-802,Instagram,@marcus_outdoor,2026-08-04,Stock Check in Soho Store,True,195.0
-DM-803,TikTok,@trendy_shopper,2026-08-03,Viral Jacket Sizing Inquiry,True,145.0
-DM-804,X / Twitter,@alex_tech_geek,2026-08-02,Wireless Earbud Specs,False,0.0
-DM-805,Facebook,@sarah_family,2026-08-01,Back to School Promo Discount,True,340.0

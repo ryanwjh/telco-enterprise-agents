@@ -1,6 +1,0 @@
-shipment_id,carrier_name,origin_port,destination_port,mode,cwt_cost_usd,target_cwt_usd,transit_status,on_time_flag
-SHP-IN-101,Maersk Line,Shanghai,Port of Los Angeles,Ocean,42.5,38.0,Delivered,True
-SHP-IN-102,MSC Mediterranean,Ningbo,Port of Long Beach,Ocean,46.2,39.5,Delivered,False
-SHP-IN-103,Hapag-Lloyd,Busan,Port of Seattle,Ocean,39.8,39.0,In-Transit,True
-SHP-IN-104,BNSF Rail,Port of Los Angeles,Chicago Inland Hub,Intermodal Rail,28.4,27.0,Delivered,True
-SHP-IN-105,Union Pacific,Port of Long Beach,Dallas DC Hub,Intermodal Rail,31.0,28.5,Delivered,False

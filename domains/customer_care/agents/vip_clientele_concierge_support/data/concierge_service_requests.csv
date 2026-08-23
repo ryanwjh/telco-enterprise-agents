@@ -1,7 +1,0 @@
-request_id,customer_id,request_type,request_date,response_time_minutes,status,sla_met
-VIP-101,CUST-1001,Personal Styling Consultation,2026-08-05,2.5,Completed,True
-VIP-102,CUST-1005,Rare Runway Item Sourcing,2026-08-05,3.1,In Progress,True
-VIP-103,CUST-1002,Priority Same-Day Delivery,2026-08-04,1.8,Delivered,True
-VIP-104,CUST-1004,Private In-Store Suite Fitting,2026-08-03,4.2,Scheduled,True
-VIP-105,CUST-1003,Custom Monogramming Order,2026-08-02,2.0,Completed,True
-VIP-106,CUST-1006,Order Reroute & Gift Packing,2026-08-01,3.8,Completed,True

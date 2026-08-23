@@ -1,4 +1,0 @@
-vehicle_id,route_id,fuel_gallons,mpg_actual,mpg_target,idle_minutes,hard_braking_events
-VAN-101,RT-METRO-01,6.2,12.8,13.5,42,3
-VAN-102,RT-METRO-02,8.5,14.1,14.0,28,1
-VAN-103,RT-METRO-03,7.0,13.0,13.5,35,2

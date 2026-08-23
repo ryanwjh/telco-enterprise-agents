@@ -1,4 +1,0 @@
-hub_id,total_dispatched_orders,on_time_window_orders,sla_adherence_pct,late_orders,top_late_reason
-HUB-CHI-01,1850,1785,96.5,65,High-Rise Elevator Wait
-HUB-CHI-02,1420,1338,94.2,82,Traffic Expressway Delay
-HUB-MIL-01,980,952,97.1,28,Customer Not Home

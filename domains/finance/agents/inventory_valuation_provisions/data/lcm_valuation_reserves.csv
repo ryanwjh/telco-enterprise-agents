@@ -1,7 +1,0 @@
-reserve_id,merchandise_category,fiscal_quarter,cost_basis_inventory_value,net_realizable_value_nrv,lcm_impairment_required,lcm_reserve_balance,reserve_change_vs_prior_qtr,reserve_pct_of_inventory
-RSV_200,Apparel,2026-Q2,9352356.39,8780483.31,571873.08,571873.08,12313.53,6.11
-RSV_201,Footwear,2026-Q2,14235330.47,12612830.64,1622499.83,1622499.83,379735.56,11.4
-RSV_202,Home & Kitchen,2026-Q2,5786204.35,5533195.1,253009.25,253009.25,25353.05,4.37
-RSV_203,Electronics,2026-Q2,8763630.26,7783144.32,980485.94,980485.94,-52999.12,11.19
-RSV_204,Beauty & Personal Care,2026-Q2,13935860.42,12481698.84,1454161.58,1454161.58,19495.99,10.43
-RSV_205,Grocery,2026-Q2,16408680.44,15210703.16,1197977.28,1197977.28,-164055.87,7.3

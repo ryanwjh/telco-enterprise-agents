@@ -1,5 +1,0 @@
-audit_id,store_id,audit_timestamp,cash_drawer_id,auditor_id,audit_result,counterfeit_detected_count,next_audit_due
-TILL-AUD-01,STORE-101,2026-07-20 11:00:00,TILL-01,MGR-101,Passed Clean,0,2026-07-27
-TILL-AUD-02,STORE-102,2026-07-20 16:30:00,TILL-01,MGR-102,Failed - Shortage,0,2026-07-21
-TILL-AUD-03,STORE-103,2026-07-20 10:30:00,TILL-03,MGR-103,Passed Clean,0,2026-07-27
-TILL-AUD-04,STORE-104,2026-07-20 14:00:00,TILL-02,MGR-104,Flagged Counterfeit Note,1,2026-07-21

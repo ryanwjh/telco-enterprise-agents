@@ -1,5 +1,0 @@
-recall_id,facility_id,disposition_method,total_units_destroyed,destruction_cert_date,certified_vendor,salvage_recovery_usd
-REC-2026-01,DC-101,Certified E-Waste Recycling & Shredding,1450,2026-05-15,CleanLytx Eco-Recycling Corp,8700.0
-REC-2026-01,DC-102,Certified E-Waste Recycling & Shredding,980,2026-05-18,CleanLytx Eco-Recycling Corp,5880.0
-REC-2026-02,DC-101,Industrial Fiber Composting & Thermal Incineration,2200,2026-06-20,EnviroSafe Waste Disposal Inc,0.0
-REC-2026-02,DC-102,Industrial Fiber Composting & Thermal Incineration,1650,2026-06-22,EnviroSafe Waste Disposal Inc,0.0

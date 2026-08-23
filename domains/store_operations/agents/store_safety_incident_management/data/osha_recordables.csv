@@ -1,5 +1,0 @@
-osha_case_id,store_id,year,case_classification,days_away_from_work,days_job_transfer,incident_summary
-OSHA-2026-01,STORE-101,2026,Days Away from Work,4,0,Sprained ankle from slip on wet produce floor
-OSHA-2026-02,STORE-103,2026,Medical Treatment Beyond First Aid,0,3,Deep palm laceration requiring 4 sutures
-OSHA-2026-03,STORE-104,2026,Job Transfer or Restriction,0,7,Lower back strain during heavy pallet jack movement
-OSHA-2026-04,STORE-102,2026,Other Recordable Case,0,0,Contusion from fallen canned goods carton

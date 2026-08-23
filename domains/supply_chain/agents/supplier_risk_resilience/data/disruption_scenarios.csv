@@ -1,3 +1,0 @@
-scenario_id,scenario_name,affected_suppliers_count,estimated_revenue_at_risk_usd,buffer_coverage_weeks,mitigation_plan
-SCEN-PORT-01,Pacific Port 4-Week Strike,14,4800000.0,2.5,Air Freight Critical Spares
-SCEN-GEO-02,Taiwan Strait Shipping Restriction,6,6200000.0,3.0,Qualify North America Secondary

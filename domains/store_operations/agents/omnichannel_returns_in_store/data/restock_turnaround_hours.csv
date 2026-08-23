@@ -1,5 +1,0 @@
-batch_id,store_id,department,items_processed_count,same_day_restock_pct,avg_hours_to_shelf,quarantine_hold_count
-RESTK-01,STORE-101,Apparel,48,92.5,3.2,2
-RESTK-02,STORE-101,Electronics,18,78.0,6.5,4
-RESTK-03,STORE-102,Footwear,32,65.0,8.4,7
-RESTK-04,STORE-103,Beauty,24,96.0,2.1,1

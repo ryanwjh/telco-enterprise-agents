@@ -1,9 +1,0 @@
-vendor_id,quarter,tier_level,category,net_procurement_spend_usd,total_spend_pct,invoice_count
-VEND-1001,2026-Q1,Tier 1 - Direct,Apparel,4250000.0,4.25,48
-VEND-1001,2026-Q2,Tier 1 - Direct,Apparel,4850000.0,4.6,54
-VEND-1002,2026-Q1,Tier 1 - Direct,Packaging,2850000.0,2.85,36
-VEND-1002,2026-Q2,Tier 1 - Direct,Packaging,3120000.0,2.95,40
-VEND-1003,2026-Q1,Tier 1 - Direct,Home & Personal Care,1950000.0,1.95,28
-VEND-1003,2026-Q2,Tier 1 - Direct,Home & Personal Care,2180000.0,2.05,32
-VEND-1004,2026-Q1,Tier 1 - Direct,Electronics,3450000.0,3.45,22
-VEND-1004,2026-Q2,Tier 1 - Direct,Electronics,3900000.0,3.7,26

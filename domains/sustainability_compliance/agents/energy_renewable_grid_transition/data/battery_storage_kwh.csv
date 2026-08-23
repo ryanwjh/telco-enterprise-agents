@@ -1,4 +1,0 @@
-facility_id,battery_system_id,storage_capacity_kwh,round_trip_efficiency_pct,daily_cycles,dispatch_mode,annual_energy_arbitrage_savings_usd
-DC-101,BATT-DC101-01,2000.0,89.5,1.2,Peak Shaving & Arbitrage,48500.0
-STORE-101,BATT-ST101-01,500.0,91.0,1.0,Solar Self-Consumption & Tariff Optimization,14200.0
-STORE-102,BATT-ST102-01,600.0,90.5,1.1,4CP Coincident Peak Shaving,18900.0

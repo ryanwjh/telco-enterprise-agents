@@ -1,5 +1,0 @@
-salvage_id,store_id,category,item_count,original_retail_value,salvage_disposition,recovery_rate_pct
-SALV-01,STORE-101,Apparel - Damaged/Stained,14,620.0,Liquidation Jobber Bulk,18.5
-SALV-02,STORE-102,Electronics - Open Box Defect,8,1450.0,Return to Vendor (RTV),65.0
-SALV-03,STORE-103,Home Goods - Chipped Ceramic,12,380.0,Local Donation Partner,0.0
-SALV-04,STORE-104,Footwear - Scuffed Return,10,890.0,Outlet Transfer,42.0

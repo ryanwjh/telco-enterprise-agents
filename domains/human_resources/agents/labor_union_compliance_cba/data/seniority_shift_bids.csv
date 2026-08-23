@@ -1,8 +1,0 @@
-bid_cycle_id,store_id,department,shift_schedule_id,bids_submitted_count,awarded_to_most_senior_flag,audit_compliance_pct
-BID-2026-Q1,STORE-101,Grocery & Perishables,SHIFT-DAY-01,12,True,100.0
-BID-2026-Q1,STORE-101,Cashier & Front End,SHIFT-DAY-02,18,True,100.0
-BID-2026-Q1,STORE-102,Grocery & Perishables,SHIFT-DAY-01,15,True,100.0
-BID-2026-Q1,STORE-102,Cashier & Front End,SHIFT-DAY-02,22,True,100.0
-BID-2026-Q2,STORE-101,Grocery & Perishables,SHIFT-DAY-01,14,True,100.0
-BID-2026-Q2,STORE-102,Cashier & Front End,SHIFT-DAY-02,20,True,100.0
-BID-2026-Q2,STORE-103,Grocery & Perishables,SHIFT-DAY-01,10,True,100.0

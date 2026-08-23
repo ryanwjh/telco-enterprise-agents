@@ -1,5 +1,0 @@
-throughput_id,store_id,lane_number,lane_type,hourly_transactions_count,hourly_revenue_usd,basket_size_avg_units
-THRU-01,STORE-101,Lane 01,Cashier Conveyor,28,1420.5,14.8
-THRU-02,STORE-101,Lane 02,Cashier Conveyor,32,1680.0,16.2
-THRU-03,STORE-101,Lane 09 (SCO Bank),4x SCO Pod,84,2940.0,6.5
-THRU-04,STORE-102,Lane 01,Cashier Conveyor,18,920.0,12.0

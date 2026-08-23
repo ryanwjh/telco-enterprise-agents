@@ -1,3 +1,0 @@
-violation_id,vendor_id,facility_country,violation_category,discovery_date,root_cause,immediate_action_taken,remediation_status
-ZT-2025-001,VEND-1001,Cambodia,Overtime Policy Discrepancy,2025-11-10,Peak Season Shift Scheduling Misalignment,Immediate shift capping at 60 hrs/week and back-pay disbursement,Closed & Verified
-ZT-2026-000,VEND-1004,Malaysia,Foreign Worker Passport Retention,2026-01-15,3P Labor Agency Passport Holding Practice,"100% Passports returned immediately, agency contract terminated, individual secure lockers installed",Closed & Verified

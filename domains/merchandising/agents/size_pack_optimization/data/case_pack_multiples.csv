@@ -1,6 +1,0 @@
-sku_id,product_name,units_per_case,avg_weekly_store_sales,weeks_of_supply_per_case,case_fit_rating
-SKU-APP-101,Graphic Tee Heather Gray L,24,4.2,5.7,Poor (Excess Inventory)
-SKU-APP-102,Fleece Hoodie Black M,12,5.5,2.2,Optimal Fit
-SKU-FTW-201,Canvas Low Top Shoe Sz 10,6,3.8,1.6,Optimal Fit
-SKU-HOU-301,Ceramic Dinner Plate 4pk,8,1.8,4.4,Sub-optimal (Reduce to 4pk)
-SKU-BEV-401,Energy Drink 16oz Can,24,18.5,1.3,Optimal Fit

@@ -1,7 +1,0 @@
-sku,category,vendor_id,primary_pcr_pct,secondary_corrugate_pcr_pct,target_pcr_pct,compliance_status
-SKU-001,Apparel,VEND-1001,50.0,85.0,60.0,Meeting Target
-SKU-002,Apparel,VEND-1001,100.0,90.0,80.0,Exceeding Target
-SKU-003,Kitchenware,VEND-1003,75.0,85.0,70.0,Exceeding Target
-SKU-004,Home Cleaning,VEND-1003,100.0,100.0,100.0,Fully Compliant
-SKU-005,Electronics,VEND-1004,35.0,70.0,50.0,Under Review
-SKU-006,Drinkware,VEND-1002,80.0,95.0,75.0,Exceeding Target

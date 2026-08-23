@@ -1,9 +1,0 @@
-topic_id,district_id,primary_reason_category,sub_topic,mention_count,sentiment_score,reporting_quarter
-TOPIC-01,DIST-01,Compensation & Benefits,Hourly Starting Wage Competitiveness,42,-0.68,2026-Q2
-TOPIC-02,DIST-01,Work Schedule & Flexibility,Unpredictable Weekly Hours & Clopenings,38,-0.74,2026-Q2
-TOPIC-03,DIST-01,Career Growth & Training,Lack of Advancement Opportunities,26,-0.45,2026-Q2
-TOPIC-04,DIST-01,Store Management & Culture,Supervisor Support & Recognition,22,-0.52,2026-Q2
-TOPIC-05,DIST-02,Compensation & Benefits,Hourly Starting Wage Competitiveness,36,-0.65,2026-Q2
-TOPIC-06,DIST-02,Work Schedule & Flexibility,Inconsistent Shift Times,30,-0.62,2026-Q2
-TOPIC-07,DIST-02,Workplace Safety & Workload,Understaffing Physical Fatigue,25,-0.58,2026-Q2
-TOPIC-08,DIST-02,Personal & Family,Relocation and School Commute,18,0.05,2026-Q2

@@ -1,7 +1,0 @@
-date,page_type,device,lcp_seconds,inp_milliseconds,cls_score,good_vitals_pct
-2026-07-01,Home,mobile,2.1,140,0.04,88.4
-2026-07-01,Home,desktop,1.4,75,0.01,96.2
-2026-07-01,PDP,mobile,2.4,180,0.06,84.1
-2026-07-01,PDP,desktop,1.6,90,0.02,94.5
-2026-07-01,Checkout,mobile,1.9,120,0.02,91.8
-2026-07-01,Checkout,desktop,1.2,60,0.01,98.1

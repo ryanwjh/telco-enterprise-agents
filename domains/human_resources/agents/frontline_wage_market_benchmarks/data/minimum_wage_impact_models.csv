@@ -1,6 +1,0 @@
-model_id,state_jurisdiction,current_statutory_min_wage_usd,scheduled_min_wage_usd,effective_date,affected_headcount,annualized_payroll_cost_impact_usd
-MOD-CA-2027,California,16.0,16.5,2027-01-01,120,124800.0
-MOD-NY-2027,New York (NYC Metro),16.0,16.5,2027-01-01,85,88400.0
-MOD-IL-2027,Illinois,14.0,15.0,2027-01-01,95,197600.0
-MOD-TX-2027,Texas (Federal Standard),7.25,7.25,2027-01-01,0,0.0
-MOD-GA-2027,Georgia (Federal Standard),7.25,7.25,2027-01-01,0,0.0

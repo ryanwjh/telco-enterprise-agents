@@ -1,9 +1,0 @@
-test_id,sku,vendor_id,lab_name,test_date,chemical_substance_tested,detected_ppm,threshold_ppm,pass_fail_status
-RSL-2026-001,SKU-001,VEND-1001,SGS Consumer Testing,2026-02-10,Formaldehyde,4.2,16.0,Pass
-RSL-2026-002,SKU-001,VEND-1001,SGS Consumer Testing,2026-02-10,Azo Dyes (Arylamines),0.0,20.0,Pass
-RSL-2026-003,SKU-002,VEND-1001,Intertek Labtech,2026-03-15,Total PFAS (Fluorine),12.0,50.0,Pass - Approaching Threshold
-RSL-2026-004,SKU-002,VEND-1001,Intertek Labtech,2026-03-15,Antimony Trioxide,85.0,260.0,Pass
-RSL-2026-005,SKU-004,VEND-1003,Bureau Veritas Clean,2026-04-12,"1,4-Dioxane",0.45,1.0,Pass
-RSL-2026-006,SKU-004,VEND-1003,Bureau Veritas Clean,2026-04-12,"Phthalates (DEHP, DBP)",0.0,50.0,Pass
-RSL-2026-007,SKU-006,VEND-1002,TUV SUD America,2026-05-08,Lead & Cadmium Extraction,0.02,0.5,Pass
-RSL-2026-008,SKU-006,VEND-1002,TUV SUD America,2026-05-08,BPA / Bisphenols,0.0,0.1,Pass

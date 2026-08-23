@@ -17,7 +17,7 @@ TEMPLATE_DIR = REPO_ROOT / "_shared" / "templates" / "logical_agent"
 INSTRUCTIONS_DIR = REPO_ROOT / "_shared" / "instructions"
 
 INSTRUCTION_FRAGMENT_FILES = [
-    "persona_retail_analyst.md",
+    "persona_telco_analyst.md",
     "safety_and_grounding_rules.md",
     "output_formatting.md",
 ]

@@ -1,5 +1,0 @@
-journey_name,step_number,trigger_event,delay_hours,channel,step_conversion_pct,step_revenue_attributed_usd
-Abandoned Cart Flow,1,Cart Abandoned > $50,2,Email,8.5,142000.0
-Abandoned Cart Flow,2,Unopened Cart Reminder + 10% Off,24,SMS,14.2,218000.0
-Post-Purchase Onboarding,1,First Purchase Delivered,12,Email,4.1,45000.0
-Post-Purchase Onboarding,2,Category Usage Tips + Review Request,72,Email,6.8,78000.0

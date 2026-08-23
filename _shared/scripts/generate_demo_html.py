@@ -24,27 +24,19 @@ sys.path.insert(0, str(REPO_ROOT))
 from _shared.scripts.prompt_parser import parse_agent_prompts, resolve_agent_domain
 
 DOMAIN_ICONS = {
-    "merchandising": "🛍️",
-    "supply_chain": "🚚",
-    "store_operations": "🏬",
-    "e_commerce": "🛒",
-    "marketing": "📊",
-    "finance": "💰",
-    "customer_care": "🎧",
-    "sustainability_compliance": "🌱",
-    "human_resources": "👥",
+    "consumer_marketing": "📱",
+    "onboarding_provisioning": "⚡",
+    "subscriber_crm": "🎧",
+    "netops_aiops": "📡",
+    "daas_camara": "🌐",
 }
 
 DOMAIN_TITLES = {
-    "merchandising": "Merchandising Domain",
-    "supply_chain": "Supply Chain & Logistics Domain",
-    "store_operations": "Store Operations Domain",
-    "e_commerce": "E-Commerce Domain",
-    "marketing": "Marketing & Retail Media Domain",
-    "finance": "Finance, Real Estate & Accounting Domain",
-    "customer_care": "Customer Care & Experience Domain",
-    "sustainability_compliance": "Sustainability, ESG & Compliance Domain",
-    "human_resources": "Human Resources & Workforce Domain",
+    "consumer_marketing": "Consumer Marketing & Growth Domain",
+    "onboarding_provisioning": "Onboarding & Service Provisioning Domain",
+    "subscriber_crm": "Subscriber CRM & Retention Domain",
+    "netops_aiops": "NetOps & AIOps Domain",
+    "daas_camara": "DaaS & CAMARA Open Gateway Domain",
 }
 
 HTML_TEMPLATE = """<!DOCTYPE html>
@@ -60,7 +52,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <script>
     // Synchronous theme initialization to prevent Flash of Unstyled Content (FOUC)
     (function() {{
-      const savedTheme = localStorage.getItem('retail_agents_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const savedTheme = localStorage.getItem('telco_agents_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', savedTheme);
     }})();
   </script>
@@ -336,7 +328,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     <header>
       <div class="badge-row">
-        <span class="badge">Retail Enterprise Agents</span>
+        <span class="badge">Telco Enterprise Agents</span>
         <span class="badge">{domain_badge}</span>
         <span class="badge">Gemini Enterprise</span>
       </div>
@@ -396,7 +388,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           const current = document.documentElement.getAttribute('data-theme') || 'dark';
           const next = current === 'dark' ? 'light' : 'dark';
           document.documentElement.setAttribute('data-theme', next);
-          localStorage.setItem('retail_agents_theme', next);
+          localStorage.setItem('telco_agents_theme', next);
           updateThemeUI(next);
         }});
       }})();
@@ -429,11 +421,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
 
     <footer>
-      <a class="btn-link" href="https://github.com/rajanm/retail-enterprise-agents/tree/master/domains/{domain}/agents/{agent_name}">
+      <a class="btn-link" href="https://github.com/ryanwjh/telco-enterprise-agents/tree/master/domains/{domain}/agents/{agent_name}">
         ← View Agent Code & Documentation on GitHub
       </a>
-      <a class="btn-link" href="https://github.com/rajanm/retail-enterprise-agents">
-        🏠 Retail Enterprise Agents Repository
+      <a class="btn-link" href="https://github.com/ryanwjh/telco-enterprise-agents">
+        🏠 Telco Enterprise Agents Repository
       </a>
     </footer>
   </div>
@@ -511,7 +503,7 @@ def generate_html_showcase(
     
     turn_items = [
         f'        <li><strong>Turn 1 (Data Insights / BigQuery):</strong> <em>"{turn_1_prompt}"</em> — Synthesizes internal BigQuery conversational analytics query and computes KPI summary.</li>',
-        f'        <li><strong>Turn 2 (Market Context / Google Search):</strong> <em>"{turn_2_prompt}"</em> — Grounds analysis against external retail benchmarks and industry context.</li>',
+        f'        <li><strong>Turn 2 (Market Context / Google Search):</strong> <em>"{turn_2_prompt}"</em> — Grounds analysis against external telecom benchmarks and industry context.</li>',
         f'        <li><strong>Turn 3 (Visual Artifact / Matplotlib):</strong> <em>"{turn_3_prompt}"</em> — Generates and renders a custom chart visualization artifact inline.</li>',
         f'        <li><strong>Turn 4 (Executive Canvas Presentation):</strong> <em>"{turn_4_prompt}"</em> — Automatically creates a 4-slide deck and showcases each slide via the bottom thumbnail rail.</li>',
     ]
@@ -537,7 +529,7 @@ def generate_html_showcase(
 def main():
     parser = argparse.ArgumentParser(description="Generate HTML Demo Video Showcase Player for Gemini Enterprise Agents.")
     parser.add_argument("--name", type=str, help="Target agent directory name (e.g. cart_checkout_analytics)")
-    parser.add_argument("--domain", type=str, help="Target retail domain (e.g. e_commerce)")
+    parser.add_argument("--domain", type=str, help="Target telco domain (e.g. consumer_marketing)")
     parser.add_argument("--all", action="store_true", help="Generate HTML for all recorded videos or all agents in domain")
     parser.add_argument("--output-dir", type=Path, default=REPO_ROOT / "demos" / "gemini-enterprise", help="Base output directory for HTML demo players")
     

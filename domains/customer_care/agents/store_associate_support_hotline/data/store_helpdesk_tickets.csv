@@ -1,7 +1,0 @@
-ticket_id,store_id,ticket_created_timestamp,category,urgency,status,resolved_timestamp,resolution_duration_minutes
-HD-1001,STORE-101,2026-08-05 08:30:00,POS Terminal Freeze,Critical,Resolved,2026-08-05 08:48:00,18
-HD-1002,STORE-102,2026-08-05 10:15:00,Barcode Scanner Disconnected,Medium,Resolved,2026-08-05 10:35:00,20
-HD-1003,STORE-103,2026-08-04 14:00:00,PIN Pad EMV Failure,High,Resolved,2026-08-04 14:24:00,24
-HD-1004,STORE-104,2026-08-04 16:20:00,Store Backroom Wi-Fi Drop,High,Resolved,2026-08-04 16:50:00,30
-HD-1005,STORE-105,2026-08-03 11:10:00,Inventory Zebra Scanner Sync,Low,Resolved,2026-08-03 11:45:00,35
-HD-1006,STORE-101,2026-08-02 09:00:00,Receipt Printer Jam & Driver Bug,Medium,Resolved,2026-08-02 09:22:00,22

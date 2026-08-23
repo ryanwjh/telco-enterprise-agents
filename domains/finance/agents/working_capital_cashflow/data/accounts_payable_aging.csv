@@ -1,7 +1,0 @@
-vendor_id,vendor_name,payment_terms,current_due,aging_1_30_days,aging_31_60_days,aging_over_90_days,early_discount_eligible_dollars
-VND-001,Apex Apparel,Net 60,75000.00,45000.00,30000.00,0.00,0.00
-VND-002,Summit Outdoor,2/10 Net 30,110000.00,80000.00,30000.00,0.00,50000.00
-VND-003,Cascade Gear,Net 30,52000.00,35000.00,17000.00,0.00,0.00
-VND-004,Alpine Tech,2/10 Net 30,98000.00,68000.00,20000.00,10000.00,40000.00
-VND-005,Pacific Threads,Net 30,44000.00,30000.00,14000.00,0.00,0.00
-VND-006,Global Logistics Ltd,Net 15,65000.00,45000.00,15000.00,5000.00,0.00

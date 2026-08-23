@@ -1,6 +1,0 @@
-sku,category,original_retail_price,current_clearance_price,markdown_stage,units_in_clearance
-SKU-001,Apparel,120.0,72.0,Stage 2 (40%),450
-SKU-002,Apparel,85.0,34.0,Stage 3 (60%),210
-SKU-003,Footwear,150.0,112.5,Stage 1 (25%),600
-SKU-004,Home Decor,65.0,26.0,Stage 3 (60%),180
-SKU-005,Electronics Accs,40.0,10.0,Stage 4 (75%),95

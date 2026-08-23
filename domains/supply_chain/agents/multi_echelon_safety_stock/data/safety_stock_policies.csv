@@ -1,4 +1,0 @@
-policy_id,category,velocity_tier,dc_buffer_days,hub_buffer_days,store_buffer_days,network_service_level_target_pct
-POL-HIGH-VEL,Snacks & Packaged Food,Fast Mover,7.0,4.0,3.0,98.0
-POL-MED-VEL,Health & Beauty,Medium Mover,10.0,5.0,4.0,96.0
-POL-SLOW-VEL,Home & Hardware,Slow Mover,14.0,0.0,5.0,93.0

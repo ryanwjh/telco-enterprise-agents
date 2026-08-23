@@ -1,5 +1,0 @@
-bug_id,system_component,description,incident_count_30d,impacted_stores_count,jira_fix_status,workaround_provided
-BUG-401,POS Checkout Client v4.2,Memory leak during continuous coupon barcode scans,64,42,In QA Testing - Patch v4.2.1,Restart POS client during mid-day shift change
-BUG-402,Payment Gateway Pinpad Driver,Intermittent contactless NFC timeout on Apple Pay,48,35,Under Engineering Investigation,Prompt customer to insert physical chip
-BUG-403,BOPIS Store Handheld App,Inventory barcode scan latency exceeding 3 seconds,38,28,Fix Scheduled for Release v2.8,Clear local cache on Zebra handhelds
-BUG-404,Gift Card Balance Inquire Module,Timeout error on magnetic stripe swipe verification,22,18,Patch Deployed to Production,Manual numeric card entry via touch keyboard

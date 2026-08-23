@@ -1,7 +1,0 @@
-region_name,seasonal_event,forecast_temp_variance_f,precipitation_skew_pct,demand_index_multiplier,projected_sales_impact_pct
-Northeast,Summer Outdoor Living,3.8,-12.0,1.15,12.5
-Midwest,Summer Outdoor Living,-1.2,18.0,0.92,-6.5
-Southeast,Summer Outdoor Living,4.5,-5.0,1.18,14.2
-Southwest,Summer Outdoor Living,5.0,-20.0,1.22,18.0
-Pacific Northwest,Summer Outdoor Living,-2.5,25.0,0.85,-12.0
-Mid-Atlantic,Back to School,0.5,0.0,1.01,1.0

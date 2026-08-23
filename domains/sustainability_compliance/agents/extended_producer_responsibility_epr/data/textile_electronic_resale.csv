@@ -1,6 +1,0 @@
-item_id,original_sku,product_category,resale_condition_grade,refurb_cost_usd,resale_price_usd,recommerce_channel,resale_status
-RESALE-1001,SKU-002,Apparel,Like New - Refurbished,12.5,68.0,Digital Pre-Loved Marketplace,Sold
-RESALE-1002,SKU-002,Apparel,Gently Used,8.0,52.0,Digital Pre-Loved Marketplace,Sold
-RESALE-1003,SKU-005,Electronics,Certified Factory Reconditioned,28.0,129.0,Store Pre-Owned Kiosk,Sold
-RESALE-1004,SKU-005,Electronics,Certified Factory Reconditioned,28.0,129.0,Store Pre-Owned Kiosk,Available
-RESALE-1005,SKU-006,Drinkware,Open Box - Sanitized,3.5,22.0,Digital Pre-Loved Marketplace,Sold

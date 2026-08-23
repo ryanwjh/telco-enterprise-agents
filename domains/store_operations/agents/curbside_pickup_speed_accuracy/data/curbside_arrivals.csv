@@ -1,5 +1,0 @@
-arrival_id,store_id,order_id,arrival_timestamp,delivery_timestamp,total_dwell_minutes,parking_bay_number,pickup_method
-ARR-CURB-001,STORE-101,ORD-CB-9941,2026-07-20 12:05:00,2026-07-20 12:07:30,2.5,Bay 02,Mobile App Geofence Check-in
-ARR-CURB-002,STORE-101,ORD-CB-9942,2026-07-20 12:12:00,2026-07-20 12:14:45,2.75,Bay 05,QR Code Scan at Stanchion
-ARR-CURB-003,STORE-102,ORD-CB-8812,2026-07-20 17:30:00,2026-07-20 17:35:10,5.17,Bay 01,SMS Link Check-in
-ARR-CURB-004,STORE-102,ORD-CB-8815,2026-07-20 17:42:00,2026-07-20 17:48:30,6.5,Bay 04,Phone Call to Service Desk

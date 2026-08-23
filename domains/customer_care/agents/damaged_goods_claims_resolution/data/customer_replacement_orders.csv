@@ -1,6 +1,0 @@
-replacement_order_id,original_order_id,customer_id,sku,replacement_approved_date,replacement_dispatched_date,dispatch_lead_time_hours,shipping_expedited
-RPL-901,ORD-89410,CUST-1001,SKU-006,2026-08-05 10:15:00,2026-08-05 16:30:00,6.2,True
-RPL-902,ORD-89380,CUST-1002,SKU-001,2026-08-04 11:30:00,2026-08-04 19:00:00,7.5,True
-RPL-903,ORD-89320,CUST-1003,SKU-003,2026-08-03 14:00:00,2026-08-03 21:15:00,7.2,True
-RPL-904,ORD-89290,CUST-1004,SKU-005,2026-08-02 09:45:00,2026-08-02 15:30:00,5.7,True
-RPL-905,ORD-89240,CUST-1005,SKU-002,2026-08-01 13:00:00,2026-08-01 22:00:00,9.0,True

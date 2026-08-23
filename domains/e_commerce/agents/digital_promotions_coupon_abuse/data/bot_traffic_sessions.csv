@@ -1,4 +1,0 @@
-date,ip_subnet,bot_score,session_count,rapid_coupon_attempts,blocked_attempts
-2026-07-01,198.51.100.0/24,98,14200,8450,8450
-2026-07-01,203.0.113.0/24,94,9800,5620,5620
-2026-07-01,192.0.2.0/24,12,420,15,0

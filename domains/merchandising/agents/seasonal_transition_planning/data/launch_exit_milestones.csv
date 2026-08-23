@@ -1,8 +1,0 @@
-event_id,seasonal_event,milestone_phase,target_date,actual_completion_date,status,risk_flag
-EVT-SUM-01,Summer Outdoor Living,Initial DC Floor Set,2026-04-10,2026-04-08,Completed,Low Risk
-EVT-SUM-02,Summer Outdoor Living,Peak Promotional Feature,2026-06-25,2026-06-25,Completed,Low Risk
-EVT-SUM-03,Summer Outdoor Living,First Clearance Markdown (25%),2026-07-20,2026-07-25,Delayed,High Risk
-EVT-SUM-04,Summer Outdoor Living,Hard Exit & Salvage Sweep,2026-08-31,2026-08-31,Pending,Medium Risk
-EVT-BTS-01,Back to School,Initial Store Set,2026-06-28,2026-06-28,Completed,Low Risk
-EVT-BTS-02,Back to School,Tax-Free Weekend Surge,2026-08-05,2026-08-05,Completed,Low Risk
-EVT-BTS-03,Back to School,Hard Exit Clearance,2026-09-15,2026-09-15,Pending,Low Risk

@@ -1,5 +1,0 @@
-endcap_id,store_id,aisle_number,vendor_brand,monthly_space_fee,contracted_facings,actual_facings,audit_pass_status
-ENDCAP-01,STORE-101,Aisle 04,Nike Apparel,4500.0,12,12,Passed
-ENDCAP-02,STORE-102,Aisle 08,L'Oreal Beauty,3800.0,16,13,Failed - Missing Facings
-ENDCAP-03,STORE-103,Aisle 02,Samsung Mobile,5200.0,8,8,Passed
-ENDCAP-04,STORE-104,Aisle 11,Nestle Confection,2900.0,20,15,Failed - Out of Stock

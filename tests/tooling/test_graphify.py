@@ -1,8 +1,14 @@
 """Unit tests for _shared/scripts/graphify.py."""
 
 import sqlite3
+import sys
 import pytest
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 from _shared.scripts.graphify import generate_graph
 
 
@@ -13,10 +19,10 @@ def test_generate_graph(tmp_path):
 
     stats = generate_graph(repo_root, out_dir, output_md)
 
-    assert stats["total_domains"] == 9
-    assert stats["total_agents"] == 100
-    assert stats["total_nodes"] > 700
-    assert stats["total_edges"] > 700
+    assert stats["total_domains"] == 5
+    assert stats["total_agents"] == 45
+    assert stats["total_nodes"] > 300
+    assert stats["total_edges"] > 300
 
     # Verify SQLite DB
     db_path = Path(stats["sqlite_path"])
@@ -29,9 +35,9 @@ def test_generate_graph(tmp_path):
     agents_count = cur.execute("SELECT COUNT(*) FROM nodes WHERE type = 'Agent'").fetchone()[0]
     tables_count = cur.execute("SELECT COUNT(*) FROM nodes WHERE type = 'BigQueryTable'").fetchone()[0]
     
-    assert domains_count == 9
-    assert agents_count == 100
-    assert tables_count >= 390
+    assert domains_count == 5
+    assert agents_count == 45
+    assert tables_count >= 135
     
     conn.close()
 

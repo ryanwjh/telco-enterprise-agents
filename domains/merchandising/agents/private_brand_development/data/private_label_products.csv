@@ -1,9 +1,0 @@
-private_sku_id,private_brand_name,product_title,category,tier,national_equiv_sku,retail_price_usd,unit_cost_usd
-PL-PAN-101,Apex Signature,Organic Extra Virgin Olive Oil 750ml,Pantry & Oils,Premium Tier,NAT-OIL-01,11.99,6.2
-PL-PAN-102,Apex Essentials,Pure Canola Cooking Oil 1L,Pantry & Oils,Value Tier,NAT-OIL-02,4.49,2.1
-PL-SNK-201,Apex Gourmet,Artisan Sea Salt Pita Chips 8oz,Snacks,Premium Tier,NAT-SNK-05,3.99,1.65
-PL-SNK-202,Apex Essentials,Classic Potato Chips 10oz,Snacks,Value Tier,NAT-SNK-01,2.79,1.05
-PL-DAI-301,Apex Farmhouse,Organic Whole Milk 1gal,Dairy,Core Tier,NAT-DAI-01,5.29,3.15
-PL-DAI-302,Apex Farmhouse,Sharp Cheddar Cheese Block 8oz,Dairy,Core Tier,NAT-DAI-04,3.49,1.7
-PL-BEV-401,Apex Botanicals,Organic Sparkling Water 8pk,Beverages,Premium Tier,NAT-BEV-08,4.99,2.15
-PL-HPC-501,Apex Pure,Plant-Based Laundry Detergent 64oz,Household,Premium Tier,NAT-HPC-02,12.49,5.8

@@ -1,5 +1,0 @@
-sign_id,store_id,promo_campaign,sign_type,scheduled_install_date,actual_install_date,on_time_execution,pop_stand_condition
-SIGN-EXEC-01,STORE-101,Summer Clearance 50% Off,Overhead Banner,2026-07-01,2026-07-01,True,Pristine
-SIGN-EXEC-02,STORE-102,Back to School Electronics,Stanchion Sign,2026-07-10,2026-07-12,False,Minor Scuff
-SIGN-EXEC-03,STORE-103,Fall Preview New Arrivals,Window Graphic,2026-07-15,2026-07-15,True,Pristine
-SIGN-EXEC-04,STORE-104,Labor Day Prep,Aisle Blade,2026-07-20,2026-07-23,False,Bent Bracket

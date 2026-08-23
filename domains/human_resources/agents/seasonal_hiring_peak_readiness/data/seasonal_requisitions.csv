@@ -1,9 +1,0 @@
-req_id,store_id,district_id,season_name,job_role,target_headcount,current_hired_headcount,open_positions_count,target_start_date
-REQ-HOL-101A,STORE-101,DIST-01,Holiday Peak 2026,Seasonal Cashier,25,20,5,2026-10-15
-REQ-HOL-101B,STORE-101,DIST-01,Holiday Peak 2026,Seasonal Stocker / Logistics,15,12,3,2026-10-15
-REQ-HOL-102A,STORE-102,DIST-01,Holiday Peak 2026,Seasonal Cashier,35,30,5,2026-10-15
-REQ-HOL-102B,STORE-102,DIST-01,Holiday Peak 2026,Seasonal Fulfillment / BOPIS,20,18,2,2026-10-15
-REQ-HOL-103A,STORE-103,DIST-02,Holiday Peak 2026,Seasonal Cashier,20,15,5,2026-10-15
-REQ-HOL-103B,STORE-103,DIST-02,Holiday Peak 2026,Seasonal Stocker / Logistics,12,9,3,2026-10-15
-REQ-HOL-104A,STORE-104,DIST-02,Holiday Peak 2026,Seasonal Cashier,28,24,4,2026-10-15
-REQ-HOL-104B,STORE-104,DIST-02,Holiday Peak 2026,Seasonal Fulfillment / BOPIS,15,13,2,2026-10-15

@@ -1,9 +1,0 @@
-swap_request_id,store_id,department,request_date,swap_status,manager_response_hours,peer_found_flag
-SWAP-501,STORE-101,Cashier & Front End,2026-06-02,Approved,3.2,True
-SWAP-502,STORE-101,Cashier & Front End,2026-06-05,Approved,5.1,True
-SWAP-503,STORE-101,Grocery & Perishables,2026-06-08,Denied,8.4,True
-SWAP-504,STORE-102,Cashier & Front End,2026-06-10,Approved,2.0,True
-SWAP-505,STORE-102,Stocking & Logistics,2026-06-12,Expired,24.0,False
-SWAP-506,STORE-103,Cashier & Front End,2026-06-14,Approved,4.5,True
-SWAP-507,STORE-103,Apparel & Home,2026-06-16,Approved,1.8,True
-SWAP-508,STORE-104,Grocery & Perishables,2026-06-18,Approved,3.6,True

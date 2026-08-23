@@ -1,7 +1,0 @@
-queue_id,queue_name,channel,target_sla_seconds,target_fcr_pct,target_aht_seconds,staffing_headcount
-Q-101,E-Commerce Customer Support,Voice,30,75.0,360,25
-Q-102,Billing & Payment Inquiries,Voice,45,80.0,420,18
-Q-103,Shipping & Delivery Tracking,Voice,30,70.0,300,22
-Q-104,Digital Live Chat Support,Chat,15,82.0,240,30
-Q-105,Loyalty & Rewards Program,Voice,60,85.0,300,12
-Q-106,VIP Priority Concierge,Voice,10,90.0,480,10

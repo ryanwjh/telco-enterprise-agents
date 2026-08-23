@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-generate_portal_site.py — Retail Enterprise Agents Portal Generator
+generate_portal_site.py — Telco Enterprise Agents Portal Generator
 
 Programmatically reads _shared/table_registry.yaml and all agent READMEs across 9 domains
 to generate a self-contained, lightning-fast, interactive single-page portal (index.html)
@@ -24,39 +24,27 @@ sys.path.insert(0, str(REPO_ROOT))
 from _shared.scripts.prompt_parser import parse_agent_prompts
 
 DOMAIN_ICONS = {
-    "merchandising": "🛍️",
-    "supply_chain": "🚚",
-    "store_operations": "🏬",
-    "e_commerce": "🛒",
-    "marketing": "📊",
-    "finance": "💰",
-    "customer_care": "🎧",
-    "sustainability_compliance": "🌱",
-    "human_resources": "👥",
+    "consumer_marketing": "📱",
+    "onboarding_provisioning": "⚡",
+    "subscriber_crm": "🎧",
+    "netops_aiops": "📡",
+    "daas_camara": "🌐",
 }
 
 DOMAIN_DISPLAY_NAMES = {
-    "merchandising": "Merchandising",
-    "supply_chain": "Supply Chain & Logistics",
-    "store_operations": "Store Operations",
-    "e_commerce": "E-Commerce & Digital",
-    "marketing": "Marketing & Retail Media",
-    "finance": "Finance, Real Estate & Accounting",
-    "customer_care": "Customer Care & Experience",
-    "sustainability_compliance": "Sustainability, ESG & Compliance",
-    "human_resources": "Human Resources & Workforce",
+    "consumer_marketing": "Consumer Marketing & Growth",
+    "onboarding_provisioning": "Onboarding & Provisioning",
+    "subscriber_crm": "Subscriber CRM & Retention",
+    "netops_aiops": "NetOps & AIOps",
+    "daas_camara": "DaaS & CAMARA / Open Gateway",
 }
 
 DOMAIN_ORDER = [
-    "merchandising",
-    "supply_chain",
-    "store_operations",
-    "e_commerce",
-    "marketing",
-    "finance",
-    "customer_care",
-    "sustainability_compliance",
-    "human_resources",
+    "consumer_marketing",
+    "onboarding_provisioning",
+    "subscriber_crm",
+    "netops_aiops",
+    "daas_camara",
 ]
 
 
@@ -68,7 +56,7 @@ def extract_agent_metadata(agent_name: str, domain: str, reg_agent: dict, repo_r
     location = reg_agent.get("location", "us-central1")
     tables = reg_agent.get("tables", [])
     
-    description = f"Autonomous enterprise reasoning agent for {display_name} in retail operations."
+    description = f"Autonomous enterprise reasoning agent for {display_name} in telecommunications operations."
     kpis = []
     prompts = []
     
@@ -124,14 +112,14 @@ def extract_agent_metadata(agent_name: str, domain: str, reg_agent: dict, repo_r
             prompts = parse_agent_prompts(readme_path)
         except Exception:
             prompts = [
-                f"What are our key performance metrics for {display_name} across store regions in 2026 YTD?",
-                f"What are current retail industry benchmarks and best practices for {display_name}?",
+                f"What are our key performance metrics for {display_name} across telecom operating markets in 2026 YTD?",
+                f"What are current telecommunications industry benchmarks and best practices for {display_name}?",
                 f"Show me a visual chart comparing our {display_name} performance vs annual target."
             ]
     else:
         prompts = [
-            f"What are our key performance metrics for {display_name} across store regions in 2026 YTD?",
-            f"What are current retail industry benchmarks and best practices for {display_name}?",
+            f"What are our key performance metrics for {display_name} across telecom operating markets in 2026 YTD?",
+            f"What are current telecommunications industry benchmarks and best practices for {display_name}?",
             f"Show me a visual chart comparing our {display_name} performance vs annual target."
         ]
         
@@ -181,8 +169,8 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gemini Enterprise Agents for Retail — 100 Multi-Agent Catalog</title>
-  <meta name="description" content="Explore 100 specialized Gemini Enterprise Agents for retail enterprise operations, built on Google ADK, Gemini Enterprise, and BigQuery Conversational Analytics.">
+  <title>Gemini Enterprise Agents for Telco — 100 Multi-Agent Catalog</title>
+  <meta name="description" content="Explore 100 specialized Gemini Enterprise Agents for telecommunications enterprise operations, built on Google ADK, Gemini Enterprise, and BigQuery Conversational Analytics.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -190,7 +178,7 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
   <script>
     // Synchronous theme initialization to prevent Flash of Unstyled Content (FOUC)
     (function() {{
-      const savedTheme = localStorage.getItem('retail_agents_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const savedTheme = localStorage.getItem('telco_agents_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', savedTheme);
     }})();
   </script>
@@ -1189,9 +1177,9 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="brand-logo">
-        <span class="brand-icon">🏬</span>
+        <span class="brand-icon">📡</span>
         <div class="brand-text">
-          <span class="brand-title">Gemini Enterprise Agents for Retail</span>
+          <span class="brand-title">Gemini Enterprise Agents for Telco</span>
           <span class="brand-subtitle">Google ADK & Gemini Enterprise Multi-Agent Swarm</span>
         </div>
       </a>
@@ -1202,7 +1190,7 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
         <button id="themeToggleBtn" class="btn-header" aria-label="Toggle Light/Dark Theme">
           <span id="themeIcon">☀️</span> <span id="themeText">Light</span>
         </button>
-        <a href="https://github.com/rajanm/retail-enterprise-agents" target="_blank" rel="noopener noreferrer" class="btn-header btn-primary-header">
+        <a href="https://github.com/ryanwjh/telco-enterprise-agents" target="_blank" rel="noopener noreferrer" class="btn-header btn-primary-header">
           <span>⭐</span> GitHub Repository
         </a>
       </div>
@@ -1212,27 +1200,27 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-pill">
-      <span>🚀</span> 100 Enterprise Agents Fully Deployed (9 Retail Domains)
+      <span>🚀</span> 45 Enterprise Agents Fully Deployed (5 Telco Domains)
     </div>
     <h1 class="hero-title">
-      Gemini Enterprise Agents for <span>Retail</span>
+      Gemini Enterprise Agents for <span>Telco</span>
     </h1>
     <p class="hero-desc">
-      A declarative, multi-agent platform powered by Google Agent Development Kit (ADK), Gemini Enterprise, and BigQuery Conversational Analytics. Real-time quantitative querying against 300+ enterprise retail datasets, grounded with external Google Search market intelligence.
+      A declarative, multi-agent platform powered by Google Agent Development Kit (ADK), Gemini Enterprise, and BigQuery Conversational Analytics. Real-time quantitative querying against 135+ enterprise telecommunications datasets, grounded with external Google Search market intelligence.
     </p>
 
     <!-- Platform Stats -->
     <div class="stat-row">
       <div class="stat-card">
-        <div class="stat-number">100</div>
-        <div class="stat-label">Gemini Enterprise Agents</div>
+        <div class="stat-number">45</div>
+        <div class="stat-label">Telco Enterprise Agents</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">9</div>
-        <div class="stat-label">Retail Domains</div>
+        <div class="stat-label">Telco Domains</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">300+</div>
+        <div class="stat-number">135+</div>
         <div class="stat-label">BigQuery Tables</div>
       </div>
       <div class="stat-card">
@@ -1254,7 +1242,7 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
       <div class="search-row">
         <div class="search-input-wrapper">
           <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" class="search-input" placeholder="Search 100 agents by name, KPI (e.g. TRIR, OTIF, ROAS), business question, or BigQuery table..." autocomplete="off">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search 45 agents by name, KPI (e.g. ARPU, Churn %, MTTR, SLA), business question, or BigQuery table..." autocomplete="off">
           <button id="searchClear" class="search-clear" aria-label="Clear search">✕</button>
         </div>
       </div>
@@ -1357,7 +1345,7 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
     <div class="modal-dialog" style="max-width: 1020px;">
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <h2 class="modal-title">📐 Retail Enterprise Multi-Agent Architecture</h2>
+          <h2 class="modal-title">📐 Telecommunications Enterprise Multi-Agent Architecture</h2>
           <span style="font-size:0.8rem; color:var(--text-secondary);">Enterprise 4-Tier Google ADK & Gemini Enterprise Topology</span>
         </div>
         <button class="modal-close" id="archCloseBtn" aria-label="Close architecture modal">✕</button>
@@ -1460,7 +1448,7 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
                 </div>
                 <div class="arch-item">
                   <strong>External Benchmarks</strong>
-                  BLS labor, OSHA safety, FDA compliance & NRF retail statistics
+                  GSMA, 3GPP, TM Forum, FCC compliance & Telecom industry benchmarks
                 </div>
                 <div class="arch-item">
                   <strong>Competitor Intelligence</strong>
@@ -1476,14 +1464,14 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
           <div class="arch-layer-card" style="border-top: 3px solid var(--accent-indigo);">
             <div class="arch-layer-header">
               <div class="arch-layer-title">
-                <span>🗄️</span> Tier 4: Enterprise Retail Data Lakehouse
+                <span>🗄️</span> Tier 4: Enterprise Telco Data Lakehouse
               </div>
               <span class="arch-layer-pill" style="color:var(--region-text); background:var(--region-bg); border-color:var(--region-border);">Google Cloud BigQuery</span>
             </div>
             <div class="arch-layer-grid">
               <div class="arch-item">
                 <strong>Enterprise Dataset</strong>
-                `retail_ent_agents` multi-tenant retail schema
+                `retail_ent_agents` multi-tenant telco schema
               </div>
               <div class="arch-item">
                 <strong>300+ Partitioned Tables</strong>
@@ -1516,16 +1504,16 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="brand-logo" style="justify-content: center;">
-        <span class="brand-icon">🏬</span>
-        <span class="brand-title">Gemini Enterprise Agents for Retail</span>
+        <span class="brand-icon">📡</span>
+        <span class="brand-title">Gemini Enterprise Agents for Telco</span>
       </div>
       <p class="footer-text">
-        100 Enterprise Agents across 9 Strategic Retail Domains. Powered by Google ADK, Gemini Enterprise, and BigQuery.
+        100 Enterprise Agents across 9 Strategic Telco Domains. Powered by Google ADK, Gemini Enterprise, and BigQuery.
       </p>
       <div class="footer-links">
-        <a href="https://github.com/rajanm/retail-enterprise-agents" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub Repository</a>
-        <a href="https://github.com/rajanm/retail-enterprise-agents/blob/master/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">Project Documentation</a>
-        <a href="https://github.com/rajanm/retail-enterprise-agents/blob/master/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer" class="footer-link">Architecture Reference</a>
+        <a href="https://github.com/ryanwjh/telco-enterprise-agents" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub Repository</a>
+        <a href="https://github.com/ryanwjh/telco-enterprise-agents/blob/master/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">Project Documentation</a>
+        <a href="https://github.com/ryanwjh/telco-enterprise-agents/blob/master/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer" class="footer-link">Architecture Reference</a>
       </div>
     </div>
   </footer>
@@ -1585,7 +1573,7 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
       const current = document.documentElement.getAttribute('data-theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('retail_agents_theme', next);
+      localStorage.setItem('telco_agents_theme', next);
       updateThemeUI(next);
     }});
 
@@ -1807,7 +1795,7 @@ def build_portal_html(agents_data: list[dict], domains_data: dict) -> str:
 
 def main():
     print("=" * 70)
-    print("🚀 GENERATING RETAIL ENTERPRISE AGENTS PORTAL (index.html)")
+    print("🚀 GENERATING TELCO ENTERPRISE AGENTS PORTAL (index.html)")
     print("=" * 70)
     
     registry_file = REPO_ROOT / "_shared" / "table_registry.yaml"

@@ -1,5 +1,0 @@
-coupon_code,creator_id,commission_rate_pct,orders_count,gross_sales_usd,commission_payout_usd,effective_cpa_usd
-CHLOE20,CR-101,10.0,1420,124500.0,12450.0,17.57
-MARCUSCOOKS,CR-102,12.0,860,94600.0,11352.0,20.76
-MAYA_GLOW,CR-103,15.0,940,56400.0,8460.0,11.34
-DAN_TECH10,CR-104,8.0,680,149600.0,11968.0,38.19

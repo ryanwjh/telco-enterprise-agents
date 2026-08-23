@@ -1,7 +1,0 @@
-tier_id,job_role,department,min_starting_wage_usd,midpoint_wage_usd,max_cap_wage_usd,active_headcount_in_tier,effective_date
-TIER-01,Store Associate / Cashier,Cashier & Front End,16.5,18.25,21.0,220,2026-01-01
-TIER-02,Grocery / Deli Specialist,Grocery & Perishables,17.5,19.5,22.5,160,2026-01-01
-TIER-03,Stocking & Overnight Logistics,Stocking & Logistics,18.0,20.0,23.5,110,2026-01-01
-TIER-04,BOPIS / Curbside Fulfillment Runner,Store Operations,17.0,18.75,21.5,85,2026-01-01
-TIER-05,Department Lead / Head Cashier,Front End / Lead,20.5,23.0,26.5,48,2026-01-01
-TIER-06,Assistant Store Manager,Leadership,26.0,29.5,34.0,16,2026-01-01

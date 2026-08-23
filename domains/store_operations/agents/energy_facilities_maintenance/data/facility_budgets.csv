@@ -1,5 +1,0 @@
-budget_id,store_id,fiscal_quarter,budgeted_opex_usd,actual_spent_usd,variance_usd,variance_pct,primary_cost_driver
-BUD-FAC-Q3-01,STORE-101,2026-Q3,45000.0,42100.0,-2900.0,-6.44,Under Budget - HVAC Efficiency
-BUD-FAC-Q3-02,STORE-102,2026-Q3,32000.0,36400.0,4400.0,13.75,Over Budget - Refrigeration Emergency
-BUD-FAC-Q3-03,STORE-103,2026-Q3,55000.0,53200.0,-1800.0,-3.27,On Budget
-BUD-FAC-Q3-04,STORE-104,2026-Q3,38000.0,44800.0,6800.0,17.89,Over Budget - Lighting Overhaul

@@ -1,9 +1,0 @@
-vendor_id,category,reporting_quarter,purchased_goods_mt_co2e,upstream_freight_mt_co2e,packaging_mt_co2e,total_scope3_mt_co2e,carbon_intensity_per_dollar
-VEND-1001,Apparel,2026-Q1,1450.5,320.2,115.8,1886.5,0.42
-VEND-1001,Apparel,2026-Q2,1580.0,345.0,122.0,2047.0,0.41
-VEND-1002,Packaging,2026-Q1,820.4,190.5,280.6,1291.5,0.35
-VEND-1002,Packaging,2026-Q2,790.0,180.0,260.0,1230.0,0.33
-VEND-1003,Home & Personal Care,2026-Q1,1120.0,240.0,195.0,1555.0,0.38
-VEND-1003,Home & Personal Care,2026-Q2,1180.0,255.0,205.0,1640.0,0.37
-VEND-1004,Electronics & Appliances,2026-Q1,2350.0,580.0,310.0,3240.0,0.58
-VEND-1004,Electronics & Appliances,2026-Q2,2490.0,610.0,325.0,3425.0,0.56

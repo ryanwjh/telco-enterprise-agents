@@ -1,5 +1,0 @@
-audit_id,store_id,store_name,department,display_type,audit_date,compliance_score_pct,auditor_role,defects_found_count
-AUD-DISP-001,STORE-101,Downtown Flagship,Apparel,Feature Endcap,2026-07-15,94.5,Visual Merch Lead,1
-AUD-DISP-002,STORE-102,North Suburban,Footwear,Island Display,2026-07-16,82.0,District Manager,3
-AUD-DISP-003,STORE-103,Metro Center,Beauty,Promo Gondola,2026-07-18,98.0,Store Operations Manager,0
-AUD-DISP-004,STORE-104,Westside Mall,Home Goods,Feature Table,2026-07-20,76.5,Visual Merch Specialist,4

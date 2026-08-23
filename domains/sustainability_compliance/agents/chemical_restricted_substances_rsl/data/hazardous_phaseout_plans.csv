@@ -1,4 +1,0 @@
-program_id,chemical_group,target_phaseout_date,affected_skus_count,safer_alternative_substance,migration_progress_pct,phaseout_status
-PHASE-PFAS-01,PFAS Forever Chemicals (DWR coatings),2026-12-31,18,Bio-based Fluorine-Free Polyurethane DWR,85.0,On Track - Final Validation
-PHASE-PVC-02,Polyvinyl Chloride (PVC) Packaging Blisters,2026-09-30,34,Recycled PET / Molded Cellulose Fiber,94.0,Near Completion
-PHASE-BPA-03,Bisphenol Epoxies in Can Liners,2026-06-30,12,Acrylic & Polyester Non-BPA Resins,100.0,Completed & Verified

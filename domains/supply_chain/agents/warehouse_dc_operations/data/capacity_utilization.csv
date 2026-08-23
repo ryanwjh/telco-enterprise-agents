@@ -1,4 +1,0 @@
-dc_id,date,active_pallet_positions,max_pallet_positions,utilization_pct,overflow_trailer_count,capacity_alert_flag
-DC-001,2026-07-24,31500,35000,90.0,3,True
-DC-002,2026-07-24,39000,50000,78.0,0,False
-DC-003,2026-07-24,37600,40000,94.0,7,True

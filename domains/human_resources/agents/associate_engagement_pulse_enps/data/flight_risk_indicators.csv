@@ -1,6 +1,0 @@
-indicator_id,store_id,district_id,department,high_risk_associate_count,primary_risk_driver,mitigation_action_taken
-RISK-101,STORE-101,DIST-01,Stocking & Logistics,5,Overnight Shift Fatigue & Wage Differential,Shift rotation adjustment & lead differential review
-RISK-102,STORE-101,DIST-01,Cashier & Front End,6,Weekend Scheduling Inflexibility,Implemented self-service shift swap portal
-RISK-103,STORE-102,DIST-01,Stocking & Logistics,3,Physical Workload,Ergonomic lift-assist tooling deployed
-RISK-104,STORE-103,DIST-02,Cashier & Front End,8,Manager Friction & Scheduling Variance,Store leadership coaching & schedule stability audit
-RISK-105,STORE-103,DIST-02,Stocking & Logistics,6,Starting Wage Competitiveness,Wage compression market adjustment model

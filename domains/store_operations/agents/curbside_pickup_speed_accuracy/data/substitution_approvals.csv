@@ -1,5 +1,0 @@
-sub_id,store_id,order_id,original_sku,suggested_sub_sku,customer_accepted,rejection_reason,price_difference_waived_usd
-SUB-APP-101,STORE-101,ORD-CB-9941,SKU-MILK-ORG-GAL,SKU-MILK-ORG-2HALF,True,None,0.5
-SUB-APP-102,STORE-101,ORD-CB-9942,SKU-BERRY-STRW-16OZ,SKU-BERRY-STRW-32OZ,True,None,1.2
-SUB-APP-103,STORE-102,ORD-CB-8812,SKU-COFFEE-DKRST-12,SKU-COFFEE-MDRST-12,False,Prefers Exact Brand Flavor,0.0
-SUB-APP-104,STORE-102,ORD-CB-8815,SKU-CHIPS-TORT-10OZ,SKU-CHIPS-TORT-PARTY,True,None,0.8

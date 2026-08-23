@@ -1,5 +1,0 @@
-cert_id,vendor_id,standard_name,issue_date,expiration_date,certification_body,cert_status,audits_covered
-CERT-OEKO-01,VEND-1001,OEKO-TEX Standard 100 Class I,2025-08-01,2026-08-01,TESTEX Swiss Textile-Testing,Active - Renewal In Progress,Apparel & Raw Fabrics
-CERT-GOTS-02,VEND-1001,Global Organic Textile Standard (GOTS),2025-10-15,2026-10-15,Control Union Certifications,Active & Valid,Organic Cotton Line
-CERT-EPA-03,VEND-1003,EPA Safer Choice Certified,2025-06-20,2028-06-20,US EPA Safer Choice Program,Active & Valid,Eco Detergents & Cleaners
-CERT-CRADLE-04,VEND-1002,Cradle to Cradle Certified Gold,2025-11-01,2027-11-01,C2CPII Institute,Active & Valid,Drinkware & Food Packaging

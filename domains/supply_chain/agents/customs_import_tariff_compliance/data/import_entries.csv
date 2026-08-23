@@ -1,5 +1,0 @@
-entry_number,importer_of_record,country_of_origin,port_of_entry,commercial_value_usd,duty_amount_usd,effective_duty_rate_pct,clearance_status
-CBP-ENT-901,Retail Enterprise Corp,Vietnam,Los Angeles,145000.0,9425.0,6.5,Cleared
-CBP-ENT-902,Retail Enterprise Corp,China,Long Beach,210000.0,52500.0,25.0,Cleared - Sec 301 Paid
-CBP-ENT-903,Retail Enterprise Corp,India,Seattle,88000.0,4400.0,5.0,Cleared
-CBP-ENT-904,Retail Enterprise Corp,China,Los Angeles,165000.0,41250.0,25.0,Under Inspection Hold

@@ -1,5 +1,0 @@
-cluster_tier,min_local_skus_required,target_local_space_allocation_pct,regional_brand_priority,override_chain_standard_flag
-Urban High-Density,15,12.5,Local Urban Artisans,True
-Suburban Affluent,20,15.0,Specialty & Gourmet Regional,True
-Suburban Family,10,8.0,Regional Dairy & Bakery,False
-Suburban Value,8,5.0,Value Regional Staples,False

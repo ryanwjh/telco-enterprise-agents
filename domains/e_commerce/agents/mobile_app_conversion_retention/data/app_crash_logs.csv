@@ -1,5 +1,0 @@
-date,app_version,platform,crash_count,affected_users,primary_exception_type
-2026-07-01,v4.8.2,iOS,28,24,NSRangeException
-2026-07-01,v4.8.2,Android,64,58,NullPointerException
-2026-07-02,v4.8.2,iOS,22,19,EXC_BAD_ACCESS
-2026-07-02,v4.8.2,Android,58,52,OutOfMemoryError

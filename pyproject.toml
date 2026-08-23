@@ -1,6 +1,7 @@
 [project]
-name = "retail-enterprise-agents"
+name = "telco-enterprise-agents"
 version = "0.1.0"
+description = "Google Agent Development Kit (ADK) enterprise agents for Gemini Enterprise across Telecommunications domains."
 requires-python = ">=3.10"
 license = "Apache-2.0"
 dependencies = [

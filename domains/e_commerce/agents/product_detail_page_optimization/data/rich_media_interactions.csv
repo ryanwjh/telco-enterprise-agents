@@ -1,5 +1,0 @@
-product_id,media_type,view_count,full_video_watches,three_sixty_spin_interactions,engagement_rate_pct
-PROD-1001,video,8400,5120,0,60.95
-PROD-1002,gallery_360,6200,0,4180,67.42
-PROD-2001,ar_try_on,9100,0,5820,63.96
-PROD-2002,static_images_only,3200,0,0,18.40

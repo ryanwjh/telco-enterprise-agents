@@ -1,7 +1,0 @@
-transaction_id,risk_score,decision,rule_triggered,false_positive_flag,reviewer_id
-TXN-8801,12,APPROVE,NONE,false,AUTO
-TXN-8802,8,APPROVE,NONE,false,AUTO
-TXN-8803,45,MANUAL_REVIEW,VELOCITY_IP,true,REV-402
-TXN-8804,88,REJECT,HIGH_RISK_GEO,false,AUTO
-TXN-8806,22,APPROVE,NONE,false,AUTO
-TXN-8808,94,REJECT,CARD_STOLEN_LIST,false,AUTO

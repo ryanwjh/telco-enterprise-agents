@@ -1,5 +1,0 @@
-eval_id,store_id,category,planogram_id,photo_timestamp,ai_vision_match_pct,missing_facings_count,shelf_height_compliant
-POG-EV-101,STORE-101,Denim Jeans,POG-DENIM-SUM26,2026-07-15 08:30:00,96.2,0,True
-POG-EV-102,STORE-102,Athletic Shoes,POG-SHOE-RUN26,2026-07-16 09:15:00,81.5,4,False
-POG-EV-103,STORE-103,Skincare Serums,POG-BEAUTY-GLOW,2026-07-18 08:45:00,99.1,0,True
-POG-EV-104,STORE-104,Cookware Sets,POG-KITCHEN-PRO,2026-07-20 10:00:00,74.8,5,False

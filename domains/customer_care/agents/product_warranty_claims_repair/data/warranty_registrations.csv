@@ -1,7 +1,0 @@
-registration_id,customer_id,sku,product_name,purchase_date,warranty_type,warranty_status,coverage_end_date
-WAR-1001,CUST-1001,SKU-003,Wireless Noise-Cancelling Earbuds,2025-11-15,Extended 2-Year,Active,2027-11-15
-WAR-1002,CUST-1002,SKU-001,Waterproof Shell Jacket,2026-01-10,Standard Manufacturer,Active,2027-01-10
-WAR-1003,CUST-1003,SKU-005,Smart Fitness Tracker Watch,2025-08-20,Accidental Protection,Active,2027-08-20
-WAR-1004,CUST-1004,SKU-002,Trail Running Shoes,2026-03-05,Standard Manufacturer,Active,2026-09-05
-WAR-1005,CUST-1005,SKU-003,Wireless Noise-Cancelling Earbuds,2024-07-12,Extended 2-Year,Expired,2026-07-12
-WAR-1006,CUST-1006,SKU-005,Smart Fitness Tracker Watch,2026-02-18,Extended 2-Year,Active,2028-02-18

@@ -1,7 +1,0 @@
-customer_id,customer_name,tier_level,annual_spend_ytd,dedicated_concierge_agent_id,lifetime_clv,preferred_channel,nps_score
-CUST-1001,Victoria Sterling,Diamond Card,42500.0,AGT-108,128000.0,Dedicated WhatsApp,10
-CUST-1002,Alexander Montgomery,Diamond Card,38900.0,AGT-108,95000.0,Private Phone Line,9
-CUST-1003,Sophia Laurent,Platinum Tier,18500.0,AGT-107,45000.0,SMS / Text,10
-CUST-1004,Marcus Vance,Platinum Tier,22400.0,AGT-107,58000.0,Private Phone Line,9
-CUST-1005,Isabella Rossi,Diamond Card,51200.0,AGT-108,160000.0,Dedicated WhatsApp,10
-CUST-1006,Harrison Forde,Platinum Tier,16800.0,AGT-107,42000.0,Email Concierge,8

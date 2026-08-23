@@ -27,15 +27,15 @@ def test_resolve_agent_config_valid(monkeypatch):
     monkeypatch.setenv("PROJECT_ID", "test-project-123")
     monkeypatch.setenv("GEMINI_ENTERPRISE_APP_ID", "projects/123/locations/global/collections/default_collection/engines/app-1")
     
-    config = resolve_agent_config("merchandising", "assortment_planning", repo_root=REPO_ROOT)
-    assert config.domain == "merchandising"
-    assert config.agent_name == "assortment_planning"
-    assert config.agent_id == "aspl"
-    assert config.display_name == "Merchandising: Assortment Planning"
+    config = resolve_agent_config("consumer_marketing", "family_plan_upsell", repo_root=REPO_ROOT)
+    assert config.domain == "consumer_marketing"
+    assert config.agent_name == "family_plan_upsell"
+    assert config.agent_id == "famu"
+    assert config.display_name == "Consumer Marketing: Family Plan Upsell"
     assert config.region == "us-central1"
     assert config.project_id == "test-project-123"
     assert "app-1" in config.gemini_enterprise_app_id
-    assert config.agent_dir == REPO_ROOT / "domains" / "merchandising" / "agents" / "assortment_planning"
+    assert config.agent_dir == REPO_ROOT / "domains" / "consumer_marketing" / "agents" / "family_plan_upsell"
 
 
 def test_resolve_agent_config_missing_project_id(monkeypatch):
@@ -43,7 +43,7 @@ def test_resolve_agent_config_missing_project_id(monkeypatch):
     monkeypatch.delenv("GOOGLE_CLOUD_PROJECT", raising=False)
     
     with pytest.raises(ValueError, match="PROJECT_ID or GOOGLE_CLOUD_PROJECT must be set"):
-        resolve_agent_config("merchandising", "assortment_planning", repo_root=REPO_ROOT, load_env=False)
+        resolve_agent_config("consumer_marketing", "family_plan_upsell", repo_root=REPO_ROOT, load_env=False)
 
 
 def test_gcp_control_plane_client_methods(monkeypatch):
@@ -54,13 +54,13 @@ def test_gcp_control_plane_client_methods(monkeypatch):
     mock_resp.status_code = 200
     mock_resp.json.return_value = {
         "reasoningEngines": [
-            {"name": "projects/123/locations/us-central1/reasoningEngines/111", "displayName": "Merchandising: Assortment Planning"}
+            {"name": "projects/123/locations/us-central1/reasoningEngines/111", "displayName": "Consumer Marketing: Family Plan Upsell"}
         ]
     }
     with patch("requests.get", return_value=mock_resp):
         engines = client.list_reasoning_engines("test-proj", "us-central1")
         assert len(engines) == 1
-        assert engines[0]["displayName"] == "Merchandising: Assortment Planning"
+        assert engines[0]["displayName"] == "Consumer Marketing: Family Plan Upsell"
 
     # 2. delete_reasoning_engine
     mock_del_resp = MagicMock()
@@ -73,13 +73,13 @@ def test_gcp_control_plane_client_methods(monkeypatch):
     mock_ge_resp.status_code = 200
     mock_ge_resp.json.return_value = {
         "agents": [
-            {"name": "projects/123/.../agents/222", "displayName": "Merchandising: Assortment Planning"}
+            {"name": "projects/123/.../agents/222", "displayName": "Consumer Marketing: Family Plan Upsell"}
         ]
     }
     with patch("requests.get", return_value=mock_ge_resp):
         cards = client.list_ge_agents("projects/123/.../engines/app1", "test-proj")
         assert len(cards) == 1
-        assert cards[0]["displayName"] == "Merchandising: Assortment Planning"
+        assert cards[0]["displayName"] == "Consumer Marketing: Family Plan Upsell"
 
     # 4. delete_ge_agent
     with patch("requests.delete", return_value=mock_del_resp):
@@ -93,22 +93,22 @@ def test_agent_lifecycle_match_and_clean():
     
     engine = AgentLifecycleEngine(client=mock_client)
     config = AgentDeployConfig(
-        domain="supply_chain",
-        agent_name="inbound_freight_optimization",
-        agent_id="ifop",
-        display_name="Supply Chain: Inbound Freight Optimization",
+        domain="netops_aiops",
+        agent_name="fcaps_alarm_noise_reduction",
+        agent_id="fcap",
+        display_name="NetOps & AIOps: FCAPS Alarm Noise Reduction",
         description="test",
         project_id="test-proj",
         gemini_enterprise_app_id="projects/123/.../engines/app1"
     )
     
     mock_engines = [
-        {"name": "projects/123/locations/us-central1/reasoningEngines/999", "displayName": "Supply Chain: Inbound Freight Optimization"},
-        {"name": "projects/123/locations/us-central1/reasoningEngines/888", "displayName": "Merchandising: Assortment Planning"}
+        {"name": "projects/123/locations/us-central1/reasoningEngines/999", "displayName": "NetOps & AIOps: FCAPS Alarm Noise Reduction"},
+        {"name": "projects/123/locations/us-central1/reasoningEngines/888", "displayName": "Consumer Marketing: Family Plan Upsell"}
     ]
     mock_cards = [
-        {"name": "projects/123/.../agents/111", "displayName": "Supply Chain: Inbound Freight Optimization"},
-        {"name": "projects/123/.../agents/112", "displayName": "Supply Chain: Inbound Freight Optimization"}
+        {"name": "projects/123/.../agents/111", "displayName": "NetOps & AIOps: FCAPS Alarm Noise Reduction"},
+        {"name": "projects/123/.../agents/112", "displayName": "NetOps & AIOps: FCAPS Alarm Noise Reduction"}
     ]
     
     matched = engine.match_resources(config, mock_engines, mock_cards)
@@ -183,19 +183,19 @@ def test_agent_lifecycle_verify_deduplication_raises_on_duplicate():
 def test_generate_delta_report_and_domain_grouping(tmp_path):
     mock_results = [
         {
-            "domain": "supply_chain",
-            "agent_name": "inbound_freight_optimization",
-            "display_name": "Supply Chain: Inbound Freight Optimization",
-            "before_state": "❌ Missing Runtime",
+            "domain": "netops_aiops",
+            "agent_name": "fcaps_alarm_noise_reduction",
+            "display_name": "NetOps & AIOps: FCAPS Alarm Noise Reduction",
+            "before_state": "None",
             "cleanup_actions": "1 dangling card deleted",
             "after_state": "✅ reasoningEngines/123",
             "demo_recorded": "🎬 1080p Normal (5m 12s)",
             "status": "SUCCESS"
         },
         {
-            "domain": "merchandising",
-            "agent_name": "assortment_planning",
-            "display_name": "Merchandising: Assortment Planning",
+            "domain": "consumer_marketing",
+            "agent_name": "family_plan_upsell",
+            "display_name": "Consumer Marketing: Family Plan Upsell",
             "before_state": "1 Engine, 1 Card",
             "cleanup_actions": "None",
             "after_state": "✅ reasoningEngines/456",
@@ -205,15 +205,15 @@ def test_generate_delta_report_and_domain_grouping(tmp_path):
     ]
     
     grouped = group_results_by_domain(mock_results)
-    assert len(grouped["supply_chain"]) == 1
-    assert len(grouped["merchandising"]) == 1
+    assert len(grouped["netops_aiops"]) == 1
+    assert len(grouped["consumer_marketing"]) == 1
     
-    out_file = tmp_path / "supply_chain_audit.md"
-    report = generate_delta_report(grouped["supply_chain"], domain="supply_chain", output_path=out_file)
+    out_file = tmp_path / "netops_aiops_audit.md"
+    report = generate_delta_report(grouped["netops_aiops"], domain="netops_aiops", output_path=out_file)
     
-    assert "# Deployment Lifecycle & Deduplication Audit Report: Supply Chain" in report
-    assert "Supply Chain: Inbound Freight Optimization" in report
-    assert "git worktree add .worktrees/deploy_supply_chain" in report
+    assert "# Deployment Lifecycle & Deduplication Audit Report: Netops Aiops" in report
+    assert "NetOps & AIOps: FCAPS Alarm Noise Reduction" in report
+    assert "git worktree add .worktrees/deploy_netops_aiops" in report
     assert out_file.exists()
 
 

@@ -1,5 +1,0 @@
-sku,fiscal_week,discount_depth_pct,units_sold,remaining_units,gross_margin_erosion_dollars
-SKU-001,2026-W28,25.0,150,850,4500.0
-SKU-001,2026-W29,40.0,400,450,19200.0
-SKU-002,2026-W28,40.0,200,410,10200.0
-SKU-002,2026-W29,60.0,200,210,10200.0

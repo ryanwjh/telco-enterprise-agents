@@ -1,9 +1,0 @@
-incident_id,store_id,district_id,incident_date,injury_type,body_part,incident_mechanism,osha_recordable_flag,days_away_count,restricted_duty_days
-INC-2026-01,STORE-101,DIST-01,2026-01-18,Sprain/Strain,Lower Back,Manual Material Handling/Lifting,True,4,10
-INC-2026-02,STORE-101,DIST-01,2026-03-04,Laceration,Right Hand/Finger,Box Cutter Cut,True,0,3
-INC-2026-03,STORE-102,DIST-01,2026-02-12,Contusion,Right Knee,Slip/Trip/Fall,True,2,7
-INC-2026-04,STORE-102,DIST-01,2026-04-20,Sprain/Strain,Right Shoulder,Overhead Stocking Reach,True,0,14
-INC-2026-05,STORE-103,DIST-02,2026-03-15,Sprain/Strain,Lower Back,Manual Material Handling/Lifting,True,6,12
-INC-2026-06,STORE-103,DIST-02,2026-05-09,Fracture/Toe,Left Foot,Struck by Heavy Flatbed Cart,True,10,20
-INC-2026-07,STORE-104,DIST-02,2026-04-02,Laceration,Left Forearm,Broken Glass Merchandise,True,0,2
-INC-2026-08,STORE-104,DIST-02,2026-05-27,Slip/Fall,Hip/Lower Back,Water Spill in Produce,True,3,8

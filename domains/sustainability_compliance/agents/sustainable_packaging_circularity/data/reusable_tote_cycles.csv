@@ -1,7 +1,0 @@
-tote_id,current_dc_id,assigned_store_id,cycle_turns_count,initial_deployment_date,condition_status,plastic_weight_saved_lbs
-TOTE-001,DC-101,STORE-101,84,2025-03-15,Excellent,336.0
-TOTE-002,DC-101,STORE-101,92,2025-02-10,Good,368.0
-TOTE-003,DC-101,STORE-102,76,2025-04-01,Good,304.0
-TOTE-004,DC-101,STORE-103,68,2025-05-12,Excellent,272.0
-TOTE-005,DC-102,STORE-104,110,2024-11-20,Fair - Maintenance Needed,440.0
-TOTE-006,DC-102,STORE-105,95,2025-01-18,Good,380.0

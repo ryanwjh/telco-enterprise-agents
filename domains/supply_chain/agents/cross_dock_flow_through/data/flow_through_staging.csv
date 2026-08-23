@@ -1,4 +1,0 @@
-facility_id,staging_lane,active_pallets,lane_capacity_pallets,utilization_pct,avg_staging_mins
-DC-01,Lane A1-A4,38,50,76.0,95
-DC-01,Lane B1-B4,44,50,88.0,115
-DC-02,Lane C1-C4,49,50,98.0,165

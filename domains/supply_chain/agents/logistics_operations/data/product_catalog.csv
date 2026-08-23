@@ -1,7 +1,0 @@
-product_id,product_name,category,department,brand,launch_date,status
-SKU-001,Down Parka,Apparel,Outerwear,AlpineGear,2025-09-01,ACTIVE
-SKU-002,Rain Jacket,Apparel,Outerwear,WeatherShield,2025-03-15,ACTIVE
-SKU-003,Hiking Boots,Footwear,Outdoor,TrailBlazer,2025-01-10,ACTIVE
-SKU-004,Running Shoes,Footwear,Athletic,PaceSetter,2025-02-01,ACTIVE
-SKU-005,Wool Socks,Apparel,Accessories,CozyStep,2024-10-01,ACTIVE
-SKU-006,Thermal Base Layer,Apparel,Underwear,HeatTech,2024-11-15,ACTIVE

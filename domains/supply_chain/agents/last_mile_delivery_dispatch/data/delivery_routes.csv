@@ -1,5 +1,0 @@
-route_id,hub_id,zone_name,total_stops,completed_stops,total_miles,cost_per_drop_usd,driver_hours
-RT-METRO-01,HUB-CHI-01,Chicago Downtown Metro,48,47,38.5,6.85,7.2
-RT-METRO-02,HUB-CHI-01,Chicago North Suburbs,42,42,62.0,8.4,7.8
-RT-METRO-03,HUB-CHI-02,Chicago South Metro,39,38,45.0,7.5,7.0
-RT-SUB-01,HUB-MIL-01,Milwaukee Metro,36,36,54.0,9.1,7.5

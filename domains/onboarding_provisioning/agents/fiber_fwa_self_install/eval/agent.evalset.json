@@ -1,0 +1,28 @@
+{
+  "eval_set": [
+    {
+      "query": "What are our primary operational metrics and performance targets for fiber fwa self install across operating regions in 2026 YTD?",
+      "expected_intent": "data_insights",
+      "assertions": [
+        {
+          "type": "contains_number",
+          "description": "Response contains grounded quantitative metrics"
+        },
+        {
+          "type": "no_hallucination",
+          "description": "Response is grounded in BigQuery tools"
+        }
+      ]
+    },
+    {
+      "query": "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for fiber fwa self install?",
+      "expected_intent": "market_context",
+      "assertions": [
+        {
+          "type": "grounded_search",
+          "description": "Response references external telecom standards/benchmarks"
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,0 @@
-case_id,store_id,department,injury_category,lost_workdays_count,dart_incident_flag,year_to_date_dart_rate
-DART-01,STORE-101,Stocking & Logistics,Lower Back Strain,14,True,1.45
-DART-02,STORE-102,Grocery & Perishables,Slip & Knee Contusion,9,True,0.98
-DART-03,STORE-102,Apparel & Home,Shoulder Strain,14,True,0.98
-DART-04,STORE-103,Stocking & Logistics,Lower Back Strain,18,True,2.1
-DART-05,STORE-103,Grocery & Perishables,Foot Fracture,30,True,2.1
-DART-06,STORE-104,Grocery & Perishables,Produce Floor Slip,11,True,1.22

@@ -1,5 +1,0 @@
-event_id,store_id,cashier_id,event_date,variance_usd,discrepancy_type,manager_reviewed,resolution_notes
-EV-OS-101,STORE-102,EMP-9021,2026-07-20,-45.0,Shortage,True,Cashier miscounted $50 bill change on split tender
-EV-OS-102,STORE-102,EMP-5512,2026-07-20,35.0,Overage,True,Unrecorded cash pickup from drawer during peak rush
-EV-OS-103,STORE-103,EMP-3341,2026-07-18,-12.5,Shortage,True,Coupon double deduction cash refund error
-EV-OS-104,STORE-104,EMP-7711,2026-07-19,-28.0,Shortage,False,Pending shift manager audit interview

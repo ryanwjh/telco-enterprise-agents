@@ -1,5 +1,0 @@
-lane_id,origin,destination,benchmark_cwt_usd,spot_rate_cwt_usd,variance_bps
-LANE-SHA-LAX,Shanghai,Los Angeles,38.0,43.5,1447
-LANE-NGB-LGB,Ningbo,Long Beach,39.5,46.2,1696
-LANE-PUS-SEA,Busan,Seattle,39.0,39.8,205
-LANE-LAX-CHI,Los Angeles,Chicago Hub,27.0,28.4,518

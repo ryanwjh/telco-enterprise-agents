@@ -1,5 +1,0 @@
-lane_id,origin_region,destination_region,standard_transit_days,avg_delay_hours
-LANE-001,West Coast,Pacific Northwest,2.0,4.5
-LANE-002,Midwest,East Coast,3.5,12.0
-LANE-003,South,Northeast,4.0,18.5
-LANE-004,West Coast,Southwest,1.5,1.0

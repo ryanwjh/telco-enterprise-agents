@@ -1,5 +1,0 @@
-offer_id,offer_name,discount_depth_pct,channel,cost_per_send_usd,target_churn_tier,margin_cost_usd
-OFFER-WB-01,VIP $25 Off $75 Exclusive Credit,33.3,Direct Mail + Email,1.85,High Risk High-CLV,25.0
-OFFER-WB-02,We Miss You 20% Off Category,20.0,Email Flow,0.02,Moderate Risk,14.5
-OFFER-WB-03,Flash $10 Credit on Any Order,40.0,SMS Push,0.08,Critical Churn,10.0
-OFFER-WB-04,Free Shipping + Bonus 500 Pts,15.0,Mobile Push,0.01,Moderate Risk Regulars,6.0

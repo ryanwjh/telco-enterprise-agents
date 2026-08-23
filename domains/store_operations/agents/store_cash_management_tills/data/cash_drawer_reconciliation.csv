@@ -1,5 +1,0 @@
-recon_id,store_id,business_date,till_id,system_expected_cash,actual_counted_cash,over_short_variance_usd,balanced_status
-REC-2026-0701,STORE-101,2026-07-20,TILL-01,2450.0,2448.5,-1.5,Within Tolerance
-REC-2026-0702,STORE-101,2026-07-20,TILL-02,3120.0,3120.0,0.0,Exact Match
-REC-2026-0703,STORE-102,2026-07-20,TILL-01,1890.0,1845.0,-45.0,Major Shortage - Investigating
-REC-2026-0704,STORE-102,2026-07-20,TILL-04,2780.0,2815.0,35.0,Major Overage - Investigating

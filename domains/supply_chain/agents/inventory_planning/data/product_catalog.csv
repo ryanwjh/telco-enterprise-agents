@@ -1,7 +1,0 @@
-product_id,product_name,category,department,brand,launch_date,status
-SKU-001,Down Parka,Men's Outerwear,Apparel,Alpine Gear,2024-01-15,active
-SKU-002,Rain Jacket,Men's Outerwear,Apparel,Alpine Gear,2024-01-15,active
-SKU-003,Fleece Vest,Men's Outerwear,Apparel,Alpine Gear,2024-01-15,active
-SKU-004,Running Shoe,Women's Footwear,Footwear,Strideline,2024-01-15,active
-SKU-005,Ankle Boot,Women's Footwear,Footwear,Strideline,2024-01-15,active
-SKU-006,Sandal,Women's Footwear,Footwear,Strideline,2024-01-15,active

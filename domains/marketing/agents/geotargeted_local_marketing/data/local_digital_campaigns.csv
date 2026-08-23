@@ -1,5 +1,0 @@
-campaign_id,store_id,channel,ad_type,geofence_radius_miles,impressions,clicks,ctr_pct,ad_spend_usd
-GEO-LOC-01,STORE-101,Meta Ads Geofence,Store Event & Weekend Sale,3.0,140000,4900,3.5,2450.0
-GEO-LOC-02,STORE-102,Google Local Inventory Ads,In-Stock Nearby Search,5.0,210000,9450,4.5,4200.0
-GEO-LOC-03,STORE-103,Waze / Google Maps Pins,Promoted Store Pin & Search,4.0,95000,3610,3.8,1800.0
-GEO-LOC-04,STORE-104,Snapchat Geofilters / Local,Back to School Promo,5.0,160000,5120,3.2,2240.0

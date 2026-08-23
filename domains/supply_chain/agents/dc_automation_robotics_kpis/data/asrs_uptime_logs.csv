@@ -1,5 +1,0 @@
-system_id,month,operating_hours,downtime_hours,uptime_pct,mtbf_hours
-SYS-ASRS-01,2026-06,720,4.3,99.4,167.4
-SYS-GTP-01,2026-06,720,8.6,98.8,83.7
-SYS-AMR-01,2026-06,720,12.9,98.2,55.8
-SYS-SORT-01,2026-06,720,15.1,97.9,47.7

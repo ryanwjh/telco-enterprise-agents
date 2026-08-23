@@ -1,6 +1,0 @@
-transaction_id,customer_id,concierge_agent_id,sale_date,order_amount,product_category,commission_earned
-TX-VIP-901,CUST-1001,AGT-108,2026-08-05,4850.0,Luxury Outerwear & Accessories,145.5
-TX-VIP-902,CUST-1005,AGT-108,2026-08-04,6200.0,Fine Jewelry & Watches,186.0
-TX-VIP-903,CUST-1002,AGT-108,2026-08-03,3100.0,Designer Footwear & Leather,93.0
-TX-VIP-904,CUST-1003,AGT-107,2026-08-02,2400.0,Evening Wear & Dresses,72.0
-TX-VIP-905,CUST-1004,AGT-107,2026-08-01,1950.0,Tailored Menswear,58.5

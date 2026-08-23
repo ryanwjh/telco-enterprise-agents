@@ -1,5 +1,0 @@
-store_id,store_name,region,district_manager,bopis_enabled_flag
-STORE-001,Downtown Flagship,West,Sarah Jenkins,TRUE
-STORE-002,Suburban Plaza,West,Sarah Jenkins,TRUE
-STORE-003,Metro Center,Midwest,Michael Chang,TRUE
-STORE-004,City Galleria,East,David Ross,TRUE

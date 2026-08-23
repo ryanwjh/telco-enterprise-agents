@@ -1,8 +1,0 @@
-grievance_id,cba_id,store_id,filing_date,grievance_category,grievance_step,status,estimated_liability_usd
-GRV-2026-01,CBA-UFCW-881,STORE-101,2026-02-10,Scheduling & Overtime Allocation,Step 1 - Store Level,Settled,450.0
-GRV-2026-02,CBA-UFCW-881,STORE-101,2026-03-15,Seniority Shift Bidding,Step 2 - District HR,Settled,650.0
-GRV-2026-03,CBA-UFCW-881,STORE-102,2026-04-05,Premium Sunday Pay Calculation,Step 1 - Store Level,Closed - Withdrawn,0.0
-GRV-2026-04,CBA-UFCW-881,STORE-102,2026-05-12,Disciplinary Action / Written Warning,Step 2 - District HR,Open,0.0
-GRV-2026-05,CBA-UFCW-1500,STORE-103,2026-03-20,Out-of-Classification Work Assignment,Step 2 - District HR,Settled,800.0
-GRV-2026-06,CBA-UFCW-1500,STORE-103,2026-05-18,Seniority Holiday Shift Assignment,Step 1 - Store Level,Open,500.0
-GRV-2026-07,CBA-RWDSU-338,STORE-101,2026-04-28,Overnight Differential Calculation,Step 1 - Store Level,Settled,320.0

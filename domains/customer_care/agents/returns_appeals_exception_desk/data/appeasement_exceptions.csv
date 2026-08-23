@@ -1,6 +1,0 @@
-exception_id,appeal_id,customer_id,exception_type,exception_amount,date
-EXC-601,APL-501,CUST-1001,Full Refund Override,145.0,2026-08-05
-EXC-602,APL-502,CUST-1002,Store Credit Only,85.0,2026-08-04
-EXC-603,APL-504,CUST-1004,Defective Unit Replacement & Waiver,120.0,2026-08-02
-EXC-604,APL-505,CUST-1005,Restocking Fee Waived,15.0,2026-08-01
-EXC-605,APL-490,CUST-1008,Keep Item Courtesy Credit,40.0,2026-07-28

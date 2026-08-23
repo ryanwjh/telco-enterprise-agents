@@ -1,5 +1,0 @@
-audit_id,store_id,audit_date,auditor_name,fire_safety_score,ergonomic_score,chemical_hazcom_score,total_safety_score_pct,corrective_actions_open
-AUD-101,STORE-101,2026-05-14,Regional Safety Lead,98.0,92.0,96.0,95.3,1
-AUD-102,STORE-102,2026-05-20,Regional Safety Lead,100.0,96.0,98.0,98.0,0
-AUD-103,STORE-103,2026-05-28,Regional Safety Lead,92.0,86.0,90.0,89.3,3
-AUD-104,STORE-104,2026-06-04,Regional Safety Lead,96.0,94.0,95.0,95.0,1

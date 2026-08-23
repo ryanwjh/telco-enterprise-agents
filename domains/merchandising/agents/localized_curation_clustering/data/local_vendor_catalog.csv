@@ -1,7 +1,0 @@
-local_vendor_id,vendor_name,store_id,local_region_tag,sku_count,local_sales_share_pct,artisan_certified
-VEND-LOC-01,Windy City Roast Works,STORE-101,Chicago Local,6,8.5,True
-VEND-LOC-02,Prairie Honey & Hive,STORE-102,Illinois Local,4,4.2,True
-VEND-LOC-03,Dairy State Creamery,STORE-103,Wisconsin Artisan,8,12.0,True
-VEND-LOC-04,Midwest Grain & Sourdough,STORE-104,Chicago Local,5,9.1,True
-VEND-LOC-05,Twin Cities Artisan Jams,STORE-201,Minnesota Local,6,7.8,True
-VEND-LOC-06,St. Croix Smokehouse,STORE-204,Minnesota Local,7,10.4,True

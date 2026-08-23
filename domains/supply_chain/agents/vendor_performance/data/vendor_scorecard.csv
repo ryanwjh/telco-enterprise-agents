@@ -1,5 +1,0 @@
-vendor_id,period_start,period_end,total_pos,on_time_pos,in_full_pos,otif_pos,otif_pct,avg_delay_days
-VEND-001,2026-04-01,2026-07-05,10,9,10,9,90.0,0.2
-VEND-002,2026-04-01,2026-07-05,10,8,9,7,70.0,0.7
-VEND-003,2026-04-01,2026-07-05,10,8,9,7,70.0,0.7
-VEND-004,2026-04-01,2026-07-05,10,5,6,3,30.0,2.5

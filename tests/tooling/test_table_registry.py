@@ -91,18 +91,14 @@ def test_every_agent_domain_field_resolves_to_a_registered_domain():
         )
 
 
-def test_all_nine_domains_are_registered():
+def test_all_five_domains_are_registered():
     registry = yaml.safe_load(REGISTRY_PATH.read_text())
     expected_domains = {
-        "merchandising",
-        "supply_chain",
-        "store_operations",
-        "e_commerce",
-        "marketing",
-        "finance",
-        "customer_care",
-        "human_resources",
-        "sustainability_compliance",
+        "consumer_marketing",
+        "onboarding_provisioning",
+        "subscriber_crm",
+        "netops_aiops",
+        "daas_camara",
     }
     registered_domains = set(registry["domains"].keys())
     assert registered_domains == expected_domains, (
@@ -111,10 +107,10 @@ def test_all_nine_domains_are_registered():
     )
 
 
-def test_all_one_hundred_agents_are_registered():
+def test_all_agents_are_registered():
     registry = yaml.safe_load(REGISTRY_PATH.read_text())
     agents = registry["agents"]
-    assert len(agents) == 100, f"Expected 100 registered agents in {REGISTRY_PATH}, found {len(agents)}"
+    assert len(agents) == 45, f"Expected 45 registered agents in {REGISTRY_PATH}, found {len(agents)}"
 
 
 def test_every_agent_has_at_least_three_tables():

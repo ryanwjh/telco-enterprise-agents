@@ -1,3 +1,0 @@
-wo_id,system_id,wo_type,technician,duration_hours,status,critical_parts_replaced
-WO-2026-01,SYS-ASRS-01,Preventative Maintenance,Tech 04,2.5,Completed,Lift Drive Belt
-WO-2026-02,SYS-SORT-01,Corrective Emergency,Tech 02,3.8,Completed,Pneumatic Diverter Valve

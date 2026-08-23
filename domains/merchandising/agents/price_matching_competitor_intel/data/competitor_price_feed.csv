@@ -1,6 +1,0 @@
-sku,category,our_price_dollars,amazon_price,walmart_price,target_price,competitor_price_gap_pct
-SKU-001,Apparel,120.0,115.0,118.0,120.0,-4.17
-SKU-002,Apparel,85.0,80.0,82.5,85.0,-5.88
-SKU-003,Footwear,150.0,140.0,145.0,148.0,-6.67
-SKU-004,Home Decor,65.0,68.0,65.0,67.0,4.62
-SKU-005,Electronics Accs,40.0,35.0,37.0,38.0,-12.5

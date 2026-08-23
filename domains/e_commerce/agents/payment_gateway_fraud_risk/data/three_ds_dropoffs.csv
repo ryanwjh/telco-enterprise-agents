@@ -1,7 +1,0 @@
-session_id,timestamp,frictionless_flow,challenge_presented,challenge_abandoned,device_type
-SES-9901,2026-07-01 10:14:00,true,false,false,mobile_ios
-SES-9902,2026-07-01 11:18:00,true,false,false,desktop_chrome
-SES-9903,2026-07-02 09:02:00,false,true,true,mobile_android
-SES-9904,2026-07-02 14:40:00,false,true,false,desktop_safari
-SES-9905,2026-07-03 16:28:00,true,false,false,mobile_ios
-SES-9906,2026-07-04 12:05:00,false,true,true,mobile_safari

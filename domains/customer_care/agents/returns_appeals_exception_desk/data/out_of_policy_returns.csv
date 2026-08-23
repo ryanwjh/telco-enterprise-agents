@@ -1,6 +1,0 @@
-appeal_id,customer_id,order_id,sku,appeal_date,days_past_return_window,reason_for_appeal,decision,override_manager_id
-APL-501,CUST-1001,ORD-89210,SKU-001,2026-08-05,14,Customer was traveling overseas for business,Approved - Full Refund,MGR-201
-APL-502,CUST-1002,ORD-89150,SKU-002,2026-08-04,45,Gift received without gift receipt,Approved - Store Credit Only,MGR-202
-APL-503,CUST-1003,ORD-88940,SKU-003,2026-08-03,90,No proof of purchase or packaging,Denied,MGR-201
-APL-504,CUST-1004,ORD-89300,SKU-005,2026-08-02,8,Item delivered defective upon opening,Approved - Full Refund,MGR-203
-APL-505,CUST-1005,ORD-89280,SKU-004,2026-08-01,20,Wrong color received; missed window due to illness,Approved - Free Exchange,MGR-202

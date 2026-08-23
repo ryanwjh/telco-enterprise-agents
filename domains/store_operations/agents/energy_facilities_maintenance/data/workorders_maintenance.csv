@@ -1,5 +1,0 @@
-workorder_id,store_id,equipment_type,issue_description,created_date,resolved_date,repair_cost_usd,vendor_contractor,mttr_hours
-WO-MAIN-501,STORE-101,HVAC Rooftop Unit #2,Compressor refrigerant leak,2026-07-05,2026-07-06,2450.0,Carrier Commercial Service,26.5
-WO-MAIN-502,STORE-102,Automatic Entry Doors,Motion sensor calibration failure,2026-07-11,2026-07-11,480.0,Stanley Access Tech,6.0
-WO-MAIN-503,STORE-103,Baler & Trash Compactor,Hydraulic cylinder seal leak,2026-07-14,2026-07-15,1650.0,Wastequip Services,18.2
-WO-MAIN-504,STORE-104,Lighting Control Panel,LED relay board failure,2026-07-19,2026-07-21,3200.0,Schneider Electric,44.0

@@ -1,5 +1,0 @@
-account_id,company_name,industry,credit_limit,current_ar_balance,credit_utilization_pct,tier
-B2B-101,Nordic Retail Group,Department Stores,500000.00,320000.00,64.0,Enterprise_Tier1
-B2B-102,Alpine Resort Outlets,Hospitality,250000.00,185000.00,74.0,Enterprise_Tier2
-B2B-103,Pacific Crest Outfitters,Specialty Retail,150000.00,45000.00,30.0,Growth_Tier
-B2B-104,Metro Uniform Supply,Corporate Services,100000.00,92000.00,92.0,Standard_Tier

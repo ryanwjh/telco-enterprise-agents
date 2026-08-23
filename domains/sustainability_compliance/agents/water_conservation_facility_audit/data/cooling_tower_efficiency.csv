@@ -1,5 +1,0 @@
-facility_id,cooling_tower_id,makeup_water_gallons,blowdown_water_gallons,cycles_of_concentration,water_treatment_type,water_efficiency_pct
-DC-101,CT-DC101-A,125000,25000,5.0,Electro-Chemical Non-Chemical,80.0
-DC-101,CT-DC101-B,118000,23600,5.0,Electro-Chemical Non-Chemical,80.0
-STORE-102,CT-ST102-01,62000,15500,4.0,Advanced Polymer & Biocide,75.0
-STORE-104,CT-ST104-01,74000,16400,4.5,Automated Acid Dosing,77.8

@@ -1,7 +1,0 @@
-feedback_id,customer_id,channel,feedback_date,category,sentiment_score,sentiment_label,key_phrases,transcript_summary
-FBD-301,CUST-1001,Voice,2026-08-05,Sizing & Fit,-0.65,Negative,runs too small; tight sleeves; size chart incorrect,Customer ordered Size M jacket but fits like XS.
-FBD-302,CUST-1002,Chat,2026-08-05,Delivery Speed,0.85,Positive,arrived 2 days early; perfect packaging; driver polite,Delighted by early weekend delivery.
-FBD-303,CUST-1003,Survey,2026-08-04,Product Quality,-0.8,Negative,seam tearing; loose threads; cheap material,Shirt hem came undone after initial wash.
-FBD-304,CUST-1004,Mobile App,2026-08-04,Checkout Experience,0.7,Positive,one-click pay; super smooth; easy return pickup,Pleased with Apple Pay integration.
-FBD-305,CUST-1005,Voice,2026-08-03,Customer Support,0.9,Positive,agent was fantastic; instant refund; courteous,Agent credited missing promo instantly.
-FBD-306,CUST-1006,Email,2026-08-02,Delivery Delay,-0.75,Negative,late 5 days; missed birthday; tracking stuck,Gift delayed beyond promised date.

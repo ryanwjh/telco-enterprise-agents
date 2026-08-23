@@ -1,5 +1,0 @@
-inspection_id,store_id,agency_name,inspection_date,grade_or_rating,critical_violations_count,non_critical_violations_count,reinspection_required
-HLTH-INSP-01,STORE-101,City Health Department,2026-06-10,Grade A (98/100),0,1,False
-HLTH-INSP-02,STORE-102,County Health Department,2026-06-18,Grade B (84/100),2,4,True
-HLTH-INSP-03,STORE-103,State Food Safety Authority,2026-07-02,Grade A (100/100),0,0,False
-HLTH-INSP-04,STORE-104,City Health Department,2026-07-14,Grade A (92/100),0,3,False

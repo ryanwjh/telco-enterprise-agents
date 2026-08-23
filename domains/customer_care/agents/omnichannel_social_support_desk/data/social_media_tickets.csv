@@ -1,6 +1,0 @@
-ticket_id,platform,post_timestamp,author_handle,post_type,issue_category,sentiment,status
-SOC-101,X / Twitter,2026-08-05 14:10:00,@sarah_fashionista,Public Mention,Delayed Delivery,Negative,Resolved via DM
-SOC-102,Instagram,2026-08-05 15:30:00,@urban_runner_mike,Post Comment,Shoe Size Sizing,Neutral,Answered in Thread
-SOC-103,TikTok,2026-08-04 19:45:00,@tech_reviewer_dan,Video Mention,Defective Earbud Battery,Critical,Executive Concierge Assigned
-SOC-104,Facebook,2026-08-04 11:20:00,@jennifer_smith,Direct Message,Store Pickup Question,Positive,Resolved in DM
-SOC-105,Reddit,2026-08-03 09:15:00,u/style_curator,Subreddit Thread,Return Policy Confusion,Negative,Clarified by Support Rep

@@ -1,7 +1,0 @@
-promo_id,product_id,baseline_daily_units,baseline_window_start,baseline_window_end,promo_period_daily_units,lift_pct,incremental_units,incremental_revenue,promo_window_days
-PROMO-001,SKU-002,8.0,2026-05-18,2026-05-31,22.0,175.0,196,13303.78,14
-PROMO-002,SKU-005,7.0,2026-06-01,2026-06-14,6.5,-7.1,-7,-642.06,14
-PROMO-003,SKU-004,12.0,2026-06-17,2026-06-30,15.5,29.2,35,2636.06,10
-PROMO-003,SKU-005,7.0,2026-06-17,2026-06-30,8.5,21.4,15,1305.39,10
-PROMO-003,SKU-006,25.0,2026-06-17,2026-06-30,30.0,20.0,50,565.3,10
-PROMO-004,SKU-001,6.0,2026-06-27,2026-07-10,9.0,50.0,21,3045.37,7

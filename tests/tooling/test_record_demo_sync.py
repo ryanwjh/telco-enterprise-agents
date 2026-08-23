@@ -146,12 +146,12 @@ async def test_smooth_mouse_scroll_walkthrough_left_pane():
 
 def test_canvas_prompt_generalization_and_override():
     from _shared.scripts.record_agent_demo import get_agent_display_name
-    display_name = get_agent_display_name("cart_checkout_analytics", "e_commerce")
+    display_name = get_agent_display_name("family_plan_upsell", "consumer_marketing")
     agent_clean_title = display_name.split(":")[-1].strip() if ":" in display_name else display_name
     
     # Default dynamic template
     dynamic_prompt = f"Create a 4-slide executive presentation summarizing the {agent_clean_title} analysis and recommendations above."
-    assert "Cart & Checkout Analytics" in dynamic_prompt
+    assert "Family Plan Upsell" in dynamic_prompt
     assert "4-slide executive presentation" in dynamic_prompt
     
     # Custom override
@@ -177,19 +177,19 @@ def test_user_data_dir_isolation_and_env_override(tmp_path, monkeypatch):
 def test_mention_query_formatting_lowercase_no_space():
     from _shared.scripts.record_agent_demo import get_agent_display_name
     
-    dname_1 = get_agent_display_name("sell_through_inventory_health", "merchandising")
-    assert dname_1 == "Merchandising: Sell-Through & Inventory Health"
+    dname_1 = get_agent_display_name("family_plan_upsell", "consumer_marketing")
+    assert dname_1 == "Consumer Marketing: Family Plan Upsell"
     clean_1 = dname_1.split(":")[-1].strip()
-    assert clean_1 == "Sell-Through & Inventory Health"
+    assert clean_1 == "Family Plan Upsell"
     mention_1 = f"@{clean_1.lower()}"
-    assert mention_1 == "@sell-through & inventory health"
+    assert mention_1 == "@family plan upsell"
     assert " " not in mention_1[:2]  # No space between @ and agent name
     
-    dname_2 = get_agent_display_name("vendor_negotiation_rebates", "merchandising")
-    assert dname_2 == "Merchandising: Vendor Negotiation & Rebates"
+    dname_2 = get_agent_display_name("fcaps_alarm_noise_reduction", "netops_aiops")
+    assert dname_2 == "NetOps & AIOps: FCAPS Alarm Noise Reduction"
     clean_2 = dname_2.split(":")[-1].strip()
-    assert clean_2 == "Vendor Negotiation & Rebates"
+    assert clean_2 == "FCAPS Alarm Noise Reduction"
     mention_2 = f"@{clean_2.lower()}"
-    assert mention_2 == "@vendor negotiation & rebates"
+    assert mention_2 == "@fcaps alarm noise reduction"
 
 

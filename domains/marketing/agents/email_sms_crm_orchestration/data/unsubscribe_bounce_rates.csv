@@ -1,5 +1,0 @@
-channel,month,total_dispatched,delivered_count,deliverability_pct,unsubscribe_count,unsubscribe_rate_pct,spam_complaint_pct
-Email,2026-07,4200000,4179000,99.5,8358,0.2,0.012
-SMS,2026-07,850000,846600,99.6,2539,0.3,0.005
-Email,2026-06,3900000,3876600,99.4,8528,0.22,0.015
-SMS,2026-06,780000,776100,99.5,2483,0.32,0.006

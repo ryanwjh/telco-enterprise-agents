@@ -1,3 +1,0 @@
-excursion_id,shipment_id,category,max_temp_reached_f,duration_mins,quarantined_units,spoilage_loss_usd,disposition
-EXC-2026-01,SHP-COLD-102,Fresh Poultry,43.5,48,120,1450.0,Condemned & Disposed
-EXC-2026-02,SHP-COLD-104,Prepared Salads,42.1,32,80,480.0,Dynamic Markdown Rescue

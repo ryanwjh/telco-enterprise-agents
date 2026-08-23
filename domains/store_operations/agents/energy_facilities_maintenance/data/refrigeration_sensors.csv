@@ -1,5 +1,0 @@
-sensor_id,store_id,case_location,target_temp_f,current_temp_f,alarm_triggered,alarm_severity,last_defrost_cycle
-REF-SENS-101,STORE-101,Dairy Walk-In Cooler,36.0,37.2,False,Normal,2026-07-20 04:00:00
-REF-SENS-102,STORE-102,Frozen Foods Aisle 03,-5.0,4.5,True,Critical Excursion,2026-07-20 06:30:00
-REF-SENS-103,STORE-103,Fresh Meat Case,32.0,33.5,False,Normal,2026-07-20 03:15:00
-REF-SENS-104,STORE-104,Produce Island Cooler,40.0,44.8,True,Warning Excursion,2026-07-20 05:00:00

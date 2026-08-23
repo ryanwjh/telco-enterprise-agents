@@ -1,7 +1,0 @@
-inquiry_id,order_id,customer_id,inquiry_date,channel,carrier_code,order_age_days,status_at_inquiry,resolution_type
-WIS-2001,ORD-98401,CUST-1001,2026-08-05,Live Chat,FedEx,4,In Transit - Delayed,Provided Tracking Link
-WIS-2002,ORD-98402,CUST-1002,2026-08-05,Voice,UPS,6,Exception - Sorting Delay,Issued $15 Goodwill Credit
-WIS-2003,ORD-98403,CUST-1003,2026-08-04,Mobile App,USPS,3,Out for Delivery,Self-Service Confirmation
-WIS-2004,ORD-98404,CUST-1004,2026-08-04,Chatbot,FedEx,5,In Transit - Weather Delay,Automated ETA Update
-WIS-2005,ORD-98405,CUST-1005,2026-08-03,Email,DHL,7,Lost in Transit,Dispatched Free Replacement
-WIS-2006,ORD-98406,CUST-1006,2026-08-02,Voice,UPS,5,Delivered - Front Porch,Verified Delivery Photo

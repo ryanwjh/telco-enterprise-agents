@@ -1,6 +1,0 @@
-carrier_claim_id,internal_claim_id,carrier_code,tracking_number,claim_filed_date,claimed_amount,carrier_payout_amount,settlement_status,turnaround_days
-CAR-CLM-101,DMG-501,FedEx,TRK-FDX-8801,2026-08-05,45.0,45.0,Approved & Paid,2
-CAR-CLM-102,DMG-502,UPS,TRK-UPS-8802,2026-08-04,145.0,116.0,Settled (80% Payout),3
-CAR-CLM-103,DMG-503,USPS,TRK-USP-8803,2026-08-03,95.0,95.0,Approved & Paid,4
-CAR-CLM-104,DMG-504,FedEx,TRK-FDX-8804,2026-08-02,120.0,120.0,Approved & Paid,2
-CAR-CLM-105,DMG-505,DHL,TRK-DHL-8805,2026-08-01,65.0,52.0,Settled (80% Payout),5

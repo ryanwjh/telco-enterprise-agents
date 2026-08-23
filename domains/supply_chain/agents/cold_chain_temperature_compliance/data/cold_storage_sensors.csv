@@ -1,4 +1,0 @@
-sensor_id,dc_id,zone_name,current_temp_f,sensor_status,uptime_pct,battery_pct
-SNS-DC1-Z1,DC-01,Dairy Cooler Room 1,35.8,Active,99.9,94
-SNS-DC1-Z2,DC-01,Meat Cooler Room 2,33.4,Active,99.8,88
-SNS-DC1-Z3,DC-01,Produce Wet Room,38.2,Active,100.0,96

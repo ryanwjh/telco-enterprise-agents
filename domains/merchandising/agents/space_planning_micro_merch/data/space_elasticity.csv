@@ -1,9 +1,0 @@
-category,bay_type,baseline_facings,optimized_facings,elasticity_coefficient,sales_lift_pct,projected_margin_lift_usd
-Snacks & Beverages,Gondola Endcap,4,6,0.42,14.5,12500.0
-Packaged Coffee,Aisle Run Wall,3,5,0.38,11.2,9800.0
-Breakfast Cereal,Aisle Run Center,5,5,0.12,1.5,1100.0
-Ready-to-Drink Dairy,Cooler Door Bay,4,6,0.48,16.8,15400.0
-Health & Wellness,Aisle Run Wall,3,6,0.35,9.8,8700.0
-Organic Pantry,Aisle Run Wall,4,6,0.4,13.0,11200.0
-Baking & Spices,Aisle Run Center,2,3,0.18,4.2,3200.0
-Seasonal Gourmet,Feature Table,6,8,0.55,21.0,18900.0

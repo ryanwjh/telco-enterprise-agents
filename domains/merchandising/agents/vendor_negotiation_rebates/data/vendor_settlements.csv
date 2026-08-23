@@ -1,6 +1,0 @@
-vendor_id,fiscal_quarter,earned_rebate_amount,collected_rebate_amount,outstanding_dispute_amount,rebate_realization_pct
-VND-001,2026-Q3,62500.0,56250.0,6250.0,90.0
-VND-002,2026-Q3,29250.0,24862.5,4387.5,85.0
-VND-003,2026-Q3,9000.0,7200.0,1800.0,80.0
-VND-004,2026-Q3,0.0,0.0,0.0,100.0
-VND-005,2026-Q3,15600.0,14820.0,780.0,95.0

@@ -1,5 +1,0 @@
-customer_id,rfm_segment,predicted_churn_probability,days_since_last_purchase,historic_clv_usd,churn_risk_tier,recommended_intervention
-CUST-10491,Lapsing Champions,0.78,68,3450.0,High Risk,VIP Concierge $25 Dynamic Credit
-CUST-22914,At-Risk Regulars,0.65,82,1200.0,Moderate Risk,Personalized 20% Category Winback Code
-CUST-38821,Active Loyalists,0.12,14,2800.0,Low Risk,Loyalty Tier Double Points Invite
-CUST-49102,Dormant One-Timers,0.92,145,180.0,Critical Churn,SMS $10 Reactivation Flash Offer

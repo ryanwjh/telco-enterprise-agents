@@ -1,5 +1,0 @@
-product_id,review_count,avg_star_rating,fit_accuracy_score,quality_score,sentiment_polarity
-PROD-1001,482,4.7,4.8,4.9,0.84
-PROD-1002,295,4.4,4.3,4.6,0.68
-PROD-2001,614,4.8,4.9,4.8,0.89
-PROD-2002,142,3.6,3.2,3.8,0.12

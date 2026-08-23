@@ -1,6 +1,0 @@
-claim_id,order_id,customer_id,submission_date,sku,damage_type,photo_verification_status,claim_validity_confidence
-DMG-501,ORD-89410,CUST-1001,2026-08-05,SKU-006,Broken Glass / Shattered,Verified by Computer Vision AI,0.98
-DMG-502,ORD-89380,CUST-1002,2026-08-04,SKU-001,Crushed Exterior Box & Torn Fabric,Verified by Computer Vision AI,0.94
-DMG-503,ORD-89320,CUST-1003,2026-08-03,SKU-003,Water / Liquid Damage to Electronics,Verified by Agent,0.91
-DMG-504,ORD-89290,CUST-1004,2026-08-02,SKU-005,Cracked Watch Bezel,Verified by Computer Vision AI,0.96
-DMG-505,ORD-89240,CUST-1005,2026-08-01,SKU-002,Scuffed & Punctured Shoe Leather,Verified by Agent,0.88

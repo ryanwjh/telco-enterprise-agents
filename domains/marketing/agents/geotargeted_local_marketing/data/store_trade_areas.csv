@@ -1,5 +1,0 @@
-store_id,trade_area_type,radius_miles,household_population,median_household_income_usd,retail_density_index
-STORE-101,Primary Trade Area,3.0,125000,88500.0,1.45
-STORE-102,Primary Trade Area,5.0,185000,104000.0,1.8
-STORE-103,Primary Trade Area,4.0,142000,76000.0,1.25
-STORE-104,Primary Trade Area,5.0,168000,92000.0,1.6

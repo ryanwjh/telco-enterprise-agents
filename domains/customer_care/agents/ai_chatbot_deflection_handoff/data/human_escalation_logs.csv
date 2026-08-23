@@ -1,6 +1,0 @@
-escalation_id,conversation_id,escalation_timestamp,trigger_reason,transferred_to_queue,agent_resolution_time_seconds
-ESC-901,BOT-702,2026-08-05 10:33:30,Sentiment Drop to Negative,Q-101,280
-ESC-902,BOT-705,2026-08-04 16:47:00,Complex Policy Exception,Q-101,340
-ESC-903,BOT-688,2026-08-04 12:15:20,User Explicitly Requested Human,Q-104,195
-ESC-904,BOT-660,2026-08-03 15:22:10,Intent Recognition Fallback Limit Reached,Q-102,420
-ESC-905,BOT-640,2026-08-02 18:05:40,High Value VIP Customer Detected,Q-106,180

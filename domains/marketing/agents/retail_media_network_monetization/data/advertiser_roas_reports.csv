@@ -1,5 +1,0 @@
-report_id,advertiser_id,campaign_name,ad_spend_usd,attributed_sales_usd,roas_multiplier,new_to_brand_pct
-ROAS-2026-01,ADV-RMN-001,Tide Pods Summer Clean Wave,45000.0,252000.0,5.6,34.5
-ROAS-2026-02,ADV-RMN-002,Dove Glow Serum Launch,38000.0,197600.0,5.2,48.0
-ROAS-2026-03,ADV-RMN-003,Oatly Barista Edition Push,18000.0,117000.0,6.5,62.5
-ROAS-2026-04,ADV-RMN-004,Anker Nano GaN Charger Prime,28000.0,134400.0,4.8,41.2

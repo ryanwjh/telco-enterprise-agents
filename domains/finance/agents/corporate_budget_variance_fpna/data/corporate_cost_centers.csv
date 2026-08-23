@@ -1,9 +1,0 @@
-cost_center_id,cost_center_name,functional_area,budget_owner,annual_budget_allocation,cost_center_status
-CC_FINANCE,Finance Department,Corporate SG&A,VP_FINANCE,13693798.93,Active
-CC_MARKETING,Marketing Department,Corporate SG&A,VP_MARKETING,16581163.91,Active
-CC_SUPPLY_CHAIN,Supply_Chain Department,Corporate SG&A,VP_SUPPLY_CHAIN,22891798.15,Active
-CC_HR,Hr Department,Corporate SG&A,VP_HR,10896122.5,Active
-CC_IT_ENG,It_Eng Department,Corporate SG&A,VP_IT_ENG,16396602.82,Active
-CC_LEGAL,Legal Department,Corporate SG&A,VP_LEGAL,17129221.42,Active
-CC_STORE_OPS,Store_Ops Department,Corporate SG&A,VP_STORE_OPS,16890376.49,Active
-CC_EXECUTIVE,Executive Department,Corporate SG&A,VP_EXECUTIVE,13553216.96,Active

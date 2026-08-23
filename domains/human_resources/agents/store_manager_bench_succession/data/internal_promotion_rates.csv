@@ -1,7 +1,0 @@
-district_id,reporting_year,total_leadership_vacancies,internal_promotions_count,external_hires_count,internal_promotion_pct
-DIST-01,2024,12,9,3,75.0
-DIST-01,2025,14,11,3,78.6
-DIST-01,2026,8,7,1,87.5
-DIST-02,2024,10,7,3,70.0
-DIST-02,2025,12,9,3,75.0
-DIST-02,2026,7,6,1,85.7

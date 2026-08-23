@@ -1,5 +1,0 @@
-order_id,date,promo_count,promos_used,total_discount_pct,order_margin_pct,abuse_flag
-ORD-99101,2026-07-01,3,SUMMER25+VIPWELCOME+EMPLOYEE,52.4,-8.2,true
-ORD-99102,2026-07-01,2,SUMMER25+FREESHIP,28.5,38.4,false
-ORD-99103,2026-07-01,4,SUMMER25+TIER10+AFFILIATE+BDAY,64.0,-16.5,true
-ORD-99104,2026-07-01,1,SUMMER25,25.0,42.1,false

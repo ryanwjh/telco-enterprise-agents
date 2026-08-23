@@ -1,6 +1,0 @@
-metro_region,category,size,regional_preference_index,national_benchmark_index,rebalance_recommendation
-Midwest Metro,Outerwear,Size XL/XXL,135.0,100.0,Increase Allocation +35%
-Southeast Metro,Outerwear,Size Small/Med,125.0,100.0,Increase Allocation +25%
-Southwest Urban,Bedding & Linens,King Size,140.0,100.0,Increase Allocation +40%
-Northeast Urban,Bedding & Linens,Twin/Queen,120.0,100.0,Increase Allocation +20%
-Pacific Coast,Footwear,Size 8.5/9,118.0,100.0,Increase Allocation +18%

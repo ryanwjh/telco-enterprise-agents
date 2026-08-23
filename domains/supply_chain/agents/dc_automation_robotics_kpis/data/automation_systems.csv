@@ -1,5 +1,0 @@
-system_id,facility_id,system_type,vendor,installed_year,active_status,uptime_target_pct,uptime_actual_pct
-SYS-ASRS-01,DC-01,ASRS Pallet Crane,Dematic,2024,Operational,99.0,99.4
-SYS-GTP-01,DC-01,Goods-to-Person Robotic Cell,AutoStore,2025,Operational,98.5,98.8
-SYS-AMR-01,DC-01,Autonomous Mobile Robots (AMR),Locus Robotics,2025,Operational,98.0,98.2
-SYS-SORT-01,DC-02,High-Speed Cross-Belt Sorter,Vanderlande,2023,Operational,99.0,97.9

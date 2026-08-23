@@ -1,6 +1,0 @@
-claim_id,registration_id,sku,claim_date,issue_description,claim_status,repair_center_id,turnaround_days,repair_cost
-CLM-801,WAR-1001,SKU-003,2026-07-28,Right earbud no audio output,Completed / Returned,RC-EAST-01,4,38.5
-CLM-802,WAR-1002,SKU-001,2026-07-30,Waterproof seam seal delamination,In Repair,RC-MIDW-02,3,24.0
-CLM-803,WAR-1003,SKU-005,2026-08-01,Cracked OLED display glass,Replaced with New Unit,RC-WEST-01,2,85.0
-CLM-804,WAR-1006,SKU-005,2026-08-02,Heart rate sensor failure,Approved - In Transit,RC-EAST-01,1,45.0
-CLM-805,WAR-1004,SKU-002,2026-07-20,Outsole tread detached,Completed / Returned,RC-MIDW-02,5,20.0

@@ -1,3 +1,0 @@
-facility_id,yard_capacity_trailers,trailers_in_yard,avg_yard_dwell_hours,target_yard_dwell_hours,congested_status
-DC-01,120,78,4.5,6.0,Normal
-DC-02,90,82,7.8,6.0,Congested

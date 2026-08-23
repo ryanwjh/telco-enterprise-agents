@@ -1,6 +1,0 @@
-recovery_id,vendor_id,vendor_name,claim_id,billed_to_vendor_amount,recovered_amount,recovery_date,settlement_status
-REC-901,VEND-1001,Apex Audio & Electronics,CLM-801,38.5,38.5,2026-08-02,Settled 100%
-REC-902,VEND-1002,Summit Outdoor Gear Corp,CLM-802,24.0,20.4,2026-08-04,Settled 85% - Net Dispute
-REC-903,VEND-1001,Apex Audio & Electronics,CLM-803,85.0,85.0,2026-08-05,Settled 100%
-REC-904,VEND-1003,AeroTech Footwear Ltd,CLM-805,20.0,18.0,2026-07-28,Settled 90%
-REC-905,VEND-1004,Nordic Living Essentials,CLM-790,42.0,42.0,2026-07-25,Settled 100%

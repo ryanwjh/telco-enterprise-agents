@@ -10,8 +10,8 @@ INSTRUCTIONS_DIR = Path(__file__).resolve().parents[2] / "_shared" / "instructio
 
 
 def test_persona_fragment_exists_and_has_required_content():
-    content = (INSTRUCTIONS_DIR / "persona_retail_analyst.md").read_text()
-    assert "senior retail merchandising data analyst" in content
+    content = (INSTRUCTIONS_DIR / "persona_telco_analyst.md").read_text()
+    assert "senior telecommunications domain specialist" in content
 
 
 def test_safety_fragment_exists_and_has_required_content():

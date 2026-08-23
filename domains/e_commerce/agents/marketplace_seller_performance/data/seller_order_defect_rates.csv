@@ -1,6 +1,0 @@
-date,seller_id,orders_shipped,late_shipments,cancelled_by_seller,buyer_disputes,defect_rate_pct
-2026-07-01,SEL-101,1240,4,2,1,0.56
-2026-07-01,SEL-102,850,8,3,2,1.53
-2026-07-01,SEL-103,2100,6,4,2,0.57
-2026-07-01,SEL-104,420,5,2,1,1.90
-2026-07-01,SEL-105,310,18,12,6,11.61

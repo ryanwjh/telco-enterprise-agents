@@ -1,5 +1,0 @@
-intervention_id,store_id,sco_terminal_id,intervention_reason,timestamp,host_response_time_sec,transaction_canceled
-SCO-INT-001,STORE-101,SCO-04,Weight Security Mismatch,2026-07-20 12:15:32,18.5,False
-SCO-INT-002,STORE-101,SCO-02,Age Verification (Alcohol),2026-07-20 12:22:10,12.0,False
-SCO-INT-003,STORE-102,SCO-01,Unrecognized Barcode,2026-07-20 17:05:44,45.0,True
-SCO-INT-004,STORE-102,SCO-03,Payment Terminal Timeout,2026-07-20 17:35:12,32.0,False

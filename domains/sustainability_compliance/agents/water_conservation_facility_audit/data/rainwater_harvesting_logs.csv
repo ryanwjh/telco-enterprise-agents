@@ -1,7 +1,0 @@
-facility_id,harvest_month,rainfall_inches,collection_volume_gallons,irrigation_reused_gallons,stormwater_retention_capacity_pct
-STORE-103,2026-01,5.8,48000,12000,95.0
-STORE-103,2026-02,4.6,38000,14000,92.0
-STORE-103,2026-03,5.1,42000,18000,94.0
-STORE-103,2026-04,3.4,28000,22000,88.0
-STORE-103,2026-05,2.2,18000,18000,82.0
-STORE-103,2026-06,1.8,15000,15000,79.0

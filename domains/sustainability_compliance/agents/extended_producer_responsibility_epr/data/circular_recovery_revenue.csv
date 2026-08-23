@@ -1,7 +1,0 @@
-fiscal_month,recovery_channel,units_recovered,gross_recovery_revenue_usd,processing_cost_usd,net_circular_profit_usd,tons_diverted_from_landfill
-2026-01,Digital Recommerce,1250,48500.0,14200.0,34300.0,9.2
-2026-02,Digital Recommerce,1420,54800.0,15800.0,39000.0,10.5
-2026-03,Digital Recommerce,1680,65200.0,18400.0,46800.0,12.4
-2026-04,Digital Recommerce,1890,74100.0,20500.0,53600.0,14.1
-2026-05,Digital Recommerce,2150,85600.0,23200.0,62400.0,16.2
-2026-06,Digital Recommerce,2420,96500.0,25800.0,70700.0,18.5

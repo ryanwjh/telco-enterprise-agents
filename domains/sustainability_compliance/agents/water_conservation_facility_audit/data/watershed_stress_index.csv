@@ -1,5 +1,0 @@
-facility_id,region,watershed_basin_name,wri_aqueduct_stress_level,baseline_water_stress_pct,drought_risk_category,audit_priority_tier
-STORE-102,Southwest - Texas,Trinity River Basin,Extremely High (>80%),84.5,Severe (D3),Tier 1 - Immediate Audit
-STORE-104,Southeast - Georgia,Chattahoochee River Basin,Medium-High (20-40%),32.0,Moderate (D1),Tier 2 - Annual Review
-STORE-101,Midwest - Illinois,Des Plaines River Basin,Low (<10%),8.5,None (D0),Tier 3 - Standard Monitoring
-STORE-103,Pacific Northwest - WA,Puget Sound Watershed,Low (<10%),6.2,None (D0),Tier 3 - Standard Monitoring

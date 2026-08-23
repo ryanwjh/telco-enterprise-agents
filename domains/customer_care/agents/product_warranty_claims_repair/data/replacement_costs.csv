@@ -1,7 +1,0 @@
-sku,product_category,avg_unit_replacement_cost,avg_repair_cost,claims_volume_ytd,total_warranty_expense_ytd
-SKU-001,Apparel & Outerwear,85.0,24.0,142,5840.0
-SKU-002,Footwear,65.0,20.0,188,5210.0
-SKU-003,Consumer Electronics,95.0,38.5,310,16850.0
-SKU-004,Basics & Apparel,22.0,8.0,65,940.0
-SKU-005,Wearable Tech,120.0,48.0,245,18200.0
-SKU-006,Home & Hydration,18.0,6.0,40,420.0

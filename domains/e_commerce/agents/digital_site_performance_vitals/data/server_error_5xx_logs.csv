@@ -1,5 +1,0 @@
-date,hour,service_name,error_5xx_count,total_requests,error_rate_pct,incident_flag
-2026-07-01,10,Checkout-API,14,480000,0.0029,false
-2026-07-01,11,Catalog-API,28,1250000,0.0022,false
-2026-07-01,12,Search-API,120,2100000,0.0057,false
-2026-07-01,14,Payment-Service,8,340000,0.0024,false

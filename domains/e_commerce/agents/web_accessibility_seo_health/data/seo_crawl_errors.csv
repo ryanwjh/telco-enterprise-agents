@@ -1,4 +1,0 @@
-date,url_path,http_status_code,error_type,first_detected_date,resolved_flag
-2026-07-01,/shop/outerwear/discontinued-parka-2024,404,Broken_Backlink,2026-06-15,true
-2026-07-01,/category/footwear/page-999,404,Pagination_Overflow,2026-06-28,true
-2026-07-02,/product/wool-beanie-red?sort=price,500,Server_Timeout,2026-07-02,false

@@ -1,5 +1,0 @@
-facility_id,event_date,peak_demand_kw,shaved_demand_kw,response_program,incentive_earned_usd,avoided_demand_charges_usd
-DC-101,2026-06-12,1850.0,450.0,PJM Summer Capacity Demand Response,6750.0,8100.0
-DC-101,2026-06-24,1920.0,500.0,PJM Summer Capacity Demand Response,7500.0,9000.0
-STORE-102,2026-06-18,480.0,120.0,ERCOT 4CP Peak Reduction Program,2400.0,3600.0
-STORE-102,2026-06-28,510.0,140.0,ERCOT 4CP Peak Reduction Program,2800.0,4200.0

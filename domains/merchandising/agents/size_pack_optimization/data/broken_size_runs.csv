@@ -1,8 +1,0 @@
-store_id,style_id,style_name,missing_core_sizes,broken_run_flag,estimated_lost_sales_usd,stockout_severity
-STORE-101,STY-DNM-01,Classic Straight Denim,32x32,True,1850.0,Moderate
-STORE-102,STY-DNM-01,Classic Straight Denim,"32x30, 32x32",True,3400.0,High
-STORE-103,STY-DNM-01,Classic Straight Denim,None,False,0.0,None
-STORE-104,STY-FTW-02,Trail Runner Sneaker,"Size 10, Size 10.5",True,4200.0,Critical
-STORE-105,STY-FTW-02,Trail Runner Sneaker,Size 10,True,2100.0,Moderate
-STORE-201,STY-DNM-01,Classic Straight Denim,"30x30, 32x32",True,2900.0,High
-STORE-204,STY-FTW-02,Trail Runner Sneaker,None,False,0.0,None
