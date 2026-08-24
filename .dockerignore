@@ -1,0 +1,15 @@
+.git
+.gitignore
+.venv
+.pytest_cache
+.coverage
+htmlcov
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.worktrees
+.DS_Store
+docs
+scratch
+*.log
