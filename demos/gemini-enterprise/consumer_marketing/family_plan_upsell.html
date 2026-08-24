@@ -1,1 +1,798 @@
-<!DOCTYPE html><html><head><title>Family Plan Upsell</title></head><body><h1>Family Plan Upsell Demo</h1></body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Plan Upsell — Gemini Enterprise Demo Walkthrough</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script>
+    // Synchronous theme initialization to prevent Flash of Unstyled Content (FOUC)
+    (function() {
+      const savedTheme = localStorage.getItem('telco_agents_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
+  <style>
+    :root, [data-theme="dark"] {
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --bg-surface: #0f172a;
+      --border-color: #334155;
+      --border-faint: rgba(255, 255, 255, 0.14);
+      --border-subtle: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #38bdf8;
+      --accent-indigo: #818cf8;
+      --badge-bg: rgba(56, 189, 248, 0.12);
+      --badge-border: rgba(56, 189, 248, 0.28);
+      --badge-text: #38bdf8;
+      --user-bubble: #2563eb;
+      --agent-bubble: #1e293b;
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-surface: #f1f5f9;
+      --border-color: #cbd5e1;
+      --border-faint: #cbd5e1;
+      --border-subtle: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-blue: #0284c7;
+      --accent-indigo: #6366f1;
+      --badge-bg: #e0f2fe;
+      --badge-border: #bae6fd;
+      --badge-text: #0284c7;
+      --user-bubble: #0284c7;
+      --agent-bubble: #f1f5f9;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 1080px;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-faint);
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: opacity 0.15s ease;
+    }
+
+    .nav-back-link:hover {
+      opacity: 0.8;
+    }
+
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    header {
+      margin-bottom: 8px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--badge-text);
+    }
+
+    h1 {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    p.subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Video Player & Interactive Simulator Wrapper */
+    .view-toggle-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 8px 16px;
+      margin-top: 10px;
+    }
+
+    .view-toggle-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toggle-view-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .toggle-view-btn.active {
+      background: var(--badge-bg);
+      border-color: var(--badge-border);
+      color: var(--accent-blue);
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--border-faint);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 12px 0;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    }
+
+    video {
+      width: 100%;
+      display: block;
+      max-height: 540px;
+    }
+
+    /* Interactive Simulator */
+    .simulator-container {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      min-height: 520px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sim-header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .sim-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sim-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .sim-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .sim-feed {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-height: 560px;
+      overflow-y: auto;
+    }
+
+    .sim-turn {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .sim-turn.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .user-message {
+      align-self: flex-end;
+      max-width: 80%;
+      background: var(--user-bubble);
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 16px 16px 4px 16px;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .agent-thought {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: var(--accent-blue);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .agent-message {
+      align-self: flex-start;
+      max-width: 88%;
+      background: var(--agent-bubble);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 14px 18px;
+      border-radius: 16px 16px 16px 4px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .agent-chart {
+      margin-top: 12px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      max-width: 480px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .agent-chart img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .canvas-deck {
+      margin-top: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .slide-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .slide-tab {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .slide-tab.active {
+      background: var(--accent-indigo);
+      color: #ffffff;
+      border-color: var(--accent-indigo);
+    }
+
+    .slide-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      line-height: 1.45;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-faint);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .turns-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-faint);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .turns-section h2 {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: var(--accent-indigo);
+    }
+
+    .turn-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .turn-list li {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .turn-list strong {
+      color: var(--text-primary);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .btn-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="top-nav">
+      <a class="nav-back-link" href="../../../index.html">
+        <span>←</span> Back to All Enterprise Agents
+      </a>
+      <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle light/dark theme">
+        <span id="themeIcon">☀️</span> <span id="themeText">Light</span>
+      </button>
+    </nav>
+
+    <header>
+      <div class="badge-row">
+        <span class="badge">Telco Enterprise Agents</span>
+        <span class="badge">Consumer Marketing & Growth Domain</span>
+        <span class="badge">Gemini Enterprise</span>
+      </div>
+      <h1>📱 Family Plan Upsell</h1>
+      <p class="subtitle">
+        Addressing core telecommunications operational challenges in family plan upsell through automated quantitative analytics, predictive AI, and real-time grounding.
+      </p>
+    </header>
+
+    <div class="view-toggle-bar">
+      <div class="sim-header-title">
+        <span>✨ Multi-Turn Interactive Walkthrough Showcase</span>
+      </div>
+      <div class="view-toggle-buttons">
+        <button id="btnSimView" class="toggle-view-btn active" onclick="switchView('sim')">
+          ⚡ Interactive Walkthrough
+        </button>
+        <button id="btnVideoView" class="toggle-view-btn" onclick="switchView('video')">
+          🎬 Video Player
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. Interactive Walkthrough Simulator -->
+    <div id="simWrapper" class="simulator-container">
+      <div class="sim-header">
+        <div class="sim-header-title">
+          <span>✨ Gemini Enterprise Session</span>
+          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">(Model: gemini-3.5-flash · Location: us-central1)</span>
+        </div>
+        <div class="sim-controls">
+          <button class="sim-btn" onclick="playAllTurns()">▶ Play All</button>
+          <button class="sim-btn" onclick="nextTurn()">⏭ Next Turn</button>
+          <button class="sim-btn" onclick="resetSim()">🔄 Reset</button>
+        </div>
+      </div>
+      <div id="simFeed" class="sim-feed">
+        <!-- Turn 1: Data Insights -->
+        <div class="sim-turn visible" id="turn1">
+          <div class="user-message">
+            What are our primary operational metrics and performance targets for family plan upsell across operating regions in 2026 YTD?
+          </div>
+          <div class="agent-thought">
+            ⚡ Executing BigQuery CA API ask_data_insights on authorized tables...
+          </div>
+          <div class="agent-message">
+            Over the past 30 days, performance metrics for <strong>Family Plan Upsell</strong> achieved an overall <strong>94.8% compliance rate</strong> across all operating clusters, exceeding the 92.0% operational benchmark.<br/><br/>
+            • <strong>Metro North:</strong> 96.2% efficiency index<br/>
+            • <strong>Metro South:</strong> 95.1% operational uptime<br/>
+            • <strong>West Region:</strong> 93.8% target achievement<br/><br/>
+            Total estimated quarterly cost savings and ROI contribution delivered approximately <strong>$214,000</strong>.
+          </div>
+        </div>
+
+        <!-- Turn 2: Market Context -->
+        <div class="sim-turn visible" id="turn2">
+          <div class="user-message">
+            What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for family plan upsell?
+          </div>
+          <div class="agent-thought">
+            🌐 Grounding via Google Search (TM Forum ODA, GSMA Open Gateway Standards)...
+          </div>
+          <div class="agent-message">
+            According to recent 2026 TM Forum and GSMA industry benchmarks, Tier-1 telecom operators deploying automated conversational analytics and predictive routing achieve a <strong>35% reduction in MTTR</strong> and a <strong>22% improvement in customer satisfaction (CSAT)</strong> compared to legacy manual workflows.
+          </div>
+        </div>
+
+        <!-- Turn 3: Visual Analytics -->
+        <div class="sim-turn visible" id="turn3">
+          <div class="user-message">
+            Render a chart comparing monthly performance metrics for family plan upsell vs annual targets.
+          </div>
+          <div class="agent-thought">
+            📊 Calling render_chart(query, title) via Matplotlib...
+          </div>
+          <div class="agent-message">
+            Here is the chart visualization comparing monthly performance metrics vs annual targets:
+            <div class="agent-chart">
+              <img src="../../../domains/consumer_marketing/agents/family_plan_upsell/sample_chart.png" alt="Family Plan Upsell Chart" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Turn 4: Executive Canvas Presentation -->
+        <div class="sim-turn visible" id="turn4">
+          <div class="user-message">
+            Create a 4-slide executive presentation summarizing the Family Plan Upsell analysis and recommendations above.
+          </div>
+          <div class="agent-thought">
+            ✨ Generating 4-Slide Executive Canvas Presentation Deck...
+          </div>
+          <div class="agent-message">
+            I have generated a 4-slide executive presentation deck summarizing key performance trends, regional benchmarks, and recommended actions:
+            <div class="canvas-deck">
+              <div class="slide-tabs">
+                <button class="slide-tab active" onclick="showSlide(1)">Slide 1: Executive Summary</button>
+                <button class="slide-tab" onclick="showSlide(2)">Slide 2: Regional Performance</button>
+                <button class="slide-tab" onclick="showSlide(3)">Slide 3: Market Benchmark</button>
+                <button class="slide-tab" onclick="showSlide(4)">Slide 4: Strategic Roadmap</button>
+              </div>
+              <div id="slideContent" class="slide-box">
+                <strong>Slide 1: Executive Summary</strong><br/>
+                • 94.8% Operational Target Achievement across network clusters.<br/>
+                • $214K quarterly cost savings realized through automated intelligence.<br/>
+                • Primary growth catalyst for Family Plan Upsell.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Video Player View -->
+    <div id="videoWrapper" class="video-wrapper" style="display:none;">
+      <video id="demoVideo" src="family_plan_upsell.mp4#t=10" controls autoplay muted playsinline preload="auto">
+        <source src="family_plan_upsell.mp4#t=10" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
+    </div>
+
+    <script>
+      let currentTurnIndex = 4;
+      const totalTurns = 4;
+
+      function switchView(view) {
+        const simWrap = document.getElementById('simWrapper');
+        const vidWrap = document.getElementById('videoWrapper');
+        const btnSim = document.getElementById('btnSimView');
+        const btnVid = document.getElementById('btnVideoView');
+        const video = document.getElementById('demoVideo');
+
+        if (view === 'sim') {
+          simWrap.style.display = 'flex';
+          vidWrap.style.display = 'none';
+          btnSim.classList.add('active');
+          btnVid.classList.remove('active');
+          if (video) video.pause();
+        } else {
+          simWrap.style.display = 'none';
+          vidWrap.style.display = 'block';
+          btnVid.classList.add('active');
+          btnSim.classList.remove('active');
+          if (video) video.play().catch(() => {});
+        }
+      }
+
+      function resetSim() {
+        currentTurnIndex = 0;
+        for (let i = 1; i <= totalTurns; i++) {
+          const el = document.getElementById('turn' + i);
+          if (el) el.classList.remove('visible');
+        }
+      }
+
+      function nextTurn() {
+        if (currentTurnIndex < totalTurns) {
+          currentTurnIndex++;
+          const el = document.getElementById('turn' + currentTurnIndex);
+          if (el) {
+            el.classList.add('visible');
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      }
+
+      function playAllTurns() {
+        resetSim();
+        let step = 1;
+        const interval = setInterval(() => {
+          if (step <= totalTurns) {
+            const el = document.getElementById('turn' + step);
+            if (el) {
+              el.classList.add('visible');
+              el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            currentTurnIndex = step;
+            step++;
+          } else {
+            clearInterval(interval);
+          }
+        }, 800);
+      }
+
+      const slideContents = {
+        1: "<strong>Slide 1: Executive Summary</strong><br/>• 94.8% Operational Target Achievement across network clusters.<br/>• $214K quarterly cost savings realized through automated intelligence.<br/>• Primary growth catalyst for Family Plan Upsell.",
+        2: "<strong>Slide 2: Regional Breakdown</strong><br/>• Metro North: 96.2% compliance index.<br/>• Metro South: 95.1% operational uptime.<br/>• West Region: 93.8% target achievement.",
+        3: "<strong>Slide 3: Industry Benchmarks (GSMA / ODA)</strong><br/>• 35% reduction in MTTR vs. manual workflows.<br/>• 22% improvement in overall CSAT.<br/>• Exceeds global tier-1 standards.",
+        4: "<strong>Slide 4: Strategic Recommendations</strong><br/>• Scale automated BigQuery triggers across additional clusters.<br/>• Integrate real-time CAMARA telemetry.<br/>• Expand quarterly cost optimization target to $350K."
+      };
+
+      function showSlide(num) {
+        document.querySelectorAll('.slide-tab').forEach((tab, idx) => {
+          tab.classList.toggle('active', idx + 1 === num);
+        });
+        document.getElementById('slideContent').innerHTML = slideContents[num] || '';
+      }
+
+      // Video offset fallback handler
+      (function() {
+        const video = document.getElementById('demoVideo');
+        if (!video) return;
+        let hasSeeked = false;
+
+        const seekToOffset = () => {
+          if (!hasSeeked && video.currentTime < 10) {
+            hasSeeked = true;
+            video.currentTime = 10;
+          }
+        };
+
+        video.addEventListener('loadedmetadata', seekToOffset);
+        video.addEventListener('canplay', seekToOffset);
+        video.addEventListener('timeupdate', function onFirstTick() {
+          if (!hasSeeked && video.currentTime < 10) {
+            seekToOffset();
+          }
+        });
+        video.addEventListener('error', () => {
+          switchView('sim');
+        });
+
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+
+        function updateThemeUI(theme) {
+          if (theme === 'light') {
+            themeIcon.textContent = '🌙';
+            themeText.textContent = 'Dark';
+          } else {
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light';
+          }
+        }
+
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        updateThemeUI(currentTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme') || 'dark';
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('telco_agents_theme', next);
+          updateThemeUI(next);
+        });
+      })();
+    </script>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="meta-label">Duration</span>
+        <span class="meta-value">5:11 (Normal Pacing)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Resolution</span>
+        <span class="meta-value">1080p Full HD (1920×1080)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">UI Scaling</span>
+        <span class="meta-value">1.25x High-DPI Scaled Text</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Model Runtime</span>
+        <span class="meta-value">gemini-3.5-flash (Vertex AI)</span>
+      </div>
+    </div>
+
+    <div class="turns-section">
+      <h2>📋 Multi-Turn Conversation Flow</h2>
+      <ul class="turn-list">
+        <li><strong>Turn 1 (Data Insights / BigQuery):</strong> <em>"What are our primary operational metrics and performance targets for family plan upsell across operating regions in 2026 YTD?"</em> — Synthesizes internal BigQuery conversational analytics query and computes KPI summary.</li>
+        <li><strong>Turn 2 (Market Context / Google Search):</strong> <em>"What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for family plan upsell?"</em> — Grounds analysis against external telecom benchmarks and industry context.</li>
+        <li><strong>Turn 3 (Visual Artifact / Matplotlib):</strong> <em>"Render a chart comparing monthly performance metrics for family plan upsell vs annual targets."</em> — Generates and renders a custom chart visualization artifact inline.</li>
+        <li><strong>Turn 4 (Executive Canvas Presentation):</strong> <em>"Create a 4-slide executive presentation summarizing the Family Plan Upsell analysis and recommendations above."</em> — Automatically creates a 4-slide deck and showcases each slide via the bottom thumbnail rail.</li>
+      </ul>
+    </div>
+
+    <footer>
+      <a class="btn-link" href="https://github.com/ryanwjh/telco-enterprise-agents/tree/master/domains/consumer_marketing/agents/family_plan_upsell">
+        ← View Agent Code & Documentation on GitHub
+      </a>
+      <a class="btn-link" href="https://github.com/ryanwjh/telco-enterprise-agents">
+        🏠 Telco Enterprise Agents Repository
+      </a>
+    </footer>
+  </div>
+</body>
+</html>
