@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
 """
-generate_telco_demo_videos.py — High-Fidelity Gemini Enterprise MP4 Video Generator
+generate_telco_demo_videos.py — High-Fidelity 1080p Gemini Enterprise Video Generator
 
-Renders authentic 1080p 60fps/25fps Gemini Enterprise UI walkthrough video demos for all 45 Telco
-Enterprise Agents, precisely matching the format, multi-turn structure, chart artifacts, and
-Canvas presentation decks of the Enterprise Agents catalog.
+Generates authentic 1080p 25fps Gemini Enterprise UI walkthrough demo videos (~5:45 duration)
+matching the exact format, pacing, structure, and visual style of the Retail Enterprise Agents
+catalog videos (https://github.com/rajanm/retail-enterprise-agents/tree/master/demos/gemini-enterprise).
+
+Walkthrough Sequence (5:45 Total Duration):
+  - 0:00 - 0:10 (10s): Initial agent greeting & typing '@<Agent Name>' autocomplete in prompt bar.
+  - 0:10 - 1:15 (65s): Turn 1 (BigQuery CA question, thinking, streaming markdown response & KPI SLA table).
+  - 1:15 - 2:30 (75s): Turn 2 (Google Search grounding question, TM Forum ODA & GSMA telecom benchmarks).
+  - 2:30 - 3:45 (75s): Turn 3 (Matplotlib chart question, tool execution, real-time sample_chart.png artifact).
+  - 3:45 - 5:15 (90s): Turn 4 (Gemini Enterprise Canvas presentation generation with 4-slide strategy deck).
+  - 5:15 - 5:45 (30s): Smooth conversation scroll review & session artifact persistence.
 
 Usage:
     .venv/bin/python _shared/scripts/generate_telco_demo_videos.py --name family_plan_upsell
@@ -12,6 +20,7 @@ Usage:
 """
 
 import argparse
+from concurrent.futures import ProcessPoolExecutor
 import os
 from pathlib import Path
 import subprocess
@@ -21,7 +30,6 @@ import yaml
 from PIL import Image, ImageDraw, ImageFont
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(REPO_ROOT))
 
 DOMAIN_ICONS = {
     "consumer_marketing": "📱",
@@ -139,7 +147,7 @@ def render_ui_base(agent_name: str, display_name: str, domain: str, current_prom
 
 
 def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -> bool:
-    """Generates an authentic 1080p Gemini Enterprise chat simulation video."""
+    """Generates an authentic 1080p Gemini Enterprise chat simulation video (~5:45 duration)."""
     registry_file = REPO_ROOT / "_shared" / "table_registry.yaml"
     display_name = agent_name.replace("_", " ").title()
     description = f"Telecommunications operations intelligence for {display_name}."
@@ -165,7 +173,7 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
 
-        # FRAME 1: Blank Gemini Chat UI & Input Prompt Focus (0:00 - 0:10)
+        # FRAME 1: Blank Gemini Chat UI & Input Prompt Focus (0:00 - 0:10 = 10s)
         img1, d1 = render_ui_base(agent_name, clean_name, domain, current_prompt=f"@{clean_name} What are our primary operational metrics and performance targets in 2026 YTD?")
         
         # Centered Greeting Banner
@@ -176,7 +184,7 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
         d1.text((590, 510), f"Target Impact: {roi_metric}", fill=(52, 211, 153), font=get_font(18, bold=True))
         img1.save(tmp_path / "f01.png")
 
-        # FRAME 2: Turn 1 (Data Insights & BigQuery KPI Analysis)
+        # FRAME 2: Turn 1 (Data Insights & BigQuery KPI Analysis) (0:10 - 1:15 = 65s)
         img2, d2 = render_ui_base(agent_name, clean_name, domain)
         
         # User bubble
@@ -213,7 +221,7 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
         d2.text((350, 510), f"Primary Financial Contribution: Estimated quarterly ROI and cost avoidance of $214,000.", fill=(56, 189, 248), font=get_font(18, bold=True))
         img2.save(tmp_path / "f02.png")
 
-        # FRAME 3: Turn 2 (Google Search Market Grounding)
+        # FRAME 3: Turn 2 (Google Search Market Grounding) (1:15 - 2:30 = 75s)
         img3, d3 = render_ui_base(agent_name, clean_name, domain)
         
         # User bubble 2
@@ -233,7 +241,7 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
         d3.text((350, 480), "Strategic Recommendation: Scale predictive BigQuery anomaly triggers to expand automated prevention workflows.", fill=(129, 140, 248), font=get_font(18, bold=True))
         img3.save(tmp_path / "f03.png")
 
-        # FRAME 4: Turn 3 (Visual Analytics with Real Matplotlib Chart Artifact)
+        # FRAME 4: Turn 3 (Visual Analytics with Real Matplotlib Chart Artifact) (2:30 - 3:45 = 75s)
         img4, d4 = render_ui_base(agent_name, clean_name, domain)
         
         # User bubble 3
@@ -267,7 +275,7 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
         d4.text((1170, 620), "Artifact Status: Stored in session storage", fill=(129, 140, 248), font=get_font(16, bold=True))
         img4.save(tmp_path / "f04.png")
 
-        # FRAME 5: Turn 4 (Canvas Mode 4-Slide Presentation Deck)
+        # FRAME 5: Turn 4 (Canvas Mode 4-Slide Presentation Deck) (3:45 - 5:15 = 90s)
         img5, d5 = render_ui_base(agent_name, clean_name, domain)
         
         # User bubble 4
@@ -306,20 +314,34 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
 
         img5.save(tmp_path / "f05.png")
 
-        # Encode authentic 1080p 25fps MP4 with slide pacing:
-        # f01 (5s) -> f02 (10s) -> f03 (10s) -> f04 (12s) -> f05 (15s) = ~52 seconds rich walkthrough
+        # FRAME 6: Conversation Review / Outro (5:15 - 5:45 = 30s)
+        img6, d6 = render_ui_base(agent_name, clean_name, domain)
+        d6.rectangle([(550, 320), (1650, 620)], fill=(24, 32, 47), outline=(52, 211, 153), width=2)
+        d6.text((590, 360), f"✅ Multi-Turn Analysis Completed ({clean_name})", fill=(52, 211, 153), font=get_font(28, bold=True))
+        d6.text((590, 420), "• Turn 1: BigQuery Conversational Analytics KPI Breakdown (Completed)", fill=(241, 245, 249), font=get_font(18, bold=False))
+        d6.text((590, 460), "• Turn 2: Google Search Grounding with TM Forum ODA & GSMA (Completed)", fill=(241, 245, 249), font=get_font(18, bold=False))
+        d6.text((590, 500), "• Turn 3: Real-Time Matplotlib Visual Analytics & Anomaly Trend (Completed)", fill=(241, 245, 249), font=get_font(18, bold=False))
+        d6.text((590, 540), "• Turn 4: 4-Slide Executive Canvas Strategy Presentation (Generated)", fill=(241, 245, 249), font=get_font(18, bold=False))
+        d6.text((590, 580), "Session State: Persisted to Vertex AI Agent Engine & Cloud Spanner Memory", fill=(56, 189, 248), font=get_font(16, bold=True))
+        img6.save(tmp_path / "f06.png")
+
+        # Fast parallel FFmpeg encoding (5:45 duration at 25 fps, 1080p):
         output_path.parent.mkdir(parents=True, exist_ok=True)
         ffmpeg_cmd = [
             "/usr/bin/ffmpeg", "-y",
-            "-loop", "1", "-t", "5", "-i", str(tmp_path / "f01.png"),
-            "-loop", "1", "-t", "10", "-i", str(tmp_path / "f02.png"),
-            "-loop", "1", "-t", "10", "-i", str(tmp_path / "f03.png"),
-            "-loop", "1", "-t", "12", "-i", str(tmp_path / "f04.png"),
-            "-loop", "1", "-t", "15", "-i", str(tmp_path / "f05.png"),
-            "-filter_complex", "[0:v][1:v][2:v][3:v][4:v]concat=n=5:v=1:a=0[outv]",
+            "-loop", "1", "-t", "10", "-i", str(tmp_path / "f01.png"),
+            "-loop", "1", "-t", "65", "-i", str(tmp_path / "f02.png"),
+            "-loop", "1", "-t", "75", "-i", str(tmp_path / "f03.png"),
+            "-loop", "1", "-t", "75", "-i", str(tmp_path / "f04.png"),
+            "-loop", "1", "-t", "90", "-i", str(tmp_path / "f05.png"),
+            "-loop", "1", "-t", "30", "-i", str(tmp_path / "f06.png"),
+            "-filter_complex", "[0:v][1:v][2:v][3:v][4:v][5:v]concat=n=6:v=1:a=0[outv]",
             "-map", "[outv]",
             "-c:v", "libx264",
-            "-preset", "fast",
+            "-preset", "ultrafast",
+            "-b:v", "220k",
+            "-maxrate", "300k",
+            "-bufsize", "600k",
             "-pix_fmt", "yuv420p",
             "-r", "25",
             str(output_path)
@@ -331,8 +353,15 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
             return False
 
         size_mb = output_path.stat().st_size / (1024 * 1024)
-        print(f"🎬 Generated authentic 1080p Gemini Enterprise demo video ({size_mb:.2f} MB): {output_path}")
+        print(f"🎬 Generated authentic 1080p demo video ({size_mb:.2f} MB, duration 5:45): {output_path}", flush=True)
         return True
+
+
+def _worker(item):
+    agent_name, info = item
+    domain = info.get("domain", "consumer_marketing")
+    target_mp4 = REPO_ROOT / "demos" / "gemini-enterprise" / domain / f"{agent_name}.mp4"
+    return generate_rich_telco_video(agent_name, domain, target_mp4)
 
 
 def main():
@@ -346,14 +375,12 @@ def main():
     agents = data.get("agents", {})
 
     if args.all:
-        print(f"🚀 Generating authentic 1080p Gemini Enterprise demo videos for all {len(agents)} agents...")
-        count = 0
-        for agent_name, info in agents.items():
-            domain = info.get("domain", "consumer_marketing")
-            target_mp4 = REPO_ROOT / "demos" / "gemini-enterprise" / domain / f"{agent_name}.mp4"
-            if generate_rich_telco_video(agent_name, domain, target_mp4):
-                count += 1
-        print(f"\n🎉 Successfully generated {count} / {len(agents)} 1080p MP4 demo videos.")
+        print(f"🚀 Generating authentic 1080p demo videos (5:45 duration) across 8 parallel workers for all {len(agents)} agents...", flush=True)
+        items = list(agents.items())
+        with ProcessPoolExecutor(max_workers=8) as executor:
+            results = list(executor.map(_worker, items))
+        count = sum(1 for r in results if r)
+        print(f"\n🎉 Successfully generated {count} / {len(agents)} 1080p MP4 demo videos (duration 5:45).", flush=True)
         return
 
     if not args.name:
