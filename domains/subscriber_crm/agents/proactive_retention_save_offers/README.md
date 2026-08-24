@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in proactive retention save offers through automated quantitative analytics, predictive AI, and real-time grounding.
+Generates personalized, margin-aware discount and upgrade incentives during active cancellation requests.
 
 ### Target Personas
-Head of Telecom Operations, Subscriber CRM Director, Principal Network Engineer, CVM Strategy Lead
+Retention Operations Director, CVM Value Optimization Lead, Loyalty Program Head
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **Cancellation Save Rate** | `>= 38.5%` | High-value subscribers choosing personalized retention offer over contract cancellation. |
+| **Offer Margin Protection** | `>= 42% margin` | Algorithmically constrained discount depth preserving account contribution margin. |
+| **6-Month Post-Save Churn Rate** | `< 3.8%` | Sustained customer retention following acceptance of personalized save proposal. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`scrm_prso_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -41,7 +41,7 @@ Head of Telecom Operations, Subscriber CRM Director, Principal Network Engineer,
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **Save Rate Improvement (+32% retention save rate)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for proactive retention save offers?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, Subscriber CRM Director, Principal Network Engineer,
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `scrm_prso_subscriber_churn_propensities` — Seeded via `data/subscriber_churn_propensities.csv`
-- `scrm_prso_save_discount_matrices` — Seeded via `data/save_discount_matrices.csv`
-- `scrm_prso_retention_agent_concessions` — Seeded via `data/retention_agent_concessions.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for proactive retention save offers across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for proactive retention save offers?"
-3. "Render a chart comparing monthly performance metrics for proactive retention save offers vs annual targets."
-4. "Break down proactive retention save offers volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing proactive retention save offers?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/subscriber_crm/agents/proactive_retention_save_offers/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/subscriber_crm/agents/proactive_retention_save_offers
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`

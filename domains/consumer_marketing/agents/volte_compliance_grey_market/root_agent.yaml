@@ -2,7 +2,7 @@ agent_class: LlmAgent
 name: volte_compliance_grey_market_root
 model: gemini-3.5-flash
 description: >-
-  Orchestrator for the Consumer Marketing: Volte Compliance Grey Market agent. Routes questions to internal BigQuery data
+  Detects non-VoLTE compliant or grey market devices to proactively warn and transition users. Routes questions to internal BigQuery data
   analysis or external market context, and synthesizes a combined answer.
 before_agent_callbacks:
   - name: volte_compliance_grey_market.tools.callbacks.set_current_date
@@ -37,15 +37,17 @@ instruction: |
 
   ## Role
 
-  You are the orchestrator for the Consumer Marketing: Volte Compliance Grey Market agent. Decide whether a user's question
-  needs internal BigQuery data (delegate to the data_insights sub-agent), external
-  market/competitive context (delegate to the market_context sub-agent), or both. When you use
+  You are the orchestrator for the Consumer Marketing: VoLTE Compliance & Grey Market agent.
+  Purpose: Detects non-VoLTE compliant or grey market devices to proactively warn and transition users.
+  
+  Decide whether a user's question needs internal BigQuery data (delegate to the data_insights sub-agent),
+  external market/competitive context (delegate to the market_context sub-agent), or both. When you use
   both, clearly label which parts of your answer came from internal data versus external search.
 
-  Recognize and route these Consumer Marketing: Volte Compliance Grey Market questions:
-  - Volte Compliance Grey Market internal metrics, quantitative table queries, regional logs, or operational KPI trends → delegate to the data_insights sub-agent.
+  Recognize and route these Consumer Marketing: VoLTE Compliance & Grey Market questions:
+  - Internal metrics, quantitative table queries, regional logs, or operational KPI trends → delegate to the data_insights sub-agent.
   - Telecom industry benchmarks, GSMA/3GPP specifications, competitor intelligence, or market research → delegate to the market_context sub-agent.
-  - Mixed questions (e.g. "how do our internal volte compliance grey market metrics compare against industry standards") → delegate to both, and synthesize a combined answer.
+  - Mixed questions (e.g. "how do our internal metrics compare against industry standards") → delegate to both, and synthesize a combined answer.
 sub_agents:
   - config_path: sub_agents/data_insights.yaml
   - config_path: sub_agents/market_context.yaml

@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in cloud storage upsell through automated quantitative analytics, predictive AI, and real-time grounding.
+Triggers automated cloud storage offers when users approach device capacity limits.
 
 ### Target Personas
-Head of Telecom Operations, Consumer Marketing Director, Principal Network Engineer, CVM Strategy Lead
+Digital Services Lead, VAS Product Manager, Cloud Partnerships Director
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **Storage Warning Conversion** | `>= 14.5%` | Users approaching 90% device memory purchasing integrated cloud backup. |
+| **Monthly Recurring VAS Revenue** | `+$2.99/sub` | Average incremental VAS revenue per enrolled cloud storage subscriber. |
+| **Cross-Device Sync Retention** | `> 92% renewal` | Annual subscription renewal rate for multi-device backup users. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`cmkt_cstu_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -41,7 +41,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **Value-Added Services Revenue ($140K/mo VAS uplift)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for cloud storage upsell?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `cmkt_cstu_device_storage_telemetry` — Seeded via `data/device_storage_telemetry.csv`
-- `cmkt_cstu_cloud_backup_subscriptions` — Seeded via `data/cloud_backup_subscriptions.csv`
-- `cmkt_cstu_storage_tier_conversions` — Seeded via `data/storage_tier_conversions.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for cloud storage upsell across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for cloud storage upsell?"
-3. "Render a chart comparing monthly performance metrics for cloud storage upsell vs annual targets."
-4. "Break down cloud storage upsell volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing cloud storage upsell?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/consumer_marketing/agents/cloud_storage_upsell/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/consumer_marketing/agents/cloud_storage_upsell
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`

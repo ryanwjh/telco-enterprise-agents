@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in social media pass through automated quantitative analytics, predictive AI, and real-time grounding.
+Identifies high social media usage to offer zero-rated social data passes.
 
 ### Target Personas
-Head of Telecom Operations, Consumer Marketing Director, Principal Network Engineer, CVM Strategy Lead
+Youth Segment Marketing Specialist, Social Media Campaign Lead, Core Data Monetization Analyst
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **Youth Segment Conversion Rate** | `>= 33.0%` | Gen Z and student subscribers adopting unlimited social media data add-ons. |
+| **Prepaid Balance Longevity** | `+8.4 days` | Increased prepaid account active duration from targeted social data passes. |
+| **App Engagement & Referral Index** | `4.6/5.0` | Social sharing and viral campaign referral rate among youth plan users. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`cmkt_smpk_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -41,7 +41,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **Gen Z Market Share (+14% youth segment acquisition)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for social media pass?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `cmkt_smpk_social_app_data_usage` — Seeded via `data/social_app_data_usage.csv`
-- `cmkt_smpk_zerorated_pass_subscriptions` — Seeded via `data/zerorated_pass_subscriptions.csv`
-- `cmkt_smpk_genz_campaign_conversions` — Seeded via `data/genz_campaign_conversions.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for social media pass across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for social media pass?"
-3. "Render a chart comparing monthly performance metrics for social media pass vs annual targets."
-4. "Break down social media pass volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing social media pass?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/consumer_marketing/agents/social_media_pass/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/consumer_marketing/agents/social_media_pass
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`

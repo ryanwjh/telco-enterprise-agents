@@ -1,4 +1,4 @@
-# Onboarding & Provisioning: Esim Device Compatibility
+# Onboarding & Provisioning: eSIM Device Compatibility
 
 Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 
@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in esim device compatibility through automated quantitative analytics, predictive AI, and real-time grounding.
+Instantly verifies device IMEI/EID for eSIM readiness and carrier-lock status during digital checkout.
 
 ### Target Personas
-Head of Telecom Operations, Onboarding & Provisioning Director, Principal Network Engineer, CVM Strategy Lead
+Digital Journey Product Manager, eSIM Systems Architect, Omnichannel Onboarding Lead
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **IMEI/EID Compatibility Check Latency** | `< 500 ms` | Sub-second verification of device manufacturer, OS, and eSIM capability. |
+| **Digital Activation Dropout Rate** | `< 2.5%` | Minimization of checkout dropouts during QR code download and profile installation. |
+| **Carrier-Lock Early Warning Accuracy** | `>= 97.0%` | Proactive notification to customers with carrier-locked handsets before eSIM push. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`onpr_esdc_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -35,13 +35,13 @@ Head of Telecom Operations, Onboarding & Provisioning Director, Principal Networ
 ### Example 1: Internal Analytics (Data Insights)
 *Question:* "What are our primary operational metrics and performance targets for esim device compatibility across operating regions in 2026 YTD?"
 *Response:*
-> Over the past 30 days, performance metrics for **Esim Device Compatibility** achieved an overall **94.8% compliance rate** across all operating clusters, exceeding the 92.0% operational benchmark.
+> Over the past 30 days, performance metrics for **eSIM Device Compatibility** achieved an overall **94.8% compliance rate** across all operating clusters, exceeding the 92.0% operational benchmark.
 > 
 > - **Metro North:** 96.2% efficiency index
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **Activation Success Rate (98.4% digital onboarding completion)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for esim device compatibility?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, Onboarding & Provisioning Director, Principal Networ
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `onpr_esdc_device_eid_database` — Seeded via `data/device_eid_database.csv`
-- `onpr_esdc_esim_activation_matrix` — Seeded via `data/esim_activation_matrix.csv`
-- `onpr_esdc_digital_onboarding_sessions` — Seeded via `data/digital_onboarding_sessions.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for esim device compatibility across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for esim device compatibility?"
-3. "Render a chart comparing monthly performance metrics for esim device compatibility vs annual targets."
-4. "Break down esim device compatibility volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing esim device compatibility?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/onboarding_provisioning/agents/esim_device_compatibility/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/onboarding_provisioning/agents/esim_device_compatibility
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`

@@ -2,7 +2,7 @@ agent_class: LlmAgent
 name: predictive_hardware_maintenance_root
 model: gemini-3.5-flash
 description: >-
-  Orchestrator for the NetOps & AIOps: Predictive Hardware Maintenance agent. Routes questions to internal BigQuery data
+  Predicts optical transceivers, fan module, and battery degradation using thermal telemetry and failure modeling. Routes questions to internal BigQuery data
   analysis or external market context, and synthesizes a combined answer.
 before_agent_callbacks:
   - name: predictive_hardware_maintenance.tools.callbacks.set_current_date
@@ -37,15 +37,17 @@ instruction: |
 
   ## Role
 
-  You are the orchestrator for the NetOps & AIOps: Predictive Hardware Maintenance agent. Decide whether a user's question
-  needs internal BigQuery data (delegate to the data_insights sub-agent), external
-  market/competitive context (delegate to the market_context sub-agent), or both. When you use
+  You are the orchestrator for the NetOps & AIOps: Predictive Hardware Maintenance agent.
+  Purpose: Predicts optical transceivers, fan module, and battery degradation using thermal telemetry and failure modeling.
+  
+  Decide whether a user's question needs internal BigQuery data (delegate to the data_insights sub-agent),
+  external market/competitive context (delegate to the market_context sub-agent), or both. When you use
   both, clearly label which parts of your answer came from internal data versus external search.
 
   Recognize and route these NetOps & AIOps: Predictive Hardware Maintenance questions:
-  - Predictive Hardware Maintenance internal metrics, quantitative table queries, regional logs, or operational KPI trends → delegate to the data_insights sub-agent.
+  - Internal metrics, quantitative table queries, regional logs, or operational KPI trends → delegate to the data_insights sub-agent.
   - Telecom industry benchmarks, GSMA/3GPP specifications, competitor intelligence, or market research → delegate to the market_context sub-agent.
-  - Mixed questions (e.g. "how do our internal predictive hardware maintenance metrics compare against industry standards") → delegate to both, and synthesize a combined answer.
+  - Mixed questions (e.g. "how do our internal metrics compare against industry standards") → delegate to both, and synthesize a combined answer.
 sub_agents:
   - config_path: sub_agents/data_insights.yaml
   - config_path: sub_agents/market_context.yaml

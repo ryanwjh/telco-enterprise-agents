@@ -25,6 +25,9 @@ agents:
     - subscriber_lines
     - data_sharing_pools
     - plan_upsell_eligibility
+    description: Identifies multi-line households sharing data to recommend consolidated
+      family plans.
+    roi_metric: ARPU Growth (+$180K/mo target)
   retail_store_placement:
     display_name: 'Consumer Marketing: Retail Store Placement'
     domain: consumer_marketing
@@ -34,6 +37,9 @@ agents:
     - geospatial_footfall
     - store_kiosk_locations
     - market_catchment_demographics
+    description: Analyzes geospatial telemetry and foot traffic to optimize retail
+      store and kiosk locations.
+    roi_metric: Capex/Opex Optimization ($1.2M annual savings)
   five_g_handset_upgrade:
     display_name: 'Consumer Marketing: 5G Handset Upgrade'
     domain: consumer_marketing
@@ -43,6 +49,9 @@ agents:
     - device_fleet_inventory
     - network_coverage_5g
     - upgrade_incentive_campaigns
+    description: Targets 4G device users in 5G-heavy coverage areas with personalized
+      upgrade incentives.
+    roi_metric: 5G Adoption Rate (+28% uplift)
   volte_compliance_grey_market:
     display_name: 'Consumer Marketing: VoLTE Compliance & Grey Market'
     domain: consumer_marketing
@@ -52,6 +61,9 @@ agents:
     - imei_tac_database
     - network_registration_logs
     - device_retirement_notices
+    description: Detects non-VoLTE compliant or grey market devices to proactively
+      warn and transition users.
+    roi_metric: Compliance & Churn Prevention (< 0.5% disconnect churn)
   international_call_pack:
     display_name: 'Consumer Marketing: International Call Pack'
     domain: consumer_marketing
@@ -61,6 +73,9 @@ agents:
     - international_cdr_usage
     - roaming_calling_zones
     - discount_rate_plans
+    description: Monitors international dialing telemetry to offer timely, cost-saving
+      roaming and IDD packs.
+    roi_metric: ARPU Growth (+$95K/mo incremental revenue)
   cloud_storage_upsell:
     display_name: 'Consumer Marketing: Cloud Storage Upsell'
     domain: consumer_marketing
@@ -70,6 +85,9 @@ agents:
     - device_storage_telemetry
     - cloud_backup_subscriptions
     - storage_tier_conversions
+    description: Triggers automated cloud storage offers when users approach device
+      capacity limits.
+    roi_metric: Value-Added Services Revenue ($140K/mo VAS uplift)
   tourist_welcome_roaming:
     display_name: 'Consumer Marketing: Tourist Welcome & Roaming'
     domain: consumer_marketing
@@ -79,6 +97,9 @@ agents:
     - inbound_roamer_events
     - tourist_pass_catalog
     - multilingual_welcome_conversions
+    description: Detects inbound roaming IMSIs to instantly send localized, language-specific
+      welcome offers.
+    roi_metric: Roaming Revenue (+34% inbound pass revenue)
   self_serve_device_specs:
     display_name: 'Consumer Marketing: Self-Serve Device Specs'
     domain: consumer_marketing
@@ -88,6 +109,9 @@ agents:
     - handset_specifications
     - digital_comparison_sessions
     - customer_device_affinities
+    description: Powers conversational agents for customers comparing complex device
+      specifications online.
+    roi_metric: Deflection to Digital (48% reduction in retail store query load)
   five_g_home_broadband_upsell:
     display_name: 'Consumer Marketing: 5G Home Broadband Upsell'
     domain: consumer_marketing
@@ -97,6 +121,9 @@ agents:
     - fiber_constrained_addresses
     - fwa_5g_signal_metrics
     - home_broadband_orders
+    description: Identifies fiber-constrained households with strong 5G signal for
+      FWA upsell.
+    roi_metric: FWA Market Share (+15K quarterly net adds)
   in_the_moment_data_boost:
     display_name: 'Consumer Marketing: In-the-Moment Data Boost'
     domain: consumer_marketing
@@ -106,6 +133,9 @@ agents:
     - subscriber_data_allowances
     - hourly_depletion_velocity
     - ondemand_topup_campaigns
+    description: Predicts mid-cycle data depletion and sends instant top-up offers
+      before throttling.
+    roi_metric: Incremental Revenue ($220K/mo data top-up revenue)
   five_g_gaming_qos_package:
     display_name: 'Consumer Marketing: 5G Gaming QoS Package'
     domain: consumer_marketing
@@ -115,6 +145,9 @@ agents:
     - cloud_gaming_session_telemetry
     - network_slice_allocations
     - gaming_qos_subscriptions
+    description: Detects cloud gaming traffic to offer low-latency network slicing
+      QoS upgrades.
+    roi_metric: Premium ARPU (+18% gaming segment ARPU)
   airport_roaming_pass:
     display_name: 'Consumer Marketing: Airport Roaming Pass'
     domain: consumer_marketing
@@ -124,6 +157,9 @@ agents:
     - airport_geofence_triggers
     - outbound_roaming_passes
     - traveler_pack_activations
+    description: Uses geo-fencing at airports to prompt outbound travelers with roaming
+      passes before departure.
+    roi_metric: Roaming Revenue (+40% pre-departure pass attach rate)
   competitor_churn_insights:
     display_name: 'Consumer Marketing: Competitor Churn Insights'
     domain: consumer_marketing
@@ -133,6 +169,9 @@ agents:
     - port_out_mnp_requests
     - competitor_campaign_intel
     - churn_driver_correlations
+    description: Analyzes port-out telemetry and web behavior to identify competitor
+      campaign impacts.
+    roi_metric: Churn Reduction (-0.35% annualized churn rate)
   prepaid_to_postpaid:
     display_name: 'Consumer Marketing: Prepaid to Postpaid'
     domain: consumer_marketing
@@ -142,6 +181,9 @@ agents:
     - prepaid_recharge_history
     - clv_scoring_models
     - postpaid_migration_offers
+    description: Identifies consistent prepaid reloaders and offers customized postpaid
+      transition plans.
+    roi_metric: Customer Lifetime Value (3.2x CLV increase per migrated user)
   streaming_subhub_bundles:
     display_name: 'Consumer Marketing: Streaming SubHub Bundles'
     domain: consumer_marketing
@@ -151,6 +193,9 @@ agents:
     - ott_traffic_consumption
     - content_partner_catalogs
     - subhub_unified_billings
+    description: Correlates OTT streaming data to recommend unified billing content
+      bundles.
+    roi_metric: Stickiness & ARPU (+$8.50/mo bundle ARPU)
   smartwatch_onenumber_esim:
     display_name: 'Consumer Marketing: Smartwatch OneNumber eSIM'
     domain: consumer_marketing
@@ -160,6 +205,9 @@ agents:
     - connected_device_pairings
     - onenumber_esim_profiles
     - wearable_addon_subscriptions
+    description: Prompts users pairing new smartwatches with instant eSIM activation
+      workflows.
+    roi_metric: Connected Device Revenue (+25K monthly active eSIM lines)
   work_from_home_broadband:
     display_name: 'Consumer Marketing: Work-From-Home Broadband'
     domain: consumer_marketing
@@ -169,6 +217,9 @@ agents:
     - enterprise_vpn_telemetry
     - dedicated_wfh_broadband_plans
     - dual_sim_hybrid_orders
+    description: Detects consistent enterprise VPN traffic to suggest dedicated WFH
+      broadband lines.
+    roi_metric: B2C/B2B Blended Revenue (+$28.00/mo corporate-subsidized line)
   social_media_pass:
     display_name: 'Consumer Marketing: Social Media Pass'
     domain: consumer_marketing
@@ -178,6 +229,9 @@ agents:
     - social_app_data_usage
     - zerorated_pass_subscriptions
     - genz_campaign_conversions
+    description: Identifies high social media usage to offer zero-rated social data
+      passes.
+    roi_metric: Gen Z Market Share (+14% youth segment acquisition)
   secondary_tablet_sim:
     display_name: 'Consumer Marketing: Secondary Tablet SIM'
     domain: consumer_marketing
@@ -187,6 +241,9 @@ agents:
     - tablet_imei_attachments
     - multi_device_data_share
     - secondary_sim_activations
+    description: Detects smartphone tethering hotspots to recommend dedicated high-speed
+      tablet SIM plans.
+    roi_metric: Multi-Device Penetration (+18K connected tablet additions)
   postcode_coverage_outages:
     display_name: 'Onboarding & Provisioning: Postcode Coverage & Outages'
     domain: onboarding_provisioning
@@ -196,6 +253,9 @@ agents:
     - address_geocodes
     - cell_coverage_ratios
     - planned_outage_schedules
+    description: Validates address-level signal strength, 5G spectrum bands, and active
+      cell outages before provisioning.
+    roi_metric: Reduced Early Churn (< 0.9% 30-day onboarding churn)
   esim_device_compatibility:
     display_name: 'Onboarding & Provisioning: eSIM Device Compatibility'
     domain: onboarding_provisioning
@@ -205,6 +265,9 @@ agents:
     - device_eid_database
     - esim_activation_matrix
     - digital_onboarding_sessions
+    description: Instantly verifies device IMEI/EID for eSIM readiness and carrier-lock
+      status during digital checkout.
+    roi_metric: Activation Success Rate (98.4% digital onboarding completion)
   mnp_number_porting_tracker:
     display_name: 'Onboarding & Provisioning: MNP Number Porting Tracker'
     domain: onboarding_provisioning
@@ -214,6 +277,9 @@ agents:
     - donor_network_responses
     - porting_clearinghouse_logs
     - activation_sla_metrics
+    description: Orchestrates MNP port-in eligibility, donor network validation, and
+      automated subscriber status updates.
+    roi_metric: Porting Lead Time Reduction (-60% MNP processing delay)
   fiber_fwa_self_install:
     display_name: 'Onboarding & Provisioning: Fiber & FWA Self-Install'
     domain: onboarding_provisioning
@@ -223,6 +289,9 @@ agents:
     - cpe_ont_telemetry
     - self_install_diagnostic_steps
     - technician_escalation_records
+    description: Guides subscribers through ONT optical modem and 5G FWA gateway self-installation
+      and automated diagnostics.
+    roi_metric: Truck Roll Avoidance ($350K/mo field technician savings)
   kyc_digital_identity_verification:
     display_name: 'Onboarding & Provisioning: KYC Digital Identity Verification'
     domain: onboarding_provisioning
@@ -232,6 +301,9 @@ agents:
     - kyc_document_validations
     - biometric_match_scores
     - fraud_risk_evaluations
+    description: Automates government ID validation, biometric liveness checks, and
+      fraud screening for instant SIM provisioning.
+    roi_metric: Onboarding Velocity & Fraud Prevention (99.2% regulatory KYC compliance)
   multi_service_bundle_activation:
     display_name: 'Onboarding & Provisioning: Multi-Service Bundle Activation'
     domain: onboarding_provisioning
@@ -241,6 +313,9 @@ agents:
     - bundle_order_orchestrations
     - provisioning_gateway_events
     - activation_exception_queues
+    description: Orchestrates end-to-end multi-play provisioning across mobile, fixed
+      broadband, and OTT subscriptions.
+    roi_metric: First-Time-Right Activation Rate (96.5% zero-fallout provisioning)
   multi_line_account_management:
     display_name: 'Subscriber CRM: Multi-Line Account Management'
     domain: subscriber_crm
@@ -250,6 +325,9 @@ agents:
     - account_line_hierarchies
     - shared_pool_usages
     - billing_inquiry_summaries
+    description: Simplifies complex family and enterprise shared accounts by summarizing
+      multi-line usage and shared pools.
+    roi_metric: CSAT / NPS (+22 pts care satisfaction index)
   proactive_retention_save_offers:
     display_name: 'Subscriber CRM: Proactive Retention Save Offers'
     domain: subscriber_crm
@@ -259,6 +337,9 @@ agents:
     - subscriber_churn_propensities
     - save_discount_matrices
     - retention_agent_concessions
+    description: Generates personalized, margin-aware discount and upgrade incentives
+      during active cancellation requests.
+    roi_metric: Save Rate Improvement (+32% retention save rate)
   smart_ivr_outage_deflection:
     display_name: 'Subscriber CRM: Smart IVR Outage Deflection'
     domain: subscriber_crm
@@ -268,6 +349,9 @@ agents:
     - incoming_caller_clis
     - active_cell_incident_maps
     - automated_ivr_deflections
+    description: Matches caller CLI to known network incident telemetry and plays
+      automated resolution updates to deflect care queues.
+    roi_metric: Call Deflection (64% IVR deflection during major fiber cuts)
   bill_shock_charge_breakdown:
     display_name: 'Subscriber CRM: Bill Shock Charge Breakdown'
     domain: subscriber_crm
@@ -277,6 +361,9 @@ agents:
     - monthly_billing_cdrs
     - roaming_overage_details
     - goodwill_adjustment_ledgers
+    description: Explains third-party billing, roaming charges, and off-bundle data
+      spikes with natural language itemized breakdowns.
+    roi_metric: Billing Dispute Reduction (-52% billing dispute volume)
   vas_subscription_manager:
     display_name: 'Subscriber CRM: VAS Subscription Manager'
     domain: subscriber_crm
@@ -286,6 +373,9 @@ agents:
     - active_vas_services
     - partner_content_charges
     - subscription_cancellation_logs
+    description: Allows subscribers to review, audit, and cancel recurring third-party
+      value-added services and micro-subscriptions.
+    roi_metric: Billing Transparency & Trust (94% digital VAS self-serve resolution)
   vip_high_arpu_concierge:
     display_name: 'Subscriber CRM: VIP & High-ARPU Concierge'
     domain: subscriber_crm
@@ -295,6 +385,9 @@ agents:
     - platinum_subscriber_rosters
     - dedicated_concierge_tickets
     - sla_resolution_timelines
+    description: Identifies high-ARPU and enterprise executive accounts to prioritize
+      routing, dedicated SLAs, and white-glove support.
+    roi_metric: VIP Retention & Loyalty (< 0.25% VIP annualized churn)
   voice_of_customer_telco_sentiment:
     display_name: 'Subscriber CRM: Voice of Customer Telco Sentiment'
     domain: subscriber_crm
@@ -304,6 +397,10 @@ agents:
     - csat_nps_survey_responses
     - nlp_sentiment_topic_clusters
     - agent_interaction_transcripts
+    description: Performs real-time NLP sentiment analysis across care transcripts,
+      NPS surveys, and social channels to surface systemic friction.
+    roi_metric: Root-Cause Sentiment Intelligence (-28% recurring customer friction
+      points)
   payment_arrangement_promise_to_pay:
     display_name: 'Subscriber CRM: Payment Arrangement & Promise to Pay'
     domain: subscriber_crm
@@ -313,6 +410,9 @@ agents:
     - delinquent_account_aging
     - promise_to_pay_commitments
     - service_restoration_triggers
+    description: Evaluates credit history and payment behavior to structure flexible
+      installments and temporary payment extensions.
+    roi_metric: Bad Debt Minimization (-36% involuntary collection churn)
   fcaps_alarm_noise_reduction:
     display_name: 'NetOps & AIOps: FCAPS Alarm Noise Reduction'
     domain: netops_aiops
@@ -322,6 +422,9 @@ agents:
     - raw_snmp_alarm_streams
     - alarm_correlation_rules
     - actionable_incident_clusters
+    description: Correlates, deduplicates, and suppresses cascading raw SNMP alarms
+      to isolate true actionable network incidents.
+    roi_metric: MTTR Reduction (-45% alarm storm MTTR)
   automated_gemini_pir_generator:
     display_name: 'NetOps & AIOps: Automated Gemini PIR Generator'
     domain: netops_aiops
@@ -331,6 +434,9 @@ agents:
     - major_incident_timelines
     - slack_chat_engineering_logs
     - root_cause_corrective_actions
+    description: Drafts comprehensive Post Incident Reviews (PIR) by synthesizing
+      incident chronology, telemetry spikes, and remediation logs.
+    roi_metric: Engineering Efficiency (85% reduction in manual PIR drafting time)
   cell_tower_congestion_analytics:
     display_name: 'NetOps & AIOps: Cell Tower Congestion Analytics'
     domain: netops_aiops
@@ -340,6 +446,10 @@ agents:
     - ran_sector_prb_utilization
     - voice_drop_call_rates
     - capacity_expansion_priorities
+    description: Evaluates PRB utilization, throughput bottlenecks, and cell handover
+      failures to recommend dynamic antenna tilt and carrier tuning.
+    roi_metric: Cell Availability & QoS Optimization (+12% throughput in congested
+      sectors)
   fiber_backhaul_latency_optimization:
     display_name: 'NetOps & AIOps: Fiber Backhaul Latency Optimization'
     domain: netops_aiops
@@ -349,6 +459,9 @@ agents:
     - optical_transceiver_telemetry
     - latency_jitter_measurements
     - rerouting_path_optimizations
+    description: Analyzes jitter, packet loss, and latency anomalies across DWDM and
+      IP-MPLS backhaul links to optimize routing paths.
+    roi_metric: Backhaul SLA Compliance (99.995% transport uptime)
   predictive_hardware_maintenance:
     display_name: 'NetOps & AIOps: Predictive Hardware Maintenance'
     domain: netops_aiops
@@ -358,6 +471,9 @@ agents:
     - baseband_temperature_sensors
     - fan_power_degradation_metrics
     - preventative_work_orders
+    description: Predicts optical transceivers, fan module, and battery degradation
+      using thermal telemetry and failure modeling.
+    roi_metric: Proactive Outage Prevention (-38% hardware failure outages)
   site_power_energy_efficiency:
     display_name: 'NetOps & AIOps: Site Power & Energy Efficiency'
     domain: netops_aiops
@@ -367,6 +483,9 @@ agents:
     - cell_site_kwh_consumption
     - dynamic_sleep_mode_schedules
     - solar_battery_telemetries
+    description: Monitors base station power consumption, diesel generator runtime,
+      and solar battery storage to minimize carbon footprint and grid costs.
+    roi_metric: Opex & Carbon Reduction ($1.8M annual power savings)
   stadium_arena_crowd_density:
     display_name: 'DaaS & CAMARA: Stadium & Arena Crowd Density'
     domain: daas_camara
@@ -376,6 +495,9 @@ agents:
     - anonymized_cell_attachments
     - venue_geofence_boundaries
     - hourly_crowd_density_aggregates
+    description: Aggregates and anonymizes real-time cell attachment telemetry to
+      provide crowd density heatmaps to event venues.
+    roi_metric: DaaS Telemetry Monetization ($650K annual B2B enterprise revenue)
   sim_swap_fraud_prevention_api:
     display_name: 'DaaS & CAMARA: SIM Swap Fraud Prevention API'
     domain: daas_camara
@@ -385,6 +507,9 @@ agents:
     - sim_swap_event_timestamps
     - banking_api_query_logs
     - fraud_verification_audit_trail
+    description: Exposes CAMARA-compliant SIM Swap verification APIs to financial
+      institutions to prevent unauthorized OTP interception.
+    roi_metric: API Monetization ($1.1M annual B2B banking revenue)
   number_verification_api:
     display_name: 'DaaS & CAMARA: Number Verification API'
     domain: daas_camara
@@ -394,6 +519,9 @@ agents:
     - camara_auth_token_requests
     - carrier_billing_id_matches
     - api_monetization_ledgers
+    description: Provides seamless, cryptographically secure SIM-based MSISDN authentication
+      for mobile banking and fintech applications.
+    roi_metric: Auth Friction & Fraud Elimination (99.5% passwordless login success)
   device_location_verification_api:
     display_name: 'DaaS & CAMARA: Device Location Verification API'
     domain: daas_camara
@@ -403,6 +531,9 @@ agents:
     - location_verification_queries
     - geofence_match_results
     - enterprise_sla_tracking
+    description: Validates device location within specified radii using network-grounded
+      cell triangulation without requiring device GPS.
+    roi_metric: Anti-Fraud Geo-Verification ($480K annual fraud loss avoidance)
   quality_on_demand_qod_api:
     display_name: 'DaaS & CAMARA: Quality on Demand (QoD) API'
     domain: daas_camara
@@ -412,6 +543,9 @@ agents:
     - qod_slice_session_requests
     - guaranteed_bandwidth_metrics
     - developer_api_billings
+    description: Exposes programmable 5G Quality on Demand (QoD) latency slicing APIs
+      to cloud gaming and enterprise drone platforms.
+    roi_metric: 5G Network API Monetization ($850K annual 5G API revenue)
   device_swap_roaming_status_api:
     display_name: 'DaaS & CAMARA: Device Swap & Roaming Status API'
     domain: daas_camara
@@ -421,3 +555,7 @@ agents:
     - device_imei_change_events
     - international_roaming_registrations
     - partner_verification_records
+    description: Delivers real-time roaming status and IMEI swap detection webhooks
+      to fraud detection and corporate security engines.
+    roi_metric: Real-Time Risk Scoring ($390K annual enterprise security subscription
+      revenue)

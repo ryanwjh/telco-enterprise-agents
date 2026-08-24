@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in retail store placement through automated quantitative analytics, predictive AI, and real-time grounding.
+Analyzes geospatial telemetry and foot traffic to optimize retail store and kiosk locations.
 
 ### Target Personas
-Head of Telecom Operations, Consumer Marketing Director, Principal Network Engineer, CVM Strategy Lead
+Retail Operations VP, Geospatial Network Planner, Channel Strategy Director
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **Store Footfall Conversion** | `>= 24.0%` | Walk-in traffic converting into new postpaid subscriptions or device upgrades. |
+| **Capex Site Efficiency** | `+32% ROI` | Net revenue contribution per square foot across company-owned retail stores. |
+| **Underperforming Site Rationalization** | `< 60 days` | Identification and relocation cycle time for low-yield retail kiosks. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`cmkt_rtsp_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -41,7 +41,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **Capex/Opex Optimization ($1.2M annual savings)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for retail store placement?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `cmkt_rtsp_geospatial_footfall` — Seeded via `data/geospatial_footfall.csv`
-- `cmkt_rtsp_store_kiosk_locations` — Seeded via `data/store_kiosk_locations.csv`
-- `cmkt_rtsp_market_catchment_demographics` — Seeded via `data/market_catchment_demographics.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for retail store placement across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for retail store placement?"
-3. "Render a chart comparing monthly performance metrics for retail store placement vs annual targets."
-4. "Break down retail store placement volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing retail store placement?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/consumer_marketing/agents/retail_store_placement/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/consumer_marketing/agents/retail_store_placement
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`

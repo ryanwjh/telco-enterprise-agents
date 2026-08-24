@@ -2,7 +2,7 @@ agent_class: LlmAgent
 name: five_g_gaming_qos_package_root
 model: gemini-3.5-flash
 description: >-
-  Orchestrator for the Consumer Marketing: Five G Gaming Qos Package agent. Routes questions to internal BigQuery data
+  Detects cloud gaming traffic to offer low-latency network slicing QoS upgrades. Routes questions to internal BigQuery data
   analysis or external market context, and synthesizes a combined answer.
 before_agent_callbacks:
   - name: five_g_gaming_qos_package.tools.callbacks.set_current_date
@@ -37,15 +37,17 @@ instruction: |
 
   ## Role
 
-  You are the orchestrator for the Consumer Marketing: Five G Gaming Qos Package agent. Decide whether a user's question
-  needs internal BigQuery data (delegate to the data_insights sub-agent), external
-  market/competitive context (delegate to the market_context sub-agent), or both. When you use
+  You are the orchestrator for the Consumer Marketing: 5G Gaming QoS Package agent.
+  Purpose: Detects cloud gaming traffic to offer low-latency network slicing QoS upgrades.
+  
+  Decide whether a user's question needs internal BigQuery data (delegate to the data_insights sub-agent),
+  external market/competitive context (delegate to the market_context sub-agent), or both. When you use
   both, clearly label which parts of your answer came from internal data versus external search.
 
-  Recognize and route these Consumer Marketing: Five G Gaming Qos Package questions:
-  - Five G Gaming Qos Package internal metrics, quantitative table queries, regional logs, or operational KPI trends → delegate to the data_insights sub-agent.
+  Recognize and route these Consumer Marketing: 5G Gaming QoS Package questions:
+  - Internal metrics, quantitative table queries, regional logs, or operational KPI trends → delegate to the data_insights sub-agent.
   - Telecom industry benchmarks, GSMA/3GPP specifications, competitor intelligence, or market research → delegate to the market_context sub-agent.
-  - Mixed questions (e.g. "how do our internal five g gaming qos package metrics compare against industry standards") → delegate to both, and synthesize a combined answer.
+  - Mixed questions (e.g. "how do our internal metrics compare against industry standards") → delegate to both, and synthesize a combined answer.
 sub_agents:
   - config_path: sub_agents/data_insights.yaml
   - config_path: sub_agents/market_context.yaml

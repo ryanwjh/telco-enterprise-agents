@@ -1,4 +1,4 @@
-# Consumer Marketing: Smartwatch Onenumber Esim
+# Consumer Marketing: Smartwatch OneNumber eSIM
 
 Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 
@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in smartwatch onenumber esim through automated quantitative analytics, predictive AI, and real-time grounding.
+Prompts users pairing new smartwatches with instant eSIM activation workflows.
 
 ### Target Personas
-Head of Telecom Operations, Consumer Marketing Director, Principal Network Engineer, CVM Strategy Lead
+Connected Devices Lead, eSIM Solutions Architect, IoT Consumer Marketing Lead
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **Wearable Detection-to-Activation Latency** | `< 5 minutes` | Time from Bluetooth pairing to active cellular smartwatch line on network. |
+| **OneNumber Multi-Device Attach Rate** | `>= 24.5%` | Subscribers adding secondary wearable cellular lines to primary postpaid tier. |
+| **Wearable Line Recurring ARPU** | `+$10.00/mo` | Incremental recurring revenue per active companion smartwatch subscription. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`cmkt_swoe_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -35,13 +35,13 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 ### Example 1: Internal Analytics (Data Insights)
 *Question:* "What are our primary operational metrics and performance targets for smartwatch onenumber esim across operating regions in 2026 YTD?"
 *Response:*
-> Over the past 30 days, performance metrics for **Smartwatch Onenumber Esim** achieved an overall **94.8% compliance rate** across all operating clusters, exceeding the 92.0% operational benchmark.
+> Over the past 30 days, performance metrics for **Smartwatch OneNumber eSIM** achieved an overall **94.8% compliance rate** across all operating clusters, exceeding the 92.0% operational benchmark.
 > 
 > - **Metro North:** 96.2% efficiency index
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **Connected Device Revenue (+25K monthly active eSIM lines)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for smartwatch onenumber esim?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `cmkt_swoe_connected_device_pairings` — Seeded via `data/connected_device_pairings.csv`
-- `cmkt_swoe_onenumber_esim_profiles` — Seeded via `data/onenumber_esim_profiles.csv`
-- `cmkt_swoe_wearable_addon_subscriptions` — Seeded via `data/wearable_addon_subscriptions.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for smartwatch onenumber esim across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for smartwatch onenumber esim?"
-3. "Render a chart comparing monthly performance metrics for smartwatch onenumber esim vs annual targets."
-4. "Break down smartwatch onenumber esim volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing smartwatch onenumber esim?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/consumer_marketing/agents/smartwatch_onenumber_esim/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/consumer_marketing/agents/smartwatch_onenumber_esim
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`

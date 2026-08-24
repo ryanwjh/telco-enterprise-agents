@@ -1,4 +1,4 @@
-# NetOps & AIOps: Automated Gemini Pir Generator
+# NetOps & AIOps: Automated Gemini PIR Generator
 
 Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 
@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in automated gemini pir generator through automated quantitative analytics, predictive AI, and real-time grounding.
+Drafts comprehensive Post Incident Reviews (PIR) by synthesizing incident chronology, telemetry spikes, and remediation logs.
 
 ### Target Personas
-Head of Telecom Operations, NetOps & AIOps Director, Principal Network Engineer, CVM Strategy Lead
+Service Reliability Engineering (SRE) Lead, Network Quality VP, Incident Commander
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **PIR Draft Generation Lead Time** | `< 5 minutes` | Time to compile full multi-source incident timeline following service restoration. |
+| **Chronology & Telemetry Accuracy** | `>= 98.0%` | Precise alignment of alarm timestamps, engineer chat logs, and remediation commands. |
+| **Post-Mortem Action Item Completion** | `>= 92.0%` | Tracking and verification of preventive architecture recommendations. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`ntop_gpir_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -35,13 +35,13 @@ Head of Telecom Operations, NetOps & AIOps Director, Principal Network Engineer,
 ### Example 1: Internal Analytics (Data Insights)
 *Question:* "What are our primary operational metrics and performance targets for automated gemini pir generator across operating regions in 2026 YTD?"
 *Response:*
-> Over the past 30 days, performance metrics for **Automated Gemini Pir Generator** achieved an overall **94.8% compliance rate** across all operating clusters, exceeding the 92.0% operational benchmark.
+> Over the past 30 days, performance metrics for **Automated Gemini PIR Generator** achieved an overall **94.8% compliance rate** across all operating clusters, exceeding the 92.0% operational benchmark.
 > 
 > - **Metro North:** 96.2% efficiency index
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **Engineering Efficiency (85% reduction in manual PIR drafting time)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for automated gemini pir generator?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, NetOps & AIOps Director, Principal Network Engineer,
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `ntop_gpir_major_incident_timelines` — Seeded via `data/major_incident_timelines.csv`
-- `ntop_gpir_slack_chat_engineering_logs` — Seeded via `data/slack_chat_engineering_logs.csv`
-- `ntop_gpir_root_cause_corrective_actions` — Seeded via `data/root_cause_corrective_actions.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for automated gemini pir generator across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for automated gemini pir generator?"
-3. "Render a chart comparing monthly performance metrics for automated gemini pir generator vs annual targets."
-4. "Break down automated gemini pir generator volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing automated gemini pir generator?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/netops_aiops/agents/automated_gemini_pir_generator/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/netops_aiops/agents/automated_gemini_pir_generator
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`

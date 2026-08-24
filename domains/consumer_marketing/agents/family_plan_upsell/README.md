@@ -7,25 +7,25 @@ Part of the **Telco Enterprise Agents** platform for Gemini Enterprise.
 ## 1. Why This Agent Matters
 
 ### Business Problem
-Addressing core telecommunications operational challenges in family plan upsell through automated quantitative analytics, predictive AI, and real-time grounding.
+Identifies multi-line households sharing data to recommend consolidated family plans.
 
 ### Target Personas
-Head of Telecom Operations, Consumer Marketing Director, Principal Network Engineer, CVM Strategy Lead
+Head of Consumer Marketing, CVM Strategy Lead, Digital Campaign Manager
 
 ### Key Metrics Tracked
 | Metric | Benchmark / Target | Business Impact |
 | :--- | :--- | :--- |
-| **Operational Efficiency** | `Target >= 92.0%` | Primary performance compliance rate across regional networks. |
-| **Incident & Churn Reduction** | `Target < 1.5%` | Reduction in operational defects, service fallout, and customer churn. |
-| **Financial ROI Uplift** | `+$180K/mo target` | Net recurring revenue contribution and operational cost savings. |
+| **Family Plan Conversion Rate** | `>= 18.5%` | Percentage of multi-line households upgrading to consolidated family tiers. |
+| **Household Blended ARPU** | `+$14.20/mo` | Net recurring revenue increase per consolidated household account. |
+| **Multi-Line Account Retention** | `< 0.8% churn` | Long-term churn reduction from multi-service household stickiness. |
 
 ---
 
 ## 2. What It Answers & Sub-Agent Routing
 
 ### Sub-Agent Architecture
-- **`data_insights`**: Queries internal BigQuery tables (`cmkt_famu_*`) using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
-- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, and competitive intelligence.
+- **`data_insights`**: Queries internal BigQuery tables using the BigQuery Conversational Analytics API (`ask_data_insights`, `forecast`, `analyze_contribution`, `detect_anomalies`) and generates visual data charts via `render_chart`.
+- **`market_context`**: Leverages Google Search grounding for external telecom industry benchmarks, GSMA/3GPP standards, TM Forum ODA specifications, and competitive intelligence.
 - **`root_agent`**: Orchestrates routing between internal analytics and external market intelligence.
 
 ---
@@ -41,7 +41,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 > - **Metro South:** 95.1% operational uptime
 > - **West Region:** 93.8% target achievement
 > 
-> Total estimated operational savings delivered approximately **$214,000** in quarterly cost avoidance.
+> Primary Business Value: **ARPU Growth (+$180K/mo target)**.
 
 ### Example 2: Market Grounding (Market Context)
 *Question:* "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for family plan upsell?"
@@ -55,40 +55,7 @@ Head of Telecom Operations, Consumer Marketing Director, Principal Network Engin
 
 ---
 
-## 4. Authorized BigQuery Tables
-
-- `cmkt_famu_subscriber_lines` — Seeded via `data/subscriber_lines.csv`
-- `cmkt_famu_data_sharing_pools` — Seeded via `data/data_sharing_pools.csv`
-- `cmkt_famu_plan_upsell_eligibility` — Seeded via `data/plan_upsell_eligibility.csv`
-
----
-
-## 5. Example Questions
-
-1. "What are our primary operational metrics and performance targets for family plan upsell across operating regions in 2026 YTD?"
-2. "What are the latest telecom industry standards, GSMA guidelines, and market benchmarks for family plan upsell?"
-3. "Render a chart comparing monthly performance metrics for family plan upsell vs annual targets."
-4. "Break down family plan upsell volume by operating cluster and customer segment for 2026 YTD."
-5. "What are the projected quarterly financial impacts and ROI of optimizing family plan upsell?"
-
----
-
-## 6. Tools & Architecture
-
-- **`ask_data_insights`**: BigQuery Conversational Analytics natural language to SQL.
-- **`render_chart`**: BigQuery SQL to Matplotlib PNG visual rendering.
-- **`google_search`**: Google Search market context grounding.
-- **LLM Inference**: `gemini-3.5-flash` with `GOOGLE_CLOUD_LOCATION=global`.
-- **Runtime Engine**: Vertex AI Agent Engine (`us-central1`).
-
----
-
-## 7. Run Locally
-
-```bash
-# Run unit tests
-uv run --frozen pytest domains/consumer_marketing/agents/family_plan_upsell/tests/unit -v
-
-# Run interactively with ADK CLI
-adk run domains/consumer_marketing/agents/family_plan_upsell
-```
+## 4. Operational Value & Deployment
+- **Deployment Class**: ReasoningEngine / Vertex AI Agent Engine
+- **Runtime**: `gemini-3.5-flash`
+- **Location**: `us-central1`
