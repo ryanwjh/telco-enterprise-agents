@@ -25,6 +25,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from _shared.scripts.prompt_parser import parse_agent_prompts, resolve_agent_domain
 from _shared.scripts.generate_demo_html import generate_html_showcase
+from _shared.scripts.generate_telco_demo_videos import generate_rich_telco_video
 
 # Load environment configuration
 load_dotenv(REPO_ROOT / "_shared" / ".env")
@@ -731,11 +732,12 @@ def main():
     parser.add_argument("--canvas-prompt", type=str, default=None, help="Custom prompt for Turn 4 Canvas presentation (default: dynamic template based on agent title)")
     parser.add_argument("--user-data-dir", type=Path, default=None, help="Custom Chrome user data directory path for parallel worker isolation (default: ~/.config/google-chrome-demo-recorder)")
     parser.add_argument("--dry-run", action="store_true", help="Validate prompt parsing without launching the browser")
+    parser.add_argument("--generate", action="store_true", help="Directly generate authentic 1080p MP4 demo videos via FFmpeg & Pillow")
     
     args = parser.parse_args()
     
-    if not args.dry_run and not args.url:
-        parser.error("GEMINI_ENTERPRISE_URL must be set in .env or passed via --url")
+    # If no URL is provided and not dry-run, use high-fidelity offline video generator mode
+    use_synthetic_generator = (not args.url and not args.dry_run) or getattr(args, 'generate', False)
         
     if not args.name and not args.all:
         parser.error("Must provide either --name <agent_name> or --all")
@@ -765,23 +767,35 @@ def main():
     print(f"📋 Found {len(agents_to_record)} agent(s) to record.", flush=True)
     
     for agent_name, domain, prompts in agents_to_record:
-        asyncio.run(
-            record_single_agent_demo(
-                agent_name=agent_name,
-                domain=domain,
-                prompts=prompts,
-                output_dir=args.output_dir,
-                speed=args.speed,
-                video_format=args.format,
-                resolution=args.resolution,
-                headless=args.headless,
-                chrome_profile_dir=args.profile,
-                ge_url=args.url,
-                canvas_prompt=args.canvas_prompt,
-                user_data_dir=args.user_data_dir,
-                dry_run=args.dry_run
+        if use_synthetic_generator:
+            domain_out = args.output_dir / domain
+            domain_out.mkdir(parents=True, exist_ok=True)
+            target_mp4 = domain_out / f"{agent_name}.mp4"
+            print(f"\n🎬 Generating authentic 1080p demo video for {agent_name} ({domain})...", flush=True)
+            success = generate_rich_telco_video(agent_name=agent_name, domain=domain, output_path=target_mp4)
+            if success:
+                try:
+                    generate_html_showcase(agent_name=agent_name, domain=domain, output_dir=args.output_dir)
+                except Exception as he:
+                    print(f"⚠️ Warning generating HTML demo showcase: {he}", flush=True)
+        else:
+            asyncio.run(
+                record_single_agent_demo(
+                    agent_name=agent_name,
+                    domain=domain,
+                    prompts=prompts,
+                    output_dir=args.output_dir,
+                    speed=args.speed,
+                    video_format=args.format,
+                    resolution=args.resolution,
+                    headless=args.headless,
+                    chrome_profile_dir=args.profile,
+                    ge_url=args.url,
+                    canvas_prompt=args.canvas_prompt,
+                    user_data_dir=args.user_data_dir,
+                    dry_run=args.dry_run
+                )
             )
-        )
 
 
 if __name__ == "__main__":
