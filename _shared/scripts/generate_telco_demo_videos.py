@@ -486,18 +486,18 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
         dout.text((590, 580), "Session State: Persisted to Vertex AI Agent Engine & Cloud Spanner Memory", fill=(26, 115, 232), font=get_font(15, bold=True))
         img_out.save(tmp_path / "f08_out.png")
 
-        # High-resolution, visually lossless FFmpeg encoding (CRF 18, 1080p @ 25fps, 5:45 duration):
+        # High-resolution, visually lossless FFmpeg encoding (CRF 18, 1080p @ 25fps, natural ~46s pacing):
         output_path.parent.mkdir(parents=True, exist_ok=True)
         ffmpeg_cmd = [
             "/usr/bin/ffmpeg", "-y",
-            "-loop", "1", "-t", "3", "-i", str(tmp_path / "f01_dir1.png"),
-            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f02_dir2.png"),
-            "-loop", "1", "-t", "8", "-i", str(tmp_path / "f03_dir3.png"),
-            "-loop", "1", "-t", "60", "-i", str(tmp_path / "f04_t1.png"),
-            "-loop", "1", "-t", "75", "-i", str(tmp_path / "f05_t2.png"),
-            "-loop", "1", "-t", "75", "-i", str(tmp_path / "f06_t3.png"),
-            "-loop", "1", "-t", "90", "-i", str(tmp_path / "f07_t4.png"),
-            "-loop", "1", "-t", "30", "-i", str(tmp_path / "f08_out.png"),
+            "-loop", "1", "-t", "2", "-i", str(tmp_path / "f01_dir1.png"),
+            "-loop", "1", "-t", "2.5", "-i", str(tmp_path / "f02_dir2.png"),
+            "-loop", "1", "-t", "3.5", "-i", str(tmp_path / "f03_dir3.png"),
+            "-loop", "1", "-t", "8", "-i", str(tmp_path / "f04_t1.png"),
+            "-loop", "1", "-t", "8", "-i", str(tmp_path / "f05_t2.png"),
+            "-loop", "1", "-t", "8", "-i", str(tmp_path / "f06_t3.png"),
+            "-loop", "1", "-t", "10", "-i", str(tmp_path / "f07_t4.png"),
+            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f08_out.png"),
             "-filter_complex", "[0:v][1:v][2:v][3:v][4:v][5:v][6:v][7:v]concat=n=8:v=1:a=0[outv]",
             "-map", "[outv]",
             "-c:v", "libx264",
@@ -518,7 +518,7 @@ def generate_rich_telco_video(agent_name: str, domain: str, output_path: Path) -
             return False
 
         size_mb = output_path.stat().st_size / (1024 * 1024)
-        print(f"🎬 Generated authentic 1080p demo video ({size_mb:.2f} MB, duration 5:45): {output_path}", flush=True)
+        print(f"🎬 Generated authentic 1080p demo video ({size_mb:.2f} MB, duration 0:46): {output_path}", flush=True)
         return True
 
 
@@ -540,7 +540,7 @@ def main():
     agents = data.get("agents", {})
 
     if args.all:
-        print(f"🚀 Generating crystal-clear 1080p demo videos (5:45 duration, CRF 18) across 8 parallel workers for all {len(agents)} agents...", flush=True)
+        print(f"🚀 Generating crystal-clear 1080p demo videos (seamless ~46s duration, CRF 18) across 8 parallel workers for all {len(agents)} agents...", flush=True)
         items = list(agents.items())
         with ProcessPoolExecutor(max_workers=8) as executor:
             results = list(executor.map(_worker, items))
