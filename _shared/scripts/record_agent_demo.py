@@ -377,7 +377,6 @@ def generate_simulator_html(agent_name: str, domain: str, prompts: list[str]) ->
     agent_desc = get_agent_description(agent_name, domain)
     domain_title = DOMAIN_TITLES.get(domain, domain.replace("_", " ").title())
     domain_icon = DOMAIN_ICONS.get(domain, "🤖")
-    chart_b64 = get_sample_chart_base64(agent_name, domain)
     
     p1 = prompts[0] if len(prompts) > 0 else f"What are our primary operational metrics for {clean_title}?"
     p2 = prompts[1] if len(prompts) > 1 else f"What are the latest telco standards and benchmarks for {clean_title}?"
@@ -662,10 +661,11 @@ def generate_simulator_html(agent_name: str, domain: str, prompts: list[str]) ->
   #chat-scroll-area {
     flex: 1;
     overflow-y: hidden;
-    padding: 24px 60px 180px;
+    padding: 24px 60px 220px;
     display: flex;
     flex-direction: column;
     gap: 24px;
+    scroll-behavior: smooth;
   }
 
   #view-directory {
@@ -844,7 +844,7 @@ def generate_simulator_html(agent_name: str, domain: str, prompts: list[str]) ->
   .agent-response {
     align-self: flex-start;
     width: 100%;
-    max-width: 820px;
+    max-width: 840px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -910,22 +910,103 @@ def generate_simulator_html(agent_name: str, domain: str, prompts: list[str]) ->
     margin-bottom: 6px;
   }
 
-  .chart-card {
+  .chart-artifact-card {
     background: #ffffff;
-    border: 1px solid #e1e3e1;
-    border-radius: 12px;
-    padding: 16px;
+    border: 1px solid #dadce0;
+    border-radius: 14px;
+    padding: 16px 20px;
     margin: 12px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    gap: 10px;
+    width: 100%;
   }
 
-  .chart-card img {
-    max-width: 480px;
-    border-radius: 8px;
+  .chart-artifact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f3f4;
+    padding-bottom: 8px;
+  }
+
+  .chart-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chart-header-icon {
+    font-size: 20px;
+  }
+
+  .chart-header-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+
+  .chart-header-sub {
+    font-size: 12px;
+    color: #727775;
+  }
+
+  .chart-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chart-badge-tag {
+    background: #e8f0fe;
+    color: #1a73e8;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .chart-action-btn {
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #444746;
+    cursor: pointer;
+  }
+
+  .chart-svg-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .chart-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 12px;
+    color: #444746;
+    padding-top: 4px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .legend-dash {
+    width: 16px;
+    height: 0;
+    border-top: 2px dashed #16a34a;
   }
 
   .sources-chip {
@@ -967,6 +1048,7 @@ def generate_simulator_html(agent_name: str, domain: str, prompts: list[str]) ->
     align-items: center;
     padding: 12px 60px 20px;
     background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 30%);
+    z-index: 15;
   }
 
   .prompt-container {
@@ -1543,7 +1625,6 @@ const P1 = __P1_JSON__;
 const P2 = __P2_JSON__;
 const P3 = __P3_JSON__;
 const P4 = __P4_JSON__;
-const CHART_B64 = __CHART_B64_JSON__;
 const SEARCH_QUERY = __SEARCH_QUERY_JSON__;
 
 const cursor = document.getElementById('virtual-cursor');
@@ -1551,6 +1632,16 @@ const tooltip = document.getElementById('tooltip');
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function scrollToBottomSmooth() {
+  const scrollArea = document.getElementById('chat-scroll-area');
+  if (scrollArea) {
+    scrollArea.scrollTo({
+      top: scrollArea.scrollHeight,
+      behavior: 'smooth'
+    });
+  }
 }
 
 async function moveCursor(x, y, durationMs = 350) {
@@ -1570,13 +1661,13 @@ async function clickAt(x, y) {
   ripple.remove();
 }
 
-async function typeText(containerId, text, delayMs = 28) {
+async function typeText(containerId, text, delayMs = 26) {
   const container = document.getElementById(containerId);
   if (!container) return;
   container.textContent = '';
   for (let i = 0; i < text.length; i++) {
     container.textContent = text.slice(0, i + 1) + '▍';
-    await sleep(delayMs + (Math.random() * 12 - 6));
+    await sleep(delayMs + (Math.random() * 10 - 5));
   }
   container.textContent = text;
 }
@@ -1678,6 +1769,7 @@ async function runFullDemo() {
     u1.className = 'user-bubble';
     u1.textContent = P1;
     messagesDiv.appendChild(u1);
+    scrollToBottomSmooth();
 
     const a1 = document.createElement('div');
     a1.className = 'agent-response';
@@ -1689,6 +1781,7 @@ async function runFullDemo() {
       <div class="markdown-body" id="t1-md" style="display:none;"></div>
     `;
     messagesDiv.appendChild(a1);
+    scrollToBottomSmooth();
     await sleep(1000);
 
     const t1Spin = document.getElementById('t1-spinner');
@@ -1719,6 +1812,7 @@ async function runFullDemo() {
         </div>
       `;
     }
+    scrollToBottomSmooth();
     await sleep(1500);
 
     // Turn 2
@@ -1738,6 +1832,7 @@ async function runFullDemo() {
     u2.className = 'user-bubble';
     u2.textContent = P2;
     messagesDiv.appendChild(u2);
+    scrollToBottomSmooth();
 
     const a2 = document.createElement('div');
     a2.className = 'agent-response';
@@ -1749,6 +1844,7 @@ async function runFullDemo() {
       <div class="markdown-body" id="t2-md" style="display:none;"></div>
     `;
     messagesDiv.appendChild(a2);
+    scrollToBottomSmooth();
     await sleep(1100);
 
     const t2Spin = document.getElementById('t2-spinner');
@@ -1774,9 +1870,10 @@ async function runFullDemo() {
         </div>
       `;
     }
+    scrollToBottomSmooth();
     await sleep(1500);
 
-    // Turn 3
+    // Turn 3 (Visual Analytics & High-Resolution Vector Chart Artifact)
     if (promptBar) promptBar.classList.add('focused');
     if (promptPl) promptPl.style.display = 'none';
     await moveCursor(700, 1010, 300);
@@ -1793,39 +1890,120 @@ async function runFullDemo() {
     u3.className = 'user-bubble';
     u3.textContent = P3;
     messagesDiv.appendChild(u3);
+    scrollToBottomSmooth();
 
     const a3 = document.createElement('div');
     a3.className = 'agent-response';
     a3.innerHTML = `
       <div class="tool-status-pill">
         <div class="spinner-ring" id="t3-spinner"></div>
-        <span id="t3-status-text">📊 Matplotlib Tool render_chart(query, title)...</span>
+        <span id="t3-status-text">📊 Matplotlib Tool render_chart(query, filename='sla_trend.png')...</span>
       </div>
       <div class="markdown-body" id="t3-md" style="display:none;"></div>
     `;
     messagesDiv.appendChild(a3);
+    scrollToBottomSmooth();
     await sleep(1200);
 
     const t3Spin = document.getElementById('t3-spinner');
     if (t3Spin) t3Spin.outerHTML = '<span style="color:#16a34a; font-size:14px;">✓</span>';
     const t3Txt = document.getElementById('t3-status-text');
-    if (t3Txt) t3Txt.textContent = 'Chart generated & saved as visual artifact';
+    if (t3Txt) t3Txt.textContent = 'Chart generated & saved as visual artifact (142ms)';
     const t3Md = document.getElementById('t3-md');
     if (t3Md) {
       t3Md.style.display = 'block';
-      let chartImgHtml = '';
-      if (CHART_B64) {
-        chartImgHtml = `<div class="chart-card"><img src="data:image/png;base64,${CHART_B64}" alt="Operational Trend Chart"/></div>`;
-      }
       t3Md.innerHTML = `
-        <p>I have rendered a monthly performance trend and SLA compliance visualization for <strong>${SEARCH_QUERY}</strong> based on BigQuery historical records.</p>
-        ${chartImgHtml}
+        <p>I have analyzed the historical telemetry records and rendered a monthly operational performance trend and target SLA compliance chart for <strong>${SEARCH_QUERY}</strong>.</p>
+        
+        <div class="chart-artifact-card">
+          <div class="chart-artifact-header">
+            <div class="chart-header-left">
+              <div class="chart-header-icon">📈</div>
+              <div>
+                <div class="chart-header-title">${SEARCH_QUERY} — Operational SLA Trend & Compliance</div>
+                <div class="chart-header-sub">2026 YTD Monthly Performance Index vs Target Baseline</div>
+              </div>
+            </div>
+            <div class="chart-header-actions">
+              <span class="chart-badge-tag">Matplotlib Artifact</span>
+              <span class="chart-action-btn">⤓ PNG</span>
+            </div>
+          </div>
+          <div class="chart-svg-container">
+            <svg width="100%" height="220" viewBox="0 0 720 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#1a73e8" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#1a73e8" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              
+              <!-- Grid lines -->
+              <line x1="50" y1="25" x2="680" y2="25" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <line x1="50" y1="60" x2="680" y2="60" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <line x1="50" y1="95" x2="680" y2="95" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <line x1="50" y1="130" x2="680" y2="130" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <line x1="50" y1="165" x2="680" y2="165" stroke="#e2e8f0" stroke-width="1.5"/>
+
+              <!-- Y Axis labels -->
+              <text x="42" y="29" font-size="11" fill="#64748b" text-anchor="end" font-family="sans-serif">98%</text>
+              <text x="42" y="64" font-size="11" fill="#64748b" text-anchor="end" font-family="sans-serif">96%</text>
+              <text x="42" y="99" font-size="11" fill="#64748b" text-anchor="end" font-family="sans-serif">94%</text>
+              <text x="42" y="134" font-size="11" fill="#64748b" text-anchor="end" font-family="sans-serif">92%</text>
+              <text x="42" y="169" font-size="11" fill="#64748b" text-anchor="end" font-family="sans-serif">90%</text>
+
+              <!-- Target SLA line (92%) -->
+              <line x1="50" y1="130" x2="680" y2="130" stroke="#16a34a" stroke-width="2" stroke-dasharray="6 4"/>
+              <rect x="575" y="118" width="95" height="18" rx="4" fill="#dcfce7"/>
+              <text x="622" y="131" font-size="10" font-weight="700" fill="#15803d" text-anchor="middle" font-family="sans-serif">Target SLA: 92.0%</text>
+
+              <!-- Area fill -->
+              <path d="M 80 132 L 145 120 L 210 112 L 275 104 L 340 88 L 405 80 L 470 74 L 535 66 L 600 58 L 650 52 L 650 165 L 80 165 Z" fill="url(#chartGrad)"/>
+
+              <!-- Line path -->
+              <path d="M 80 132 L 145 120 L 210 112 L 275 104 L 340 88 L 405 80 L 470 74 L 535 66 L 600 58 L 650 52" stroke="#1a73e8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+              <!-- Data dots -->
+              <circle cx="80" cy="132" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="145" cy="120" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="210" cy="112" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="275" cy="104" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="340" cy="88" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="405" cy="80" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="470" cy="74" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="535" cy="66" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="600" cy="58" r="4.5" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <circle cx="650" cy="52" r="5.5" fill="#1a73e8" stroke="#ffffff" stroke-width="2"/>
+
+              <!-- Peak badge -->
+              <rect x="585" y="20" width="80" height="22" rx="5" fill="#1a73e8"/>
+              <text x="625" y="35" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle" font-family="sans-serif">96.2% Peak</text>
+
+              <!-- X Axis labels -->
+              <text x="80" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Jan</text>
+              <text x="145" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Feb</text>
+              <text x="210" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Mar</text>
+              <text x="275" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Apr</text>
+              <text x="340" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">May</text>
+              <text x="405" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Jun</text>
+              <text x="470" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Jul</text>
+              <text x="535" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Aug</text>
+              <text x="600" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Sep</text>
+              <text x="650" y="185" font-size="11" fill="#64748b" text-anchor="middle" font-family="sans-serif">Oct</text>
+            </svg>
+          </div>
+          <div class="chart-legend-row">
+            <div class="legend-item"><span class="legend-dot" style="background:#1a73e8;"></span><span>Actual Telemetry Performance</span></div>
+            <div class="legend-item"><span class="legend-dash"></span><span>Operational SLA Target (92.0%)</span></div>
+          </div>
+        </div>
+
         <ul>
           <li><strong>Upward Trajectory:</strong> Consistent month-over-month performance uplift across all reporting periods.</li>
-          <li><strong>Exceeded Target:</strong> Surpassed target operational SLA threshold across consecutive quarterly cycles.</li>
+          <li><strong>Exceeded Target:</strong> Surpassed target operational SLA threshold across consecutive quarterly cycles (+4.2%).</li>
           <li><strong>Anomaly Calibration:</strong> Real-time telemetry thresholds have been auto-tuned to prevent false positive escalations.</li>
         </ul>
-        <p style="color:#16a34a; font-weight:600; font-size:13px;">Artifact Status: Stored in session storage.</p>
+        <p style="color:#16a34a; font-weight:600; font-size:13px;">Artifact Status: Stored in session storage as sla_trend.png.</p>
         <div class="action-row">
           <span class="action-btn">👍</span>
           <span class="action-btn">👎</span>
@@ -1834,7 +2012,9 @@ async function runFullDemo() {
         </div>
       `;
     }
-    await sleep(1500);
+    scrollToBottomSmooth();
+    // Pause to let the viewer clearly examine the chart artifact
+    await sleep(3500);
 
     // Turn 4
     if (promptBar) promptBar.classList.add('focused');
@@ -1853,6 +2033,7 @@ async function runFullDemo() {
     u4.className = 'user-bubble';
     u4.textContent = P4;
     messagesDiv.appendChild(u4);
+    scrollToBottomSmooth();
 
     const a4 = document.createElement('div');
     a4.className = 'agent-response';
@@ -1868,7 +2049,8 @@ async function runFullDemo() {
       </div>
     `;
     messagesDiv.appendChild(a4);
-    await sleep(1200);
+    scrollToBottomSmooth();
+    await sleep(1400);
 
     await moveCursor(380, 940, 350);
     if (tooltip) {
@@ -1999,7 +2181,6 @@ window.addEventListener('DOMContentLoaded', () => {
     html_content = html_content.replace("__P2_JSON__", json.dumps(p2))
     html_content = html_content.replace("__P3_JSON__", json.dumps(p3))
     html_content = html_content.replace("__P4_JSON__", json.dumps(p4))
-    html_content = html_content.replace("__CHART_B64_JSON__", json.dumps(chart_b64))
     html_content = html_content.replace("__SEARCH_QUERY_JSON__", json.dumps(clean_title))
 
     return html_content
