@@ -7,9 +7,18 @@ Supports:
      searching the Agents directory, selecting the agent card, executing the 3 curated prompts
      from README.md sequentially, generating a 4-slide Canvas presentation, and recording MP4.
   2. High-Resolution Offline Rendering: When GEMINI_ENTERPRISE_URL is not set (or --render is used),
-     renders crystal-clear 1080p 25fps Gemini Enterprise UI walkthrough demo videos using the agent's
-     curated README.md prompts, BigQuery SLA tables, GSMA/TM Forum grounding, Matplotlib sample_chart.png,
-     and 4-slide Canvas presentation decks.
+     renders crystal-clear 1080p 25fps Gemini Enterprise UI walkthrough demo videos matching the exact
+     interface layout:
+     - Google Gemini Sidebar (Sparkle Logo, New chat, Agents, Recent chats)
+     - Agent Directory Search (Animated typing)
+     - "From your organization" Card matching reference
+     - Interactive Multi-Turn Chat:
+       • Turn 1 (Data Insights): BigQuery Conversational Analytics & SLA Table
+       • Turn 2 (Market Grounding): Grounding with Google Search & TM Forum ODA / GSMA
+       • Turn 3 (Visual Analytics): Inline Matplotlib chart visualization artifact
+       • Turn 4 (Gemini Enterprise Canvas): Split-screen slide-over presenting a 4-slide executive
+         briefing deck with slide-by-slide navigation!
+       • Outro: Session memory persistence & multi-turn completion review
 
 Usage:
     .venv/bin/python _shared/scripts/record_agent_demo.py --name family_plan_upsell
@@ -191,43 +200,31 @@ async def wait_for_response_completion(
     timeout_seconds: int = 180,
     read_pause: float = 6.0
 ):
-    """Waits for the streaming response of turn_index to fully render."""
+    """Waits for streaming response to finish rendering."""
     print(f"⏳ Waiting for Response {turn_index} to appear and complete streaming on screen...", flush=True)
-    
     visible_stops = page.locator("button[aria-label*='Stop' i]:visible, button:has(mat-icon:has-text('stop')):visible")
     
-    gen_started = False
     for _ in range(30):
         if await visible_stops.count() > 0:
-            gen_started = True
             break
         await asyncio.sleep(0.5)
-        
-    if gen_started:
-        print(f"   ✓ Generation {turn_index} active (Stop button active in prompt bar).", flush=True)
         
     start_time = asyncio.get_event_loop().time()
     while True:
         is_stop_active = (await visible_stops.count()) > 0
         elapsed = asyncio.get_event_loop().time() - start_time
         if not is_stop_active:
-            print(f"   ✓ Response {turn_index} generation completed after {elapsed:.1f}s.", flush=True)
             break
         if elapsed > timeout_seconds:
-            print(f"   ⚠️ Reached {timeout_seconds}s timeout waiting for Response {turn_index}. Proceeding...", flush=True)
             break
         await asyncio.sleep(1.0)
         
     await asyncio.sleep(1.5)
-    print(f"📖 Reading pause ({read_pause:.1f}s) for Response {turn_index}...", flush=True)
     await asyncio.sleep(read_pause)
-    print(f"✅ Turn {turn_index} response successfully displayed.\n", flush=True)
 
 
 async def activate_canvas_mode(page) -> bool:
-    """Clicks the Tools menu option below the text box and selects Canvas."""
-    print("🎨 Activating Canvas mode via Tools menu...", flush=True)
-    
+    """Clicks Tools menu and selects Canvas."""
     tools_button_selectors = [
         "button[aria-label*='tool' i]:visible",
         "button:visible:has(mat-icon:has-text('tune'))",
@@ -236,96 +233,67 @@ async def activate_canvas_mode(page) -> bool:
         "button:visible:has-text('Add tool')",
         "button[aria-label*='Add' i]:visible",
         "button:visible:has(mat-icon:has-text('add'))",
-        "[data-test-id*='tools-button']:visible",
-        "[class*='tools-button']:visible"
     ]
-    
     for sel in tools_button_selectors:
         btns = page.locator(sel)
-        count = await btns.count()
-        if count > 0:
+        if await btns.count() > 0:
             btn = btns.last
             if await btn.is_visible():
-                print(f"   ✓ Clicking Tools menu button ({sel})...", flush=True)
                 try:
                     await btn.click()
                     await asyncio.sleep(1.5)
                     break
-                except Exception as e:
-                    print(f"   ⚠️ Tools button click note: {e}", flush=True)
+                except Exception:
+                    pass
                     
     try:
         if hasattr(page, "get_by_text"):
             canvas_item = page.get_by_text("Canvas", exact=True).first
             if await canvas_item.is_visible():
-                print("   ✓ Found Canvas menu option via get_by_text. Clicking...", flush=True)
                 await canvas_item.click()
                 await asyncio.sleep(1.5)
-                print("   ✅ Canvas mode successfully activated from Tools menu.", flush=True)
                 return True
-    except Exception as e:
-        print(f"   ⚠️ get_by_text search note: {e}", flush=True)
+    except Exception:
+        pass
         
-    menu_locators = page.locator(
-        ".cdk-overlay-container [role='menuitem']:visible, "
-        ".cdk-overlay-container mat-menu-item:visible, "
-        ".cdk-overlay-container button:visible, "
-        "[role='menu'] [role='menuitem']:visible, "
-        "[role='menu'] button:visible, "
-        ".mat-mdc-menu-item:visible, "
-        ":visible:has-text('Canvas')"
-    )
-    
+    menu_locators = page.locator(".cdk-overlay-container [role='menuitem']:visible, .mat-mdc-menu-item:visible, :visible:has-text('Canvas')")
     try:
         count = await menu_locators.count()
-        if count > 0:
-            for idx in range(count):
-                item = menu_locators.nth(idx)
-                txt = (await item.text_content() or "").strip()
-                if "canvas" in txt.lower():
-                    print(f"   ✓ Found matching option: '{txt}'. Clicking...", flush=True)
-                    await item.click()
-                    await asyncio.sleep(1.5)
-                    print("   ✅ Canvas mode successfully activated from Tools menu.", flush=True)
-                    return True
-    except Exception as e:
-        print(f"   ⚠️ Menu scanning note: {e}", flush=True)
-        
-    print("   ℹ️ Canvas option not found in dropdown menu. Proceeding with presentation prompt...", flush=True)
+        for idx in range(count):
+            item = menu_locators.nth(idx)
+            txt = (await item.text_content() or "").strip()
+            if "canvas" in txt.lower():
+                await item.click()
+                await asyncio.sleep(1.5)
+                return True
+    except Exception:
+        pass
     return False
 
 
 async def showcase_canvas_presentation(page, num_slides: int = 4, slide_pause: float = 2.5, resolution: str = "1080p"):
-    """Ensures Canvas split screen is active and smoothly clicks through presentation slides."""
-    print(f"\n📊 Showcasing Canvas presentation ({num_slides} slides, {slide_pause:.1f}s pause per slide)...", flush=True)
-    
+    """Smoothly navigates through Canvas presentation slides via bottom thumbnail rail."""
     try:
         open_btn = page.locator("button:visible:has-text('Open'), [role='button']:visible:has-text('Open')").first
         if await open_btn.is_visible():
-            print("   ✓ Clicking 'Open' button to expand Canvas split pane...", flush=True)
             await open_btn.click()
             await asyncio.sleep(2.5)
     except Exception:
         pass
 
     res_config = RESOLUTION_CONFIGS.get(resolution, RESOLUTION_CONFIGS["1080p"])
-    w = res_config["width"]
-    scale = w / 1920.0
+    scale = res_config["width"] / 1920.0
     y_pos = 995 * scale
     x_coords = [(749 + idx * 172) * scale for idx in range(num_slides)]
     
-    print(f"   👉 Navigating {num_slides} slides via bottom thumbnail rail (y={y_pos:.0f})...", flush=True)
     for idx, x_pos in enumerate(x_coords):
         try:
             await page.mouse.move(x_pos, y_pos, steps=15)
             await asyncio.sleep(0.4)
             await page.mouse.click(x_pos, y_pos)
-            print(f"   ✓ Selected Slide {idx + 1}. Pausing {slide_pause:.1f}s to showcase content...", flush=True)
-        except Exception as ce:
-            print(f"      (thumbnail click note: {ce})", flush=True)
+        except Exception:
+            pass
         await asyncio.sleep(slide_pause)
-        
-    print(f"   ✅ Finished showcasing {num_slides} presentation slides.\n", flush=True)
 
 
 async def scroll_to_bottom_prompt_box(page):
@@ -342,31 +310,21 @@ async def scroll_to_bottom_prompt_box(page):
 
 async def smooth_mouse_scroll_walkthrough(page, resolution: str = "1080p"):
     """Performs smooth mouse scroll walkthrough of full conversation."""
-    print("\n📜 Performing smooth mouse scroll walkthrough of full conversation on left pane...", flush=True)
-    
     res_config = RESOLUTION_CONFIGS.get(resolution, RESOLUTION_CONFIGS["1080p"])
-    width = res_config["width"]
-    height = res_config["height"]
-    left_x = int(width * 0.25)
-    center_y = int(height * 0.5)
+    left_x = int(res_config["width"] * 0.25)
+    center_y = int(res_config["height"] * 0.5)
     
     await page.mouse.move(left_x, center_y)
     await asyncio.sleep(0.5)
     
-    print(f"   ⬆️ Smoothly scrolling left pane (x={left_x}, y={center_y}) up to the top...", flush=True)
     for _ in range(35):
         await page.mouse.wheel(0, -180)
         await asyncio.sleep(0.05)
-        
-    print("   ⏸️ Pausing at top (3.0s)...", flush=True)
     await asyncio.sleep(3.0)
     
-    print(f"   ⬇️ Smoothly scrolling left pane down to the bottom...", flush=True)
     for _ in range(35):
         await page.mouse.wheel(0, 180)
         await asyncio.sleep(0.05)
-        
-    print("   ⏸️ Pausing at bottom (3.0s)...", flush=True)
     await asyncio.sleep(3.0)
 
 
@@ -439,7 +397,7 @@ def render_sidebar(draw: ImageDraw.ImageDraw, agent_display_name: str, domain: s
 
 
 def render_agent_directory_screen(agent_name: str, display_name: str, domain: str, description: str, search_query: str = "", highlight_target: bool = False) -> Image.Image:
-    """Renders the exact Gemini Enterprise Agent Directory."""
+    """Renders the exact Gemini Enterprise Agent Directory matching reference."""
     img = Image.new("RGB", (1920, 1080), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
 
@@ -458,6 +416,7 @@ def render_agent_directory_screen(agent_name: str, display_name: str, domain: st
 
     draw.text((330, 175), "Made by Google", fill=(68, 71, 70), font=get_font(14, bold=True))
     
+    # Deep Research Card
     draw.rounded_rectangle([(330, 205), (680, 335)], radius=12, fill=(240, 244, 249), outline=(218, 220, 224), width=1)
     draw.ellipse([(350, 225), (385, 260)], fill=(0, 188, 212))
     draw.text((358, 232), "🌐", font=get_font(16))
@@ -466,6 +425,7 @@ def render_agent_directory_screen(agent_name: str, display_name: str, domain: st
     draw.text((350, 298), "Get in-depth answers grounded in web research.", fill=(68, 71, 70), font=get_font(12, bold=False))
     draw.text((350, 316), "By Google", fill=(117, 117, 117), font=get_font(11, bold=False))
 
+    # Gemini Notebook Card
     draw.rounded_rectangle([(710, 205), (1060, 335)], radius=12, fill=(240, 244, 249), outline=(218, 220, 224), width=1)
     draw.ellipse([(730, 225), (765, 260)], fill=(30, 41, 59))
     draw.text((738, 232), "✨", font=get_font(16))
@@ -561,8 +521,106 @@ def render_chat_base(agent_display_name: str, domain: str) -> tuple[Image.Image,
     return img, draw
 
 
+def render_canvas_split_screen(agent_display_name: str, domain: str, slide_index: int, slide_data: list) -> Image.Image:
+    """Renders the exact Gemini Enterprise Canvas split-screen slide-over view."""
+    img = Image.new("RGB", (1920, 1080), color=(255, 255, 255))
+    draw = ImageDraw.Draw(img)
+
+    # 1. Left Sidebar (x=0..260)
+    draw.rectangle([(0, 0), (260, 1080)], fill=(248, 249, 250))
+    draw.line([(260, 0), (260, 1080)], fill=(227, 227, 227), width=1)
+    draw_gemini_spark(draw, 20, 22, size=20)
+    draw.text((48, 20), "Cymbal", fill=(31, 31, 31), font=get_font(16, bold=True))
+    draw.text((48, 38), "Telco", fill=(217, 48, 37), font=get_font(13, bold=True))
+    draw.rounded_rectangle([(14, 75), (246, 110)], radius=18, fill=(233, 238, 246))
+    draw.text((32, 85), "✏️  New chat", fill=(31, 31, 31), font=get_font(14, bold=True))
+    draw.text((20, 135), "🤖  Agents", fill=(26, 115, 232), font=get_font(13, bold=True))
+    draw.text((20, 170), "Recent", fill=(100, 100, 100), font=get_font(11, bold=True))
+    draw.text((20, 195), "Q3 Network SLA report", fill=(68, 71, 70), font=get_font(12))
+    draw.text((20, 225), "5G Coverage Metro", fill=(68, 71, 70), font=get_font(12))
+
+    # 2. Left Chat Pane (x=260..960)
+    draw.rectangle([(260, 0), (960, 1080)], fill=(255, 255, 255))
+    draw.line([(960, 0), (960, 1080)], fill=(218, 220, 224), width=1)
+    
+    draw.rectangle([(260, 0), (960, 60)], fill=(255, 255, 255))
+    draw.line([(260, 60), (960, 60)], fill=(227, 227, 227), width=1)
+    draw.rounded_rectangle([(280, 12), (600, 48)], radius=18, fill=(240, 244, 249))
+    draw.ellipse([(292, 25), (300, 33)], fill=(24, 128, 56))
+    draw.text((310, 20), f"@{agent_display_name}", fill=(31, 31, 31), font=get_font(13, bold=True))
+
+    draw.rounded_rectangle([(550, 80), (930, 125)], radius=14, fill=(233, 238, 246))
+    draw.text((565, 94), "Create a 4-slide executive presentation...", fill=(31, 31, 31), font=get_font(13, bold=True))
+
+    draw_gemini_spark(draw, 280, 145, size=20)
+    draw.rounded_rectangle([(310, 140), (930, 340)], radius=12, fill=(248, 249, 250), outline=(227, 227, 227))
+    draw.text((325, 155), f"✨ Generated Canvas Deck ({agent_display_name}):", fill=(26, 115, 232), font=get_font(14, bold=True))
+    draw.text((325, 185), "• Slide 1: 2026 Executive Summary & KPIs", fill=(68, 71, 70), font=get_font(12))
+    draw.text((325, 210), "• Slide 2: Regional Cluster SLA Performance", fill=(68, 71, 70), font=get_font(12))
+    draw.text((325, 235), "• Slide 3: TM Forum ODA / GSMA Standards", fill=(68, 71, 70), font=get_font(12))
+    draw.text((325, 260), "• Slide 4: Strategic Recommendations & ROI", fill=(68, 71, 70), font=get_font(12))
+    draw.text((325, 295), "👉 Interactive Canvas presentation active on right pane.", fill=(24, 128, 56), font=get_font(12, bold=True))
+
+    draw.rounded_rectangle([(280, 990), (940, 1045)], radius=20, fill=(248, 249, 250), outline=(218, 220, 224))
+    draw.text((300, 1008), "Ask anything or modify slides...", fill=(120, 120, 120), font=get_font(13))
+
+    # 3. Right Canvas Slide-Over Pane (x=960..1920)
+    draw.rectangle([(960, 0), (1920, 1080)], fill=(240, 244, 249))
+
+    # Canvas Top Bar
+    draw.rectangle([(960, 0), (1920, 60)], fill=(255, 255, 255))
+    draw.line([(960, 60), (1920, 60)], fill=(227, 227, 227), width=1)
+    draw.text((990, 18), f"✨ Gemini Canvas  |  {agent_display_name} — Executive Briefing", fill=(31, 31, 31), font=get_font(16, bold=True))
+    draw.rounded_rectangle([(1680, 14), (1800, 46)], radius=16, fill=(233, 238, 246))
+    draw.text((1695, 22), "Export PPTX", fill=(26, 115, 232), font=get_font(12, bold=True))
+    draw.text((1840, 18), "✕", fill=(100, 100, 100), font=get_font(18, bold=True))
+
+    # Main Slide Presentation Stage: x=1010..1870, y=90..870
+    slide_title, bullets, kpis = slide_data[slide_index]
+    draw.rounded_rectangle([(1010, 90), (1870, 870)], radius=16, fill=(15, 23, 42), outline=(51, 65, 85), width=2)
+    
+    draw.rounded_rectangle([(1010, 90), (1870, 170)], radius=16, fill=(30, 41, 59))
+    draw.text((1050, 115), f"Slide {slide_index + 1} of 4: {slide_title}", fill=(56, 189, 248), font=get_font(22, bold=True))
+    draw.text((1720, 120), "Cymbal Telco AI", fill=(148, 163, 184), font=get_font(14, bold=False))
+
+    if kpis:
+        kpi_x = 1050
+        for k_label, k_val in kpis:
+            draw.rounded_rectangle([(kpi_x, 200), (kpi_x + 240, 290)], radius=10, fill=(30, 41, 59), outline=(51, 65, 85))
+            draw.text((kpi_x + 20, 215), k_label, fill=(148, 163, 184), font=get_font(13))
+            draw.text((kpi_x + 20, 242), k_val, fill=(74, 222, 128), font=get_font(20, bold=True))
+            kpi_x += 270
+
+    b_y = 330 if kpis else 220
+    for bullet in bullets:
+        draw.rounded_rectangle([(1050, b_y), (1830, b_y + 85)], radius=10, fill=(30, 41, 59), outline=(51, 65, 85))
+        draw.text((1080, b_y + 20), "• " + bullet[0], fill=(248, 250, 252), font=get_font(16, bold=True))
+        if len(bullet) > 1:
+            draw.text((1098, b_y + 48), bullet[1], fill=(203, 213, 225), font=get_font(14))
+        b_y += 105
+
+    # Bottom Slide Thumbnail Rail: x=1010..1870, y=900..1050
+    draw.rounded_rectangle([(1010, 900), (1870, 1050)], radius=12, fill=(255, 255, 255), outline=(218, 220, 224))
+    
+    thumb_x = 1040
+    for idx in range(4):
+        is_active = (idx == slide_index)
+        border_col = (26, 115, 232) if is_active else (218, 220, 224)
+        bg_col = (232, 240, 254) if is_active else (248, 249, 250)
+        draw.rounded_rectangle([(thumb_x, 915), (thumb_x + 180, 1035)], radius=8, fill=bg_col, outline=border_col, width=2 if is_active else 1)
+        
+        draw.rounded_rectangle([(thumb_x + 10, 925), (thumb_x + 170, 990)], radius=4, fill=(15, 23, 42))
+        draw.text((thumb_x + 20, 935), f"Slide {idx + 1}", fill=(56, 189, 248), font=get_font(11, bold=True))
+        draw.text((thumb_x + 20, 955), slide_data[idx][0][:14] + "..", fill=(148, 163, 184), font=get_font(9))
+        
+        draw.text((thumb_x + 35, 1005), f"Slide {idx + 1} of 4", fill=(26, 115, 232) if is_active else (100, 100, 100), font=get_font(12, bold=is_active))
+        thumb_x += 205
+
+    return img
+
+
 def render_agent_walkthrough_video(agent_name: str, domain: str, prompts: list[str], output_path: Path) -> bool:
-    """Renders authentic 1080p Gemini Enterprise UI walkthrough video for Telco Enterprise Agents."""
+    """Renders authentic 1080p Gemini Enterprise UI walkthrough video with Canvas split-screen slide-over."""
     registry_file = REPO_ROOT / "_shared" / "table_registry.yaml"
     display_name = agent_name.replace("_", " ").title()
     description = f"Telecommunications operations intelligence for {display_name}."
@@ -585,6 +643,29 @@ def render_agent_walkthrough_video(agent_name: str, domain: str, prompts: list[s
     p1 = prompts[0] if len(prompts) > 0 else f"What are our primary operational metrics for {clean_name.lower()} in 2026 YTD?"
     p2 = prompts[1] if len(prompts) > 1 else f"What are current telecom industry benchmarks and GSMA/ODA standards for {clean_name.lower()}?"
     p3 = prompts[2] if len(prompts) > 2 else f"Render a chart comparing monthly performance metrics for {clean_name.lower()} vs annual targets."
+
+    slide_data = [
+        ("Executive Strategy & Overview", [
+            ("94.8% Operational SLA Compliance", "Exceeded target benchmark by +2.8% across Metro operating clusters."),
+            ("$214,000 Quarterly Cost Avoidance", "Autonomous BigQuery analytics deflection driving direct bottom-line ROI."),
+            ("Enterprise Autonomous Architecture", "Seamless agent transfer between NetOps, CRM, and DaaS CAMARA gateways.")
+        ], [("SLA Compliance", "94.8%"), ("Quarterly ROI", "$214K"), ("Resolution Speed", "+35%")]),
+        ("Regional Cluster Performance", [
+            ("Metro North Primary: 96.2% Uptime", "Zero major severity outages recorded across Q3 2026 reporting window."),
+            ("Metro South Secondary: 95.1% SLA", "Proactive predictive telemetry prevented 14 cascading backhaul alarms."),
+            ("West Region Edge: 93.8% Efficiency", "FWA & Fiber activation provisioning latency reduced by 4.2 hours.")
+        ], [("Metro North", "96.2%"), ("Metro South", "95.1%"), ("West Edge", "93.8%")]),
+        ("Industry Standards & Grounding", [
+            ("TM Forum Open Digital Architecture", "Conforms to TM Forum ODA Open API standards for autonomous CSP workflows."),
+            ("GSMA Open Gateway Certification", "Integrated CAMARA APIs for network QoS and real-time fraud mitigation."),
+            ("Top-Quartile Telecom Ranking", "Positioned in top 10% of regional CSP efficiency and digital CSAT.")
+        ], [("TM Forum ODA", "Certified"), ("GSMA CAMARA", "Integrated"), ("Industry Ranking", "Top 10%")]),
+        ("Strategic Action Plan & Recommendations", [
+            ("Scale Automated BigQuery Triggers", "Deploy continuous anomaly detection across remaining regional clusters."),
+            ("Expand Network Slice CAMARA APIs", "Monetize low-latency gaming & remote enterprise QoS packages."),
+            ("Target $350K Q4 Cost Optimization", "Expand conversational deflection across smart IVR and billing exception desks.")
+        ], [("Target ROI", "$350K"), ("Q4 Milestone", "100% Clusters"), ("CSAT Goal", "> 96.0%")])
+    ]
 
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
@@ -681,41 +762,21 @@ def render_agent_walkthrough_video(agent_name: str, domain: str, prompts: list[s
         d3.text((1205, 610), "Artifact Status: Stored in session storage", fill=(26, 115, 232), font=get_font(15, bold=True))
         img_t3.save(tmp_path / "f06_t3.png")
 
-        # Frame 7: Turn 4 (Canvas Mode Presentation) (10.0s)
-        img_t4, d4 = render_chat_base(clean_name, domain)
-        d4.rounded_rectangle([(1020, 95), (1860, 155)], radius=18, fill=(233, 238, 246))
-        d4.text((1045, 115), f"Create a 4-slide executive presentation summarizing the {clean_name} analysis.", fill=(31, 31, 31), font=get_font(15, bold=True))
+        # Frame 7a: Turn 4 Canvas Split-Screen - Slide 1 (4.0s)
+        img_c1 = render_canvas_split_screen(clean_name, domain, 0, slide_data)
+        img_c1.save(tmp_path / "f07a_c1.png")
 
-        draw_gemini_spark(d4, 320, 180, size=24)
-        d4.rounded_rectangle([(360, 175), (1860, 950)], radius=16, fill=(248, 249, 250), outline=(218, 220, 224), width=1)
-        d4.rounded_rectangle([(360, 175), (1860, 235)], radius=16, fill=(233, 238, 246))
-        d4.text((385, 192), f"✨ Gemini Enterprise Canvas Presentation — {clean_name} Strategy Brief", fill=(31, 31, 31), font=get_font(18, bold=True))
-        d4.text((1600, 195), "4 Slides Generated  |  Export PPTX", fill=(26, 115, 232), font=get_font(13, bold=True))
+        # Frame 7b: Turn 4 Canvas Split-Screen - Slide 2 (4.0s)
+        img_c2 = render_canvas_split_screen(clean_name, domain, 1, slide_data)
+        img_c2.save(tmp_path / "f07b_c2.png")
 
-        slides = [
-            ("Slide 1: Executive Summary", [f"• 94.8% Operational Target Achievement across network clusters.", f"• $214K quarterly cost savings generated through automated AI.", f"• Primary growth and operational catalyst for {clean_name}."]),
-            ("Slide 2: Regional Performance", ["• Metro North: 96.2% compliance index.", "• Metro South: 95.1% operational uptime.", "• West Region: 93.8% target achievement."]),
-            ("Slide 3: Industry Benchmarks", ["• 35% reduction in MTTR vs legacy manual workflows.", "• 22% improvement in overall customer satisfaction (CSAT).", "• Exceeds TM Forum ODA and GSMA tier-1 standards."]),
-            ("Slide 4: Strategic Recommendations", ["• Scale automated BigQuery triggers across additional clusters.", "• Integrate real-time CAMARA network telemetry.", "• Expand quarterly cost optimization target to $350K."])
-        ]
+        # Frame 7c: Turn 4 Canvas Split-Screen - Slide 3 (4.0s)
+        img_c3 = render_canvas_split_screen(clean_name, domain, 2, slide_data)
+        img_c3.save(tmp_path / "f07c_c3.png")
 
-        boxes = [
-            ((385, 260), (1085, 570)),
-            ((1125, 260), (1835, 570)),
-            ((385, 600), (1085, 910)),
-            ((1125, 600), (1835, 910))
-        ]
-
-        for (stitle, sbullets), (c1, c2) in zip(slides, boxes):
-            d4.rounded_rectangle([c1, c2], radius=12, fill=(255, 255, 255), outline=(227, 227, 227), width=1)
-            d4.rounded_rectangle([(c1[0], c1[1]), (c2[0], c1[1] + 45)], radius=12, fill=(240, 244, 249))
-            d4.text((c1[0] + 18, c1[1] + 10), stitle, fill=(31, 31, 31), font=get_font(16, bold=True))
-            y_b = c1[1] + 65
-            for bullet in sbullets:
-                d4.text((c1[0] + 18, y_b), bullet, fill=(68, 71, 70), font=get_font(14, bold=False))
-                y_b += 36
-
-        img_t4.save(tmp_path / "f07_t4.png")
+        # Frame 7d: Turn 4 Canvas Split-Screen - Slide 4 (4.0s)
+        img_c4 = render_canvas_split_screen(clean_name, domain, 3, slide_data)
+        img_c4.save(tmp_path / "f07d_c4.png")
 
         # Frame 8: Outro & Session Persistence (4.0s)
         img_out, dout = render_chat_base(clean_name, domain)
@@ -724,7 +785,7 @@ def render_agent_walkthrough_video(agent_name: str, domain: str, prompts: list[s
         dout.text((590, 420), "• Turn 1: BigQuery Conversational Analytics KPI Breakdown (Completed)", fill=(68, 71, 70), font=get_font(16, bold=False))
         dout.text((590, 460), "• Turn 2: Google Search Grounding with TM Forum ODA & GSMA (Completed)", fill=(68, 71, 70), font=get_font(16, bold=False))
         dout.text((590, 500), "• Turn 3: Real-Time Matplotlib Visual Analytics & Anomaly Trend (Completed)", fill=(68, 71, 70), font=get_font(16, bold=False))
-        dout.text((590, 540), "• Turn 4: 4-Slide Executive Canvas Strategy Presentation (Generated)", fill=(68, 71, 70), font=get_font(16, bold=False))
+        dout.text((590, 540), "• Turn 4: 4-Slide Executive Canvas Slide-Over Deck (Presented)", fill=(68, 71, 70), font=get_font(16, bold=False))
         dout.text((590, 580), "Session State: Persisted to Vertex AI Agent Engine & Cloud Spanner Memory", fill=(26, 115, 232), font=get_font(15, bold=True))
         img_out.save(tmp_path / "f08_out.png")
 
@@ -737,9 +798,12 @@ def render_agent_walkthrough_video(agent_name: str, domain: str, prompts: list[s
             "-loop", "1", "-t", "8", "-i", str(tmp_path / "f04_t1.png"),
             "-loop", "1", "-t", "8", "-i", str(tmp_path / "f05_t2.png"),
             "-loop", "1", "-t", "8", "-i", str(tmp_path / "f06_t3.png"),
-            "-loop", "1", "-t", "10", "-i", str(tmp_path / "f07_t4.png"),
+            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07a_c1.png"),
+            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07b_c2.png"),
+            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07c_c3.png"),
+            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07d_c4.png"),
             "-loop", "1", "-t", "4", "-i", str(tmp_path / "f08_out.png"),
-            "-filter_complex", "[0:v][1:v][2:v][3:v][4:v][5:v][6:v][7:v]concat=n=8:v=1:a=0[outv]",
+            "-filter_complex", "[0:v][1:v][2:v][3:v][4:v][5:v][6:v][7:v][8:v][9:v][10:v]concat=n=11:v=1:a=0[outv]",
             "-map", "[outv]",
             "-c:v", "libx264",
             "-preset", "ultrafast",
@@ -759,7 +823,7 @@ def render_agent_walkthrough_video(agent_name: str, domain: str, prompts: list[s
             return False
 
         size_mb = output_path.stat().st_size / (1024 * 1024)
-        print(f"🎬 Generated authentic 1080p demo video ({size_mb:.2f} MB, duration 0:46): {output_path}", flush=True)
+        print(f"🎬 Generated authentic 1080p demo video ({size_mb:.2f} MB, duration 0:52): {output_path}", flush=True)
         try:
             generate_html_showcase(agent_name=agent_name, domain=domain, output_dir=output_path.parent.parent)
         except Exception as he:
@@ -1023,7 +1087,7 @@ def main():
         return
 
     if args.render or not args.url:
-        print(f"🚀 Rendering crystal-clear 1080p demo videos (seamless ~46s duration, CRF 18) for {len(agents_to_record)} agents...", flush=True)
+        print(f"🚀 Rendering crystal-clear 1080p demo videos (seamless ~52s duration with Canvas split-screen slide-over) for {len(agents_to_record)} agents...", flush=True)
         items = [(aname, dom, p_list, args.output_dir) for (aname, dom, p_list) in agents_to_record]
         
         if len(items) > 1:
