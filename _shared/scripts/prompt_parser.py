@@ -1,4 +1,4 @@
-"""Prompt Parser and Domain Resolver for Retail Enterprise Agents.
+"""Prompt Parser and Domain Resolver for Telco Enterprise Agents.
 
 Extracts 3 curated prompts from an agent's README.md (from Sample Q&A or Example Questions).
 """
@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 
 def resolve_agent_domain(agent_name: str, repo_root: Path | None = None) -> str:
-    """Resolves the retail domain name for a given agent name."""
+    """Resolves the telco domain name for a given agent name."""
     if repo_root is None:
         repo_root = Path(__file__).resolve().parent.parent.parent
     
