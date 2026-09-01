@@ -6,19 +6,27 @@ Supports:
   1. Live Browser Automation: Automates opening Gemini Enterprise in Google Chrome via Playwright,
      searching the Agents directory, selecting the agent card, executing the 3 curated prompts
      from README.md sequentially, generating a 4-slide Canvas presentation, and recording MP4.
-  2. High-Resolution Offline Rendering: When GEMINI_ENTERPRISE_URL is not set (or --render is used),
-     renders crystal-clear 1080p 25fps Gemini Enterprise UI walkthrough demo videos matching the exact
-     interface layout:
-     - Google Gemini Sidebar (Sparkle Logo, New chat, Agents, Recent chats)
-     - Agent Directory Search (Animated typing)
-     - "From your organization" Card matching reference
+  2. High-Resolution Browser Simulator & Video Recorder:
+     Renders and records crystal-clear 1080p Gemini Enterprise UI walkthrough demo videos matching
+     the exact interface layout, typing animations, and visual feel of Gemini Enterprise:
+     - Google Gemini Sidebar (Cymbal Telco Sparkle Logo, New chat, Agents, Pinned agents, Recent chats, Profile)
+     - Agent Directory Search (Character-by-character animated typing & instant card filtering)
+     - "From your organization" Card click with mouse glide and ripple
+     - Dedicated Agent View (Avatar, Title, Description, Prompt bar)
      - Interactive Multi-Turn Chat:
-       • Turn 1 (Data Insights): BigQuery Conversational Analytics & SLA Table
-       • Turn 2 (Market Grounding): Grounding with Google Search & TM Forum ODA / GSMA
-       • Turn 3 (Visual Analytics): Inline Matplotlib chart visualization artifact
-       • Turn 4 (Gemini Enterprise Canvas): Split-screen slide-over presenting a 4-slide executive
-         briefing deck with slide-by-slide navigation!
-       • Outro: Session memory persistence & multi-turn completion review
+       • Turn 1 (Data Insights): Realistic typing in prompt box, BigQuery CA tool execution spinner,
+         word-by-word streaming response, SLA compliance table, and quarterly ROI metric.
+       • Turn 2 (Market Grounding): Realistic typing in prompt box, Google Search Grounding spinner,
+         word-by-word streaming response with TM Forum ODA & GSMA Open Gateway standards, and Sources pill.
+       • Turn 3 (Visual Analytics): Realistic typing in prompt box, Matplotlib tool spinner,
+         word-by-word streaming response with real embedded sample_chart.png visual artifact.
+       • Turn 4 (Executive Slide Synthesis & Copy): Realistic typing in prompt box, 4-slide outline text,
+         mouse cursor gliding to Copy button with tooltip feedback, mouse clicking New Chat on sidebar.
+       • Canvas Mode Activation: Fresh chat, mouse clicking Tools -> Canvas mode ([+ Canvas] pill),
+         pasting slide synthesis prompt, and submitting to Slidegen.
+       • Gemini Enterprise Canvas Split-Screen Presentation: 50/50 split screen, dark slate slide deck,
+         KPI cards, and bottom thumbnail rail navigation (Slide 1 -> Slide 2 -> Slide 3 -> Slide 4).
+       • Smooth Mouse Scroll Walkthrough: Left pane smooth scroll to top, pause, and scroll to bottom.
 
 Usage:
     .venv/bin/python _shared/scripts/record_agent_demo.py --name family_plan_upsell
@@ -28,7 +36,10 @@ Usage:
 
 import argparse
 import asyncio
+import base64
 from concurrent.futures import ProcessPoolExecutor
+import html
+import json
 import os
 from pathlib import Path
 import shutil
@@ -37,7 +48,6 @@ import sys
 import tempfile
 import time
 from dotenv import load_dotenv
-from PIL import Image, ImageDraw, ImageFont
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -78,28 +88,12 @@ DOMAIN_TITLES = {
 }
 
 
-def get_font(size: int, bold: bool = False):
-    """Loads a clean TrueType font."""
-    font_candidates = [
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-    ]
-    for p in font_candidates:
-        if os.path.exists(p):
-            try:
-                return ImageFont.truetype(p, size)
-            except Exception:
-                pass
-    return ImageFont.load_default()
-
-
 def enforce_100_percent_zoom(user_data_dir: Path | None = None):
     """Sanitizes synced Chrome preferences so vertexaisearch zoom is strictly 100% (0.0)."""
     target_dir = user_data_dir or DEFAULT_CHROME_USER_DATA_DIR
     pref_path = target_dir / DEFAULT_CHROME_PROFILE_DIR / "Preferences"
     if pref_path.exists():
         try:
-            import json
             data = json.loads(pref_path.read_text(encoding="utf-8"))
             partition = data.get("partition", {})
             per_host = partition.get("per_host_zoom_levels", {})
@@ -149,7 +143,7 @@ def sync_chrome_profile(user_data_dir: Path | None = None):
     enforce_100_percent_zoom(target_dir)
 
 
-def get_agent_display_name(agent_name: str, domain: str = "") -> str:
+def get_agent_display_name(agent_name: str, domain: str) -> str:
     """Gets human-readable display name from table_registry.yaml or root_agent.yaml."""
     registry_file = REPO_ROOT / "_shared" / "table_registry.yaml"
     if registry_file.exists():
@@ -161,22 +155,54 @@ def get_agent_display_name(agent_name: str, domain: str = "") -> str:
         except Exception:
             pass
 
-    if domain:
-        root_agent_file = REPO_ROOT / "domains" / domain / "agents" / agent_name / "root_agent.yaml"
-        if root_agent_file.exists():
-            try:
-                data = yaml.safe_load(root_agent_file.read_text(encoding="utf-8"))
-                if "display_name" in data:
-                    return data["display_name"].strip()
-            except Exception:
-                pass
+    root_agent_file = REPO_ROOT / "domains" / domain / "agents" / agent_name / "root_agent.yaml"
+    if root_agent_file.exists():
+        try:
+            data = yaml.safe_load(root_agent_file.read_text(encoding="utf-8"))
+            if "display_name" in data:
+                return data["display_name"].strip()
+        except Exception:
+            pass
     return agent_name.replace("_", " ").title()
+
+
+def get_agent_description(agent_name: str, domain: str) -> str:
+    """Gets agent description from table_registry.yaml or root_agent.yaml."""
+    registry_file = REPO_ROOT / "_shared" / "table_registry.yaml"
+    if registry_file.exists():
+        try:
+            data = yaml.safe_load(registry_file.read_text(encoding="utf-8"))
+            agent_entry = data.get("agents", {}).get(agent_name, {})
+            if "description" in agent_entry:
+                return agent_entry["description"].strip()
+        except Exception:
+            pass
+
+    root_agent_file = REPO_ROOT / "domains" / domain / "agents" / agent_name / "root_agent.yaml"
+    if root_agent_file.exists():
+        try:
+            data = yaml.safe_load(root_agent_file.read_text(encoding="utf-8"))
+            if "description" in data:
+                return data["description"].strip()
+        except Exception:
+            pass
+    return f"Autonomous telco operational intelligence agent for {agent_name.replace('_', ' ')}."
+
+
+def get_sample_chart_base64(agent_name: str, domain: str) -> str:
+    """Reads the agent's sample_chart.png as base64 string."""
+    chart_path = REPO_ROOT / "domains" / domain / "agents" / agent_name / "sample_chart.png"
+    if chart_path.exists():
+        try:
+            return base64.b64encode(chart_path.read_bytes()).decode("utf-8")
+        except Exception:
+            pass
+    return ""
 
 
 def convert_webm_to_mp4(webm_path: Path, mp4_path: Path) -> bool:
     """Converts recorded webm video to high-quality universal MP4 using ffmpeg."""
     try:
-        print(f"🔄 Converting {webm_path.name} to MP4 format...", flush=True)
         cmd = [
             "ffmpeg", "-y",
             "-i", str(webm_path),
@@ -200,12 +226,13 @@ async def wait_for_response_completion(
     timeout_seconds: int = 180,
     read_pause: float = 6.0
 ):
-    """Waits for streaming response to finish rendering."""
+    """Waits for the streaming response of turn_index to fully render."""
     print(f"⏳ Waiting for Response {turn_index} to appear and complete streaming on screen...", flush=True)
     visible_stops = page.locator("button[aria-label*='Stop' i]:visible, button:has(mat-icon:has-text('stop')):visible")
-    
+    gen_started = False
     for _ in range(30):
         if await visible_stops.count() > 0:
+            gen_started = True
             break
         await asyncio.sleep(0.5)
         
@@ -224,16 +251,17 @@ async def wait_for_response_completion(
 
 
 async def activate_canvas_mode(page) -> bool:
-    """Clicks Tools menu and selects Canvas."""
+    """Clicks the Tools menu option below the text box and selects Canvas."""
     tools_button_selectors = [
         "button[aria-label*='tool' i]:visible",
         "button:visible:has(mat-icon:has-text('tune'))",
-        "button:visible:has(mat-icon:has-text('handyman'))",
         "button:visible:has-text('Tools')",
         "button:visible:has-text('Add tool')",
         "button[aria-label*='Add' i]:visible",
-        "button:visible:has(mat-icon:has-text('add'))",
+        "[data-test-id*='tools-button']:visible",
+        "[class*='tools-button']:visible"
     ]
+    
     for sel in tools_button_selectors:
         btns = page.locator(sel)
         if await btns.count() > 0:
@@ -256,23 +284,32 @@ async def activate_canvas_mode(page) -> bool:
     except Exception:
         pass
         
-    menu_locators = page.locator(".cdk-overlay-container [role='menuitem']:visible, .mat-mdc-menu-item:visible, :visible:has-text('Canvas')")
+    menu_locators = page.locator(
+        ".cdk-overlay-container [role='menuitem']:visible, "
+        ".cdk-overlay-container mat-menu-item:visible, "
+        ".cdk-overlay-container button:visible, "
+        "[role='menu'] [role='menuitem']:visible, "
+        ":visible:has-text('Canvas')"
+    )
+    
     try:
         count = await menu_locators.count()
-        for idx in range(count):
-            item = menu_locators.nth(idx)
-            txt = (await item.text_content() or "").strip()
-            if "canvas" in txt.lower():
-                await item.click()
-                await asyncio.sleep(1.5)
-                return True
+        if count > 0:
+            for idx in range(count):
+                item = menu_locators.nth(idx)
+                txt = (await item.text_content() or "").strip()
+                if "canvas" in txt.lower():
+                    await item.click()
+                    await asyncio.sleep(1.5)
+                    return True
     except Exception:
         pass
+        
     return False
 
 
 async def showcase_canvas_presentation(page, num_slides: int = 4, slide_pause: float = 2.5, resolution: str = "1080p"):
-    """Smoothly navigates through Canvas presentation slides via bottom thumbnail rail."""
+    """Smoothly clicks through presentation slides via the bottom thumbnail rail."""
     try:
         open_btn = page.locator("button:visible:has-text('Open'), [role='button']:visible:has-text('Open')").first
         if await open_btn.is_visible():
@@ -282,7 +319,8 @@ async def showcase_canvas_presentation(page, num_slides: int = 4, slide_pause: f
         pass
 
     res_config = RESOLUTION_CONFIGS.get(resolution, RESOLUTION_CONFIGS["1080p"])
-    scale = res_config["width"] / 1920.0
+    w = res_config["width"]
+    scale = w / 1920.0
     y_pos = 995 * scale
     x_coords = [(749 + idx * 172) * scale for idx in range(num_slides)]
     
@@ -297,7 +335,7 @@ async def showcase_canvas_presentation(page, num_slides: int = 4, slide_pause: f
 
 
 async def scroll_to_bottom_prompt_box(page):
-    """Smoothly scrolls down to ensure prompt box is fully visible in viewport."""
+    """Smoothly scrolls down to ensure prompt box is fully visible."""
     try:
         await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         for _ in range(8):
@@ -309,10 +347,12 @@ async def scroll_to_bottom_prompt_box(page):
 
 
 async def smooth_mouse_scroll_walkthrough(page, resolution: str = "1080p"):
-    """Performs smooth mouse scroll walkthrough of full conversation."""
+    """Performs smooth mouse scroll walkthrough on left conversation pane."""
     res_config = RESOLUTION_CONFIGS.get(resolution, RESOLUTION_CONFIGS["1080p"])
-    left_x = int(res_config["width"] * 0.25)
-    center_y = int(res_config["height"] * 0.5)
+    width = res_config["width"]
+    height = res_config["height"]
+    left_x = int(width * 0.25)
+    center_y = int(height * 0.5)
     
     await page.mouse.move(left_x, center_y)
     await asyncio.sleep(0.5)
@@ -320,521 +360,1722 @@ async def smooth_mouse_scroll_walkthrough(page, resolution: str = "1080p"):
     for _ in range(35):
         await page.mouse.wheel(0, -180)
         await asyncio.sleep(0.05)
-    await asyncio.sleep(3.0)
+        
+    await asyncio.sleep(2.0)
     
     for _ in range(35):
         await page.mouse.wheel(0, 180)
         await asyncio.sleep(0.05)
-    await asyncio.sleep(3.0)
+        
+    await asyncio.sleep(2.0)
 
 
-def draw_gemini_spark(draw: ImageDraw.ImageDraw, x: int, y: int, size: int = 24):
-    """Draws the iconic Gemini 4-pointed sparkle icon in Google blue."""
-    cx, cy = x + size // 2, y + size // 2
-    r = size // 2
-    pts = [
-        (cx, cy - r), (cx + r // 4, cy - r // 4),
-        (cx + r, cy), (cx + r // 4, cy + r // 4),
-        (cx, cy + r), (cx - r // 4, cy + r // 4),
-        (cx - r, cy), (cx - r // 4, cy - r // 4)
-    ]
-    draw.polygon(pts, fill=(26, 115, 232))
-
-
-def render_sidebar(draw: ImageDraw.ImageDraw, agent_display_name: str, domain: str, active_tab: str = "agents"):
-    """Renders the left navigation sidebar matching Gemini Enterprise layout."""
-    draw.rectangle([(0, 0), (280, 1080)], fill=(248, 249, 250))
-    draw.line([(280, 0), (280, 1080)], fill=(227, 227, 227), width=1)
-
-    draw_gemini_spark(draw, 24, 22, size=22)
-    draw.text((54, 20), "Cymbal", fill=(31, 31, 31), font=get_font(18, bold=True))
-    draw.text((54, 38), "Telco", fill=(217, 48, 37), font=get_font(14, bold=True))
-
-    draw.rectangle([(236, 24), (256, 44)], outline=(180, 180, 180), width=1)
-    draw.line([(243, 24), (243, 44)], fill=(180, 180, 180), width=1)
-
-    draw.rounded_rectangle([(16, 75), (264, 115)], radius=20, fill=(233, 238, 246))
-    draw.text((40, 86), "✏️  New chat", fill=(31, 31, 31), font=get_font(15, bold=True))
-
-    draw.text((24, 140), "🔍  Search", fill=(68, 71, 70), font=get_font(14, bold=False))
-    draw.text((24, 175), "📚  Library", fill=(68, 71, 70), font=get_font(14, bold=False))
-
-    bg_agents = (232, 240, 254) if active_tab == "agents" else (248, 249, 250)
-    draw.rounded_rectangle([(16, 215), (264, 250)], radius=8, fill=bg_agents)
-    draw.text((24, 225), "🤖  Agents", fill=(26, 115, 232) if active_tab == "agents" else (68, 71, 70), font=get_font(14, bold=True))
-    draw.text((250, 225), "›", fill=(26, 115, 232) if active_tab == "agents" else (100, 100, 100), font=get_font(14, bold=True))
-
-    draw.text((36, 265), "📓  Gemini Notebook", fill=(68, 71, 70), font=get_font(13, bold=False))
-    draw.text((245, 265), "📌", fill=(150, 150, 150), font=get_font(12, bold=False))
+def generate_simulator_html(agent_name: str, domain: str, prompts: list[str]) -> str:
+    """Builds a complete, self-contained, interactive Gemini Enterprise web UI simulation."""
+    display_name = get_agent_display_name(agent_name, domain)
+    clean_title = display_name.split(":")[-1].strip() if ":" in display_name else display_name
+    agent_desc = get_agent_description(agent_name, domain)
+    domain_title = DOMAIN_TITLES.get(domain, domain.replace("_", " ").title())
+    domain_icon = DOMAIN_ICONS.get(domain, "🤖")
+    chart_b64 = get_sample_chart_base64(agent_name, domain)
     
-    draw.text((36, 298), "🌐  Deep Research", fill=(68, 71, 70), font=get_font(13, bold=False))
-    draw.text((245, 298), "📌", fill=(150, 150, 150), font=get_font(12, bold=False))
+    p1 = prompts[0] if len(prompts) > 0 else f"What are our primary operational metrics for {clean_title}?"
+    p2 = prompts[1] if len(prompts) > 1 else f"What are the latest telco standards and benchmarks for {clean_title}?"
+    p3 = prompts[2] if len(prompts) > 2 else f"Can you render a chart comparing performance trends for {clean_title}?"
+    p4 = f"Create a 4-slide executive presentation summarizing the {clean_title} analysis, key KPIs, and strategic recommendations."
 
-    draw.text((36, 335), "＋  New agent", fill=(68, 71, 70), font=get_font(13, bold=False))
-
-    draw.text((24, 385), "Recent", fill=(100, 100, 100), font=get_font(12, bold=True))
-    recents = [
-        "Q3 2026 Network SLA report",
-        "5G Coverage Metro North",
-        "4-slide presentation on sales",
-        "ARPU Uplift Strategy 2026",
-        "SIM Swap Fraud Anomaly",
-        "VoLTE Compliance Audit",
-        "Packaging Optimization Deck",
-        "Cell Tower Congestion Map",
-        "Fiber Provisioning Flow",
-        "Trailer-to-trailer turn time"
-    ]
-    y_r = 415
-    for rec in recents:
-        draw.text((24, y_r), rec, fill=(68, 71, 70), font=get_font(13, bold=False))
-        y_r += 30
-    draw.text((24, y_r), "∨  Show more", fill=(100, 100, 100), font=get_font(12, bold=False))
-
-    draw.line([(16, 1000), (264, 1000)], fill=(227, 227, 227))
-    draw.text((24, 1015), "GCP: telco-catalog", fill=(24, 128, 56), font=get_font(13, bold=True))
-    draw.text((24, 1040), "BigQuery: telco_ent_agents", fill=(100, 100, 100), font=get_font(12, bold=False))
-
-
-def render_agent_directory_screen(agent_name: str, display_name: str, domain: str, description: str, search_query: str = "", highlight_target: bool = False) -> Image.Image:
-    """Renders the exact Gemini Enterprise Agent Directory matching reference."""
-    img = Image.new("RGB", (1920, 1080), color=(255, 255, 255))
-    draw = ImageDraw.Draw(img)
-
-    render_sidebar(draw, display_name, domain, active_tab="agents")
-
-    draw.text((330, 36), "Agents", fill=(31, 31, 31), font=get_font(28, bold=True))
-    draw.rounded_rectangle([(1720, 32), (1860, 72)], radius=20, fill=(26, 115, 232))
-    draw.text((1742, 43), "＋ New agent", fill=(255, 255, 255), font=get_font(14, bold=True))
-
-    draw.rounded_rectangle([(330, 95), (1860, 145)], radius=25, fill=(255, 255, 255), outline=(218, 220, 224), width=1)
-    if search_query:
-        draw.text((360, 110), f"🔍  {search_query}", fill=(31, 31, 31), font=get_font(15, bold=False))
-        draw.text((1830, 110), "✕", fill=(100, 100, 100), font=get_font(16, bold=False))
-    else:
-        draw.text((360, 110), "🔍  Search agents by name, domain, or capability...", fill=(117, 117, 117), font=get_font(15, bold=False))
-
-    draw.text((330, 175), "Made by Google", fill=(68, 71, 70), font=get_font(14, bold=True))
-    
-    # Deep Research Card
-    draw.rounded_rectangle([(330, 205), (680, 335)], radius=12, fill=(240, 244, 249), outline=(218, 220, 224), width=1)
-    draw.ellipse([(350, 225), (385, 260)], fill=(0, 188, 212))
-    draw.text((358, 232), "🌐", font=get_font(16))
-    draw.text((650, 220), "📌", font=get_font(12))
-    draw.text((350, 275), "Deep Research", fill=(31, 31, 31), font=get_font(15, bold=True))
-    draw.text((350, 298), "Get in-depth answers grounded in web research.", fill=(68, 71, 70), font=get_font(12, bold=False))
-    draw.text((350, 316), "By Google", fill=(117, 117, 117), font=get_font(11, bold=False))
-
-    # Gemini Notebook Card
-    draw.rounded_rectangle([(710, 205), (1060, 335)], radius=12, fill=(240, 244, 249), outline=(218, 220, 224), width=1)
-    draw.ellipse([(730, 225), (765, 260)], fill=(30, 41, 59))
-    draw.text((738, 232), "✨", font=get_font(16))
-    draw.text((1030, 220), "📌", font=get_font(12))
-    draw.text((730, 275), "Gemini Notebook", fill=(31, 31, 31), font=get_font(15, bold=True))
-    draw.text((730, 298), "Quickly summarize and take notes for research with AI.", fill=(68, 71, 70), font=get_font(12, bold=False))
-    draw.text((730, 316), "By Google", fill=(117, 117, 117), font=get_font(11, bold=False))
-
-    draw.text((330, 365), "From your organization", fill=(68, 71, 70), font=get_font(14, bold=True))
-    draw.text((1800, 365), "Show more", fill=(26, 115, 232), font=get_font(13, bold=False))
-
-    icon = DOMAIN_ICONS.get(domain, "📱")
-    domain_label = DOMAIN_TITLES.get(domain, "Consumer Marketing").split("&")[0].strip()
-    
-    org_cards = [
-        (f"{domain_label}: {display_name}", description, icon, highlight_target),
-        ("NetOps: FCAPS Alarm Noise Reduction", "Clusters root-cause network telemetry alarms and reduces ticket volume.", "📡", False),
-        ("Subscriber CRM: Bill Shock Breakdown", "Analyzes roaming, data overage, and rating spikes to reduce churn.", "🎧", False),
-        ("DaaS: SIM Swap Fraud Prevention API", "Real-time CAMARA Open Gateway network verification for financial security.", "🌐", False),
+    slides_data = [
+        {
+            "num": 1,
+            "badge": "🎯 EXECUTIVE STRATEGY & ROADMAP",
+            "title": f"Slide 1 of 4: 2026 Executive Summary & KPIs",
+            "sub": f"Autonomous Telco Operational Intelligence for {clean_title}",
+            "kpis": [
+                {"val": "95.6%", "label": "Operational SLA", "color": "#38bdf8"},
+                {"val": "+$214K", "label": "Quarterly ROI", "color": "#4ade80"},
+                {"val": "0.4s", "label": "Response Latency", "color": "#a78bfa"}
+            ],
+            "bullets": [
+                ("Direct BigQuery CA Integration", "Automated SQL generation against enterprise telemetry tables."),
+                ("Proactive Incident Deflection", "Over 1,400 routine operational tickets resolved autonomously."),
+                ("Executive Level Governance", "Continuous multi-turn auditability and compliance adherence.")
+            ]
+        },
+        {
+            "num": 2,
+            "badge": "📊 REGIONAL SLA METRICS",
+            "title": f"Slide 2 of 4: Regional Cluster SLA Performance",
+            "sub": "Operational telemetry breakdown across primary network clusters",
+            "kpis": [
+                {"val": "96.2%", "label": "Metro North", "color": "#38bdf8"},
+                {"val": "95.1%", "label": "Metro South", "color": "#4ade80"},
+                {"val": "93.8%", "label": "West Edge", "color": "#a78bfa"}
+            ],
+            "bullets": [
+                ("Metro North Primary Cluster", "96.2% efficiency with zero major outage windows in Q3."),
+                ("Metro South Secondary Cluster", "95.1% SLA compliance with proactive alarm correlation."),
+                ("West Region Edge Nodes", "93.8% edge node uptime with automated latency optimization.")
+            ]
+        },
+        {
+            "num": 3,
+            "badge": "🌐 INDUSTRY BENCHMARKS & STANDARDS",
+            "title": f"Slide 3 of 4: TM Forum ODA & GSMA Standards",
+            "sub": "Open Gateway and TM Forum Open Digital Architecture alignment",
+            "kpis": [
+                {"val": "Top 10%", "label": "Industry Decile", "color": "#38bdf8"},
+                {"val": "TMF622", "label": "API Standard", "color": "#4ade80"},
+                {"val": "100%", "label": "ODA Compliant", "color": "#a78bfa"}
+            ],
+            "bullets": [
+                ("TM Forum ODA Compliant", "Fully aligns with Open Digital Architecture component specifications."),
+                ("GSMA CAMARA APIs", "Integrated with SIM Swap, Location, and Quality-on-Demand (QoD) APIs."),
+                ("Live Google Search Grounding", "Enterprise web verification against real-time industry benchmark reports.")
+            ]
+        },
+        {
+            "num": 4,
+            "badge": "🚀 STRATEGIC EXECUTION PLAN",
+            "title": f"Slide 4 of 4: Strategic Recommendations & Action Plan",
+            "sub": "Actionable roadmap to scale autonomous telco operations",
+            "kpis": [
+                {"val": "Phase 1", "label": "Immediate Priority", "color": "#38bdf8"},
+                {"val": "Phase 2", "label": "Expansion Target", "color": "#4ade80"},
+                {"val": ">85%", "label": "Target Automation", "color": "#a78bfa"}
+            ],
+            "bullets": [
+                ("Phase 1: Edge Optimization", "Deploy fine-tuned anomaly detection thresholds across all edge clusters."),
+                ("Phase 2: Closed-Loop Automation", "Expand automated self-healing triggers to exceed 85% closed-loop resolution."),
+                ("Enterprise Knowledge Sync", "Continuous grounding against updated telco topology and service catalogs.")
+            ]
+        }
     ]
 
-    card_x = 330
-    for title, desc, c_icon, is_high in org_cards:
-        border_col = (26, 115, 232) if is_high else (218, 220, 224)
-        bg_col = (232, 240, 254) if is_high else (255, 255, 255)
-        w = 360
-        draw.rounded_rectangle([(card_x, 395), (card_x + w, 565)], radius=12, fill=bg_col, outline=border_col, width=2 if is_high else 1)
-        
-        draw.rounded_rectangle([(card_x + 18, 412), (card_x + 58, 452)], radius=8, fill=(255, 238, 217) if is_high else (240, 244, 249))
-        draw.text((card_x + 26, 420), c_icon, font=get_font(18))
-        draw.text((card_x + w - 30, 415), "⋮", fill=(100, 100, 100), font=get_font(16, bold=True))
+    html_template = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Enterprise — __DISPLAY_NAME__</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Google Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    color: #1f1f1f;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
 
-        t_short = title if len(title) < 28 else title[:26] + "..."
-        draw.text((card_x + 18, 465), t_short, fill=(26, 115, 232) if is_high else (31, 31, 31), font=get_font(14, bold=True))
+  #app-root {
+    display: flex;
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    background: #ffffff;
+  }
 
-        d_words = desc.split()
-        d_line1 = " ".join(d_words[:6])
-        d_line2 = " ".join(d_words[6:12])
-        d_line3 = " ".join(d_words[12:18]) + "..." if len(d_words) > 12 else ""
-        
-        draw.text((card_x + 18, 492), d_line1, fill=(68, 71, 70), font=get_font(12, bold=False))
-        if d_line2:
-            draw.text((card_x + 18, 510), d_line2, fill=(68, 71, 70), font=get_font(12, bold=False))
-        if d_line3:
-            draw.text((card_x + 18, 528), d_line3, fill=(68, 71, 70), font=get_font(12, bold=False))
+  #sidebar {
+    width: 260px;
+    height: 1080px;
+    background: #f8fafd;
+    border-right: 1px solid #e1e3e1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 12px;
+    flex-shrink: 0;
+    z-index: 10;
+  }
 
-        card_x += w + 20
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px 18px 8px;
+  }
 
-    draw.text((330, 600), "Your agents", fill=(68, 71, 70), font=get_font(14, bold=True))
-    draw.rounded_rectangle([(330, 630), (680, 770)], radius=12, fill=(255, 255, 255), outline=(218, 220, 224), width=1)
+  .sparkle-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .brand-text {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .brand-cymbal { color: #1f1f1f; }
+  .brand-telco { color: #1a73e8; }
+
+  .new-chat-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #e8f0fe;
+    color: #1a73e8;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: background 0.15s;
+  }
+
+  .new-chat-btn.active {
+    background: #d2e3fc;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444746;
+    margin-bottom: 4px;
+  }
+
+  .nav-item.active {
+    background: #e1e3e1;
+    color: #1f1f1f;
+    font-weight: 600;
+  }
+
+  .nav-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #727775;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 12px 6px;
+  }
+
+  .pinned-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    color: #444746;
+    margin-bottom: 2px;
+  }
+
+  .pinned-item.active {
+    background: #e8f0fe;
+    color: #1a73e8;
+    font-weight: 600;
+  }
+
+  .pinned-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .recent-list {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .recent-item {
+    padding: 6px 12px;
+    font-size: 13px;
+    color: #444746;
+    border-radius: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .profile-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 8px 4px;
+    border-top: 1px solid #e1e3e1;
+    margin-top: auto;
+  }
+
+  .profile-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #795548;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .profile-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f1f1f;
+  }
+
+  .profile-tier {
+    font-size: 11px;
+    color: #727775;
+  }
+
+  #main-pane {
+    flex: 1;
+    height: 1080px;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  #chat-container {
+    flex: 1;
+    height: 1080px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  #chat-scroll-area {
+    flex: 1;
+    overflow-y: hidden;
+    padding: 24px 60px 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  #view-directory {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    width: 100%;
+  }
+
+  .dir-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 860px;
+    margin-bottom: 24px;
+  }
+
+  .dir-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+
+  .new-agent-pill {
+    background: #1a73e8;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .search-box-container {
+    width: 860px;
+    height: 52px;
+    background: #f0f4f9;
+    border: 1.5px solid transparent;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+    margin-bottom: 32px;
+    transition: all 0.2s;
+  }
+
+  .search-box-container.focused {
+    background: #ffffff;
+    border-color: #1a73e8;
+    box-shadow: 0 1px 6px rgba(26, 115, 232, 0.25);
+  }
+
+  .search-input-text {
+    flex: 1;
+    font-size: 15px;
+    color: #1f1f1f;
+    font-family: inherit;
+  }
+
+  .dir-section {
+    width: 860px;
+    margin-bottom: 28px;
+  }
+
+  .dir-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #444746;
+    margin-bottom: 12px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .agent-card {
+    background: #ffffff;
+    border: 1px solid #e1e3e1;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .agent-card.hovered {
+    border-color: #1a73e8;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .agent-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #e8f0fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .agent-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f1f1f;
+    line-height: 1.3;
+  }
+
+  .agent-card-desc {
+    font-size: 12px;
+    color: #727775;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  #agent-hero {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 60px;
+    gap: 12px;
+  }
+
+  .hero-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #e8f0fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin-bottom: 6px;
+  }
+
+  .hero-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+
+  .hero-desc {
+    font-size: 14px;
+    color: #727775;
+    max-width: 620px;
+    line-height: 1.5;
+  }
+
+  .user-bubble {
+    align-self: flex-end;
+    background: #f0f4f9;
+    color: #1f1f1f;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    max-width: 70%;
+    line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  .agent-response {
+    align-self: flex-start;
+    width: 100%;
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tool-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafd;
+    border: 1px solid #e1e3e1;
+    border-radius: 16px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #444746;
+    align-self: flex-start;
+  }
+
+  .spinner-ring {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #1a73e8;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .markdown-body {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: #1f1f1f;
+  }
+
+  .markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+
+  .markdown-body th, .markdown-body td {
+    padding: 8px 12px;
+    border: 1px solid #e1e3e1;
+    text-align: left;
+  }
+
+  .markdown-body th {
+    background: #f8fafd;
+    font-weight: 600;
+    color: #444746;
+  }
+
+  .markdown-body ul {
+    margin: 8px 0 8px 20px;
+  }
+
+  .markdown-body li {
+    margin-bottom: 6px;
+  }
+
+  .chart-card {
+    background: #ffffff;
+    border: 1px solid #e1e3e1;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .chart-card img {
+    max-width: 480px;
+    border-radius: 8px;
+  }
+
+  .sources-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e8f0fe;
+    color: #1a73e8;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-top: 6px;
+    width: fit-content;
+  }
+
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+    color: #727775;
+    font-size: 13px;
+  }
+
+  .action-btn {
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+  }
+
+  #bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 60px 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 30%);
+  }
+
+  .prompt-container {
+    width: 820px;
+    background: #ffffff;
+    border: 1.5px solid #dadce0;
+    border-radius: 26px;
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+
+  .prompt-container.focused {
+    border-color: #1a73e8;
+    box-shadow: 0 1px 8px rgba(26, 115, 232, 0.2);
+  }
+
+  .prompt-input-row {
+    position: relative;
+    min-height: 24px;
+    font-size: 15px;
+    color: #1f1f1f;
+    line-height: 1.5;
+    font-family: inherit;
+    word-break: break-word;
+  }
+
+  .prompt-placeholder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #727775;
+    pointer-events: none;
+  }
+
+  .prompt-text-content {
+    position: relative;
+    min-height: 24px;
+    z-index: 2;
+  }
+
+  .prompt-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .prompt-tools-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tool-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e8f0fe;
+    color: #1a73e8;
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .icon-tool-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #444746;
+  }
+
+  .send-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e1e3e1;
+    color: #727775;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .send-btn.active {
+    background: #1a73e8;
+    color: #ffffff;
+  }
+
+  .disclaimer-text {
+    font-size: 11px;
+    color: #727775;
+    margin-top: 8px;
+  }
+
+  #tools-dropdown {
+    position: absolute;
+    bottom: 90px;
+    left: 200px;
+    background: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    padding: 6px 0;
+    display: none;
+    flex-direction: column;
+    width: 160px;
+    z-index: 50;
+  }
+
+  .dropdown-item {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1f1f1f;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .dropdown-item:hover {
+    background: #f0f4f9;
+  }
+
+  #canvas-pane {
+    width: 0px;
+    height: 1080px;
+    background: #0f172a;
+    border-left: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: width 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+    z-index: 20;
+  }
+
+  #canvas-pane.open {
+    width: 860px;
+  }
+
+  .canvas-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid #334155;
+    color: #f8fafc;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .canvas-top-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .canvas-export-btn {
+    background: #38bdf8;
+    color: #0f172a;
+    border: none;
+    border-radius: 14px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .canvas-slide-container {
+    flex: 1;
+    padding: 28px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .slide-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .slide-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #38bdf8;
+    text-transform: uppercase;
+  }
+
+  .slide-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.25;
+  }
+
+  .slide-sub {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: -6px;
+  }
+
+  .slide-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 8px 0;
+  }
+
+  .slide-kpi-card {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slide-kpi-val {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .slide-kpi-lbl {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  .slide-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .slide-bullet-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+
+  .slide-bullet-dot {
+    color: #38bdf8;
+    font-size: 14px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .canvas-rail {
+    height: 72px;
+    background: #090d16;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .rail-thumb {
+    flex: 1;
+    height: 48px;
+    background: #1e293b;
+    border: 1.5px solid #334155;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .rail-thumb.active {
+    border-color: #38bdf8;
+    color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+  }
+
+  #virtual-cursor {
+    position: fixed;
+    width: 24px;
+    height: 24px;
+    z-index: 99999;
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: translate(960px, 540px);
+  }
+
+  .cursor-ripple {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(26, 115, 232, 0.35);
+    transform: translate(-4px, -4px) scale(0);
+    animation: ripple 0.4s ease-out forwards;
+  }
+
+  @keyframes ripple {
+    to { transform: translate(-4px, -4px) scale(1.8); opacity: 0; }
+  }
+
+  #tooltip {
+    position: fixed;
+    background: #1f1f1f;
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 999999;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div id="app-root">
+  <aside id="sidebar">
+    <div class="brand-row">
+      <svg class="sparkle-icon" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="#1a73e8"/>
+        <path d="M12 6L13.5 10.5L18 12L13.5 13.5L12 18L10.5 13.5L6 12L10.5 10.5L12 6Z" fill="#4285f4"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-cymbal">Cymbal</span>
+        <span class="brand-telco">Telco</span>
+      </div>
+    </div>
+
+    <button class="new-chat-btn" id="sidebar-new-chat">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+      New chat
+    </button>
+
+    <div class="nav-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      Search
+    </div>
+    <div class="nav-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+      Library
+    </div>
+    <div class="nav-item active" id="sidebar-agents-nav">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6H3v-2h2V7a2 2 0 0 1 2-2h3V2h4v3h3a2 2 0 0 1 2 2v4h2v2h-2zm-2 0H7v6h10v-6zM9 9h2v2H9V9zm4 0h2v2h-2V9z"/></svg>
+      Agents
+    </div>
+
+    <div class="nav-section-title">Pinned</div>
+    <div class="pinned-item">
+      <div class="pinned-left">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a73e8"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Gemini Notebook
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#727775"><path d="M16 9V4l1 0V2H7v2l1 0v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg>
+    </div>
+    <div class="pinned-item">
+      <div class="pinned-left">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#0b57d0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        Deep Research
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#727775"><path d="M16 9V4l1 0V2H7v2l1 0v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg>
+    </div>
+    <div class="pinned-item active" id="sidebar-target-agent" style="display:none;">
+      <div class="pinned-left">
+        <span style="font-size:12px;">__DOMAIN_ICON__</span>
+        __CLEAN_TITLE__
+      </div>
+      <span style="width:6px; height:6px; border-radius:50%; background:#1a73e8;"></span>
+    </div>
+
+    <div class="nav-section-title">Recent</div>
+    <div class="recent-list">
+      <div class="recent-item">Q3 2026 Network SLA report</div>
+      <div class="recent-item">5G Coverage Metro North</div>
+      <div class="recent-item">ARPU Uplift Strategy 2026</div>
+      <div class="recent-item">SIM Swap Fraud Anomaly</div>
+      <div class="recent-item">VoLTE Compliance Audit</div>
+      <div class="recent-item">Cell Tower Congestion Map</div>
+    </div>
+
+    <div class="profile-row">
+      <div class="profile-left">
+        <div class="avatar-circle">R</div>
+        <div>
+          <div class="profile-name">Ryan Wong</div>
+          <div class="profile-tier">Telco Specialist • Plus</div>
+        </div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#727775"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+    </div>
+  </aside>
+
+  <main id="main-pane">
+    <div id="chat-container">
+      <div id="chat-scroll-area">
+        <div id="view-directory">
+          <div class="dir-header">
+            <div class="dir-title">Agents</div>
+            <button class="new-agent-pill">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              New agent
+            </button>
+          </div>
+
+          <div class="search-box-container" id="dir-search-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#727775"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <div class="search-input-text" id="dir-search-text">Search for agents</div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#727775"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </div>
+
+          <div class="dir-section">
+            <div class="dir-section-title">Made by Google</div>
+            <div class="cards-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="agent-card">
+                <div class="agent-card-icon" style="background:#e0f2fe;">🌐</div>
+                <div class="agent-card-title">Deep Research</div>
+                <div class="agent-card-desc">Get in-depth answers grounded in web research and enterprise knowledge.</div>
+              </div>
+              <div class="agent-card">
+                <div class="agent-card-icon" style="background:#f3e8ff;">📓</div>
+                <div class="agent-card-title">Gemini Notebook</div>
+                <div class="agent-card-desc">Quickly summarize and take structured notes for telco research with AI.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dir-section">
+            <div class="dir-section-title">From your organization</div>
+            <div class="cards-grid" id="org-cards-grid">
+              <div class="agent-card" id="target-agent-card">
+                <div class="agent-card-icon">__DOMAIN_ICON__</div>
+                <div class="agent-card-title">__DISPLAY_NAME__</div>
+                <div class="agent-card-desc">__AGENT_DESC__</div>
+              </div>
+              <div class="agent-card" id="dummy-card-1">
+                <div class="agent-card-icon">📡</div>
+                <div class="agent-card-title">NetOps: Cell Tower Analytics</div>
+                <div class="agent-card-desc">Monitors RAN utilization and identifies congestion hotspots.</div>
+              </div>
+              <div class="agent-card" id="dummy-card-2">
+                <div class="agent-card-icon">🎧</div>
+                <div class="agent-card-title">Subscriber CRM: Bill Shock Breakdown</div>
+                <div class="agent-card-desc">Analyzes roaming and data overage spikes to mitigate churn.</div>
+              </div>
+              <div class="agent-card" id="dummy-card-3">
+                <div class="agent-card-icon">🌐</div>
+                <div class="agent-card-title">DaaS: SIM Swap Fraud Prevention</div>
+                <div class="agent-card-desc">CAMARA Open Gateway real-time API verification.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="agent-hero">
+          <div class="hero-icon">__DOMAIN_ICON__</div>
+          <div class="hero-title">__DISPLAY_NAME__</div>
+          <div class="hero-desc">__AGENT_DESC__</div>
+        </div>
+
+        <div id="chat-messages" style="display:none; flex-direction:column; gap:24px;"></div>
+      </div>
+
+      <div id="bottom-bar">
+        <div class="prompt-container" id="prompt-bar">
+          <div class="prompt-input-row">
+            <div class="prompt-placeholder" id="prompt-placeholder">Ask __CLEAN_TITLE__...</div>
+            <div class="prompt-text-content" id="prompt-text"></div>
+          </div>
+          <div class="prompt-controls">
+            <div class="prompt-tools-left">
+              <div class="icon-tool-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              </div>
+              <div class="icon-tool-btn" id="tools-menu-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+              </div>
+              <div class="tool-badge-pill" id="canvas-active-pill" style="display:none;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+                Canvas
+              </div>
+            </div>
+            <button class="send-btn" id="send-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="disclaimer-text">Generative AI may display inaccurate information, including about people, so double-check its responses.</div>
+      </div>
+
+      <div id="tools-dropdown">
+        <div class="dropdown-item" id="menu-item-canvas">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a73e8"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+          Canvas
+        </div>
+        <div class="dropdown-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#727775"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          Deep Research
+        </div>
+      </div>
+    </div>
+
+    <div id="canvas-pane">
+      <div class="canvas-top-bar">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#38bdf8"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+          <span>__CLEAN_TITLE__ — Executive Briefing</span>
+        </div>
+        <div class="canvas-top-right">
+          <button class="canvas-export-btn">Export PPTX ▾</button>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#94a3b8" style="cursor:pointer;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
+      </div>
+
+      <div class="canvas-slide-container" id="canvas-slide-content"></div>
+
+      <div class="canvas-rail" id="canvas-rail">
+        <div class="rail-thumb active" id="thumb-1">
+          <div>Slide 1</div>
+          <div style="font-size:9px; color:#64748b;">Executive KPIs</div>
+        </div>
+        <div class="rail-thumb" id="thumb-2">
+          <div>Slide 2</div>
+          <div style="font-size:9px; color:#64748b;">Regional SLA</div>
+        </div>
+        <div class="rail-thumb" id="thumb-3">
+          <div>Slide 3</div>
+          <div style="font-size:9px; color:#64748b;">TM Forum ODA</div>
+        </div>
+        <div class="rail-thumb" id="thumb-4">
+          <div>Slide 4</div>
+          <div style="font-size:9px; color:#64748b;">Strategic Plan</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="virtual-cursor">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#202124" stroke="#ffffff" stroke-width="1.5">
+      <path d="M4 2l16 11.5-6.5 1.5 4 8-3 1.5-4-8-5.5 4.5z"/>
+    </svg>
+  </div>
+
+  <div id="tooltip">Copied to clipboard</div>
+</div>
+
+<script>
+const SLIDES_DATA = __SLIDES_DATA_JSON__;
+const P1 = __P1_JSON__;
+const P2 = __P2_JSON__;
+const P3 = __P3_JSON__;
+const P4 = __P4_JSON__;
+const CHART_B64 = __CHART_B64_JSON__;
+const SEARCH_QUERY = __SEARCH_QUERY_JSON__;
+
+const cursor = document.getElementById('virtual-cursor');
+const tooltip = document.getElementById('tooltip');
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function moveCursor(x, y, durationMs = 350) {
+  if (!cursor) return;
+  cursor.style.transition = `transform ${durationMs}ms cubic-bezier(0.25, 1, 0.5, 1)`;
+  cursor.style.transform = `translate(${x}px, ${y}px)`;
+  await sleep(durationMs + 40);
+}
+
+async function clickAt(x, y) {
+  await moveCursor(x, y, 250);
+  if (!cursor) return;
+  const ripple = document.createElement('div');
+  ripple.className = 'cursor-ripple';
+  cursor.appendChild(ripple);
+  await sleep(180);
+  ripple.remove();
+}
+
+async function typeText(containerId, text, delayMs = 28) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.textContent = '';
+  for (let i = 0; i < text.length; i++) {
+    container.textContent = text.slice(0, i + 1) + '▍';
+    await sleep(delayMs + (Math.random() * 12 - 6));
+  }
+  container.textContent = text;
+}
+
+function renderSlide(slideIndex) {
+  const slide = SLIDES_DATA[slideIndex];
+  const container = document.getElementById('canvas-slide-content');
+  if (!container || !slide) return;
+  
+  let kpisHtml = '';
+  for (const k of slide.kpis) {
+    kpisHtml += `
+      <div class="slide-kpi-card">
+        <div class="slide-kpi-val" style="color:${k.color}">${k.val}</div>
+        <div class="slide-kpi-lbl">${k.label}</div>
+      </div>
+    `;
+  }
+
+  let bulletsHtml = '';
+  for (const b of slide.bullets) {
+    bulletsHtml += `
+      <div class="slide-bullet-item">
+        <span class="slide-bullet-dot">▸</span>
+        <div><strong style="color:#f8fafc;">${b[0]}:</strong> ${b[1]}</div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div class="slide-card">
+      <div class="slide-badge">${slide.badge}</div>
+      <div class="slide-title">${slide.title}</div>
+      <div class="slide-sub">${slide.sub}</div>
+      <div class="slide-kpi-grid">${kpisHtml}</div>
+      <div class="slide-bullets">${bulletsHtml}</div>
+    </div>
+    <div style="font-size:11px; color:#64748b; text-align:right;">Cymbal Telco AI • Slide ${slide.num} of 4</div>
+  `;
+
+  for (let i = 1; i <= 4; i++) {
+    const thumb = document.getElementById(`thumb-${i}`);
+    if (thumb) {
+      if (i === slideIndex + 1) thumb.classList.add('active');
+      else thumb.classList.remove('active');
+    }
+  }
+}
+
+async function runFullDemo() {
+  console.log("🎬 Starting Gemini Enterprise Telco Demo Simulation...");
+  window.__DEMO_COMPLETE__ = false;
+
+  try {
+    await sleep(800);
+    const searchBox = document.getElementById('dir-search-box');
+    if (searchBox) searchBox.classList.add('focused');
+    await moveCursor(700, 120, 400);
+    await typeText('dir-search-text', SEARCH_QUERY, 35);
     
-    draw.ellipse([(350, 645), (385, 680)], fill=(244, 199, 195))
-    draw.text((362, 652), "M", fill=(197, 34, 31), font=get_font(16, bold=True))
-    draw.rounded_rectangle([(395, 650), (445, 672)], radius=6, fill=(224, 242, 254))
-    draw.text((404, 654), "Draft", fill=(2, 132, 199), font=get_font(11, bold=True))
-    draw.text((650, 645), "⋮", fill=(100, 100, 100), font=get_font(16, bold=True))
+    const d1 = document.getElementById('dummy-card-1'); if (d1) d1.style.display = 'none';
+    const d2 = document.getElementById('dummy-card-2'); if (d2) d2.style.display = 'none';
+    const d3 = document.getElementById('dummy-card-3'); if (d3) d3.style.display = 'none';
+    await sleep(400);
 
-    draw.text((350, 695), "My Agent", fill=(31, 31, 31), font=get_font(14, bold=True))
-    draw.text((350, 720), "Agent to help interact with enterprise data.", fill=(68, 71, 70), font=get_font(12, bold=False))
+    const targetCard = document.getElementById('target-agent-card');
+    if (targetCard) targetCard.classList.add('hovered');
+    await clickAt(400, 320);
+    await sleep(300);
 
-    return img
+    const vDir = document.getElementById('view-directory'); if (vDir) vDir.style.display = 'none';
+    const sTarget = document.getElementById('sidebar-target-agent'); if (sTarget) sTarget.style.display = 'flex';
+    const sAgents = document.getElementById('sidebar-agents-nav'); if (sAgents) sAgents.classList.remove('active');
+    const aHero = document.getElementById('agent-hero'); if (aHero) aHero.style.display = 'flex';
+    const cMsgs = document.getElementById('chat-messages'); if (cMsgs) cMsgs.style.display = 'flex';
+    await sleep(800);
 
+    const messagesDiv = document.getElementById('chat-messages');
+    const promptBar = document.getElementById('prompt-bar');
+    const promptText = document.getElementById('prompt-text');
+    const promptPl = document.getElementById('prompt-placeholder');
+    const sendBtn = document.getElementById('send-btn');
 
-def render_chat_base(agent_display_name: str, domain: str) -> tuple[Image.Image, ImageDraw.ImageDraw]:
-    """Renders the clean light-theme chat container with top bar and prompt input."""
-    img = Image.new("RGB", (1920, 1080), color=(255, 255, 255))
-    draw = ImageDraw.Draw(img)
-
-    render_sidebar(draw, agent_display_name, domain, active_tab="chat")
-
-    draw.rectangle([(280, 0), (1920, 65)], fill=(255, 255, 255))
-    draw.line([(280, 65), (1920, 65)], fill=(227, 227, 227), width=1)
-
-    draw.rounded_rectangle([(310, 14), (740, 50)], radius=18, fill=(240, 244, 249), outline=(218, 220, 224), width=1)
-    draw.ellipse([(326, 27), (336, 37)], fill=(24, 128, 56))
-    draw.text((346, 21), f"@{agent_display_name}", fill=(31, 31, 31), font=get_font(15, bold=True))
-    draw.text((680, 22), "Active", fill=(24, 128, 56), font=get_font(12, bold=True))
-
-    draw.rounded_rectangle([(760, 14), (920, 50)], radius=18, fill=(240, 244, 249))
-    draw.text((775, 22), "gemini-3.5-flash", fill=(68, 71, 70), font=get_font(13, bold=False))
-
-    domain_title = DOMAIN_TITLES.get(domain, domain.title())
-    draw.rounded_rectangle([(940, 14), (1260, 50)], radius=18, fill=(240, 244, 249))
-    draw.text((955, 22), f"{DOMAIN_ICONS.get(domain, '📱')} {domain_title}", fill=(26, 115, 232), font=get_font(13, bold=False))
-
-    draw.text((1720, 22), "Canvas Mode ⚡  |  Export  |  Docs", fill=(100, 100, 100), font=get_font(13, bold=False))
-
-    draw.rounded_rectangle([(320, 980), (1880, 1045)], radius=24, fill=(248, 249, 250), outline=(218, 220, 224), width=1)
-    draw.text((350, 1002), f"Ask @{agent_display_name} anything or generate reports...", fill=(117, 117, 117), font=get_font(15, bold=False))
-    draw.ellipse([(1830, 992), (1866, 1028)], fill=(26, 115, 232))
-    draw.text((1842, 998), "↑", fill=(255, 255, 255), font=get_font(18, bold=True))
-
-    return img, draw
-
-
-def render_canvas_split_screen(agent_display_name: str, domain: str, slide_index: int, slide_data: list) -> Image.Image:
-    """Renders the exact Gemini Enterprise Canvas split-screen slide-over view."""
-    img = Image.new("RGB", (1920, 1080), color=(255, 255, 255))
-    draw = ImageDraw.Draw(img)
-
-    # 1. Left Sidebar (x=0..260)
-    draw.rectangle([(0, 0), (260, 1080)], fill=(248, 249, 250))
-    draw.line([(260, 0), (260, 1080)], fill=(227, 227, 227), width=1)
-    draw_gemini_spark(draw, 20, 22, size=20)
-    draw.text((48, 20), "Cymbal", fill=(31, 31, 31), font=get_font(16, bold=True))
-    draw.text((48, 38), "Telco", fill=(217, 48, 37), font=get_font(13, bold=True))
-    draw.rounded_rectangle([(14, 75), (246, 110)], radius=18, fill=(233, 238, 246))
-    draw.text((32, 85), "✏️  New chat", fill=(31, 31, 31), font=get_font(14, bold=True))
-    draw.text((20, 135), "🤖  Agents", fill=(26, 115, 232), font=get_font(13, bold=True))
-    draw.text((20, 170), "Recent", fill=(100, 100, 100), font=get_font(11, bold=True))
-    draw.text((20, 195), "Q3 Network SLA report", fill=(68, 71, 70), font=get_font(12))
-    draw.text((20, 225), "5G Coverage Metro", fill=(68, 71, 70), font=get_font(12))
-
-    # 2. Left Chat Pane (x=260..960)
-    draw.rectangle([(260, 0), (960, 1080)], fill=(255, 255, 255))
-    draw.line([(960, 0), (960, 1080)], fill=(218, 220, 224), width=1)
+    // Turn 1
+    if (promptBar) promptBar.classList.add('focused');
+    if (promptPl) promptPl.style.display = 'none';
+    await moveCursor(700, 1010, 300);
+    await typeText('prompt-text', P1, 24);
+    if (sendBtn) sendBtn.classList.add('active');
+    await clickAt(1040, 1020);
     
-    draw.rectangle([(260, 0), (960, 60)], fill=(255, 255, 255))
-    draw.line([(260, 60), (960, 60)], fill=(227, 227, 227), width=1)
-    draw.rounded_rectangle([(280, 12), (600, 48)], radius=18, fill=(240, 244, 249))
-    draw.ellipse([(292, 25), (300, 33)], fill=(24, 128, 56))
-    draw.text((310, 20), f"@{agent_display_name}", fill=(31, 31, 31), font=get_font(13, bold=True))
+    if (aHero) aHero.style.display = 'none';
+    if (promptText) promptText.textContent = '';
+    if (promptPl) promptPl.style.display = 'block';
+    if (sendBtn) sendBtn.classList.remove('active');
+    if (promptBar) promptBar.classList.remove('focused');
 
-    draw.rounded_rectangle([(550, 80), (930, 125)], radius=14, fill=(233, 238, 246))
-    draw.text((565, 94), "Create a 4-slide executive presentation...", fill=(31, 31, 31), font=get_font(13, bold=True))
+    const u1 = document.createElement('div');
+    u1.className = 'user-bubble';
+    u1.textContent = P1;
+    messagesDiv.appendChild(u1);
 
-    draw_gemini_spark(draw, 280, 145, size=20)
-    draw.rounded_rectangle([(310, 140), (930, 340)], radius=12, fill=(248, 249, 250), outline=(227, 227, 227))
-    draw.text((325, 155), f"✨ Generated Canvas Deck ({agent_display_name}):", fill=(26, 115, 232), font=get_font(14, bold=True))
-    draw.text((325, 185), "• Slide 1: 2026 Executive Summary & KPIs", fill=(68, 71, 70), font=get_font(12))
-    draw.text((325, 210), "• Slide 2: Regional Cluster SLA Performance", fill=(68, 71, 70), font=get_font(12))
-    draw.text((325, 235), "• Slide 3: TM Forum ODA / GSMA Standards", fill=(68, 71, 70), font=get_font(12))
-    draw.text((325, 260), "• Slide 4: Strategic Recommendations & ROI", fill=(68, 71, 70), font=get_font(12))
-    draw.text((325, 295), "👉 Interactive Canvas presentation active on right pane.", fill=(24, 128, 56), font=get_font(12, bold=True))
+    const a1 = document.createElement('div');
+    a1.className = 'agent-response';
+    a1.innerHTML = `
+      <div class="tool-status-pill">
+        <div class="spinner-ring" id="t1-spinner"></div>
+        <span id="t1-status-text">⚡ BigQuery CA API ask_data_insights on telco_ent_agents tables...</span>
+      </div>
+      <div class="markdown-body" id="t1-md" style="display:none;"></div>
+    `;
+    messagesDiv.appendChild(a1);
+    await sleep(1000);
 
-    draw.rounded_rectangle([(280, 990), (940, 1045)], radius=20, fill=(248, 249, 250), outline=(218, 220, 224))
-    draw.text((300, 1008), "Ask anything or modify slides...", fill=(120, 120, 120), font=get_font(13))
+    const t1Spin = document.getElementById('t1-spinner');
+    if (t1Spin) t1Spin.outerHTML = '<span style="color:#16a34a; font-size:14px;">✓</span>';
+    const t1Txt = document.getElementById('t1-status-text');
+    if (t1Txt) t1Txt.textContent = 'BigQuery CA telemetry query completed (110ms)';
+    const t1Md = document.getElementById('t1-md');
+    if (t1Md) {
+      t1Md.style.display = 'block';
+      t1Md.innerHTML = `
+        <p>Based on real-time BigQuery telemetry across operating clusters, <strong>${SEARCH_QUERY}</strong> achieved an overall compliance rate of <strong>95.6%</strong> over the past 30 days.</p>
+        <table>
+          <thead>
+            <tr><th>Operating Cluster</th><th>Performance Index</th><th>Operational Target</th><th>Status / SLA Compliance</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Metro North Primary Cluster</strong></td><td><span style="color:#16a34a; font-weight:700;">96.2% Efficiency</span></td><td>&gt;= 92.0%</td><td><strong style="color:#16a34a;">✓ SLA Exceeded (+4.2%)</strong></td></tr>
+            <tr><td><strong>Metro South Secondary Cluster</strong></td><td><span style="color:#16a34a; font-weight:700;">95.1% Uptime</span></td><td>&gt;= 92.0%</td><td><strong style="color:#16a34a;">✓ Target Met (+3.1%)</strong></td></tr>
+            <tr><td><strong>West Region Edge Nodes</strong></td><td><span style="color:#16a34a; font-weight:700;">93.8% Availability</span></td><td>&gt;= 90.0%</td><td><strong style="color:#16a34a;">✓ SLA Exceeded (+3.8%)</strong></td></tr>
+          </tbody>
+        </table>
+        <p style="color:#1a73e8; font-weight:600;">Primary Financial Contribution: Estimated quarterly ROI and cost avoidance of $214,000.</p>
+        <div class="action-row">
+          <span class="action-btn">👍</span>
+          <span class="action-btn">👎</span>
+          <span class="action-btn">📋</span>
+          <span class="action-btn">⋮</span>
+        </div>
+      `;
+    }
+    await sleep(1500);
 
-    # 3. Right Canvas Slide-Over Pane (x=960..1920)
-    draw.rectangle([(960, 0), (1920, 1080)], fill=(240, 244, 249))
+    // Turn 2
+    if (promptBar) promptBar.classList.add('focused');
+    if (promptPl) promptPl.style.display = 'none';
+    await moveCursor(700, 1010, 300);
+    await typeText('prompt-text', P2, 24);
+    if (sendBtn) sendBtn.classList.add('active');
+    await clickAt(1040, 1020);
 
-    # Canvas Top Bar
-    draw.rectangle([(960, 0), (1920, 60)], fill=(255, 255, 255))
-    draw.line([(960, 60), (1920, 60)], fill=(227, 227, 227), width=1)
-    draw.text((990, 18), f"✨ Gemini Canvas  |  {agent_display_name} — Executive Briefing", fill=(31, 31, 31), font=get_font(16, bold=True))
-    draw.rounded_rectangle([(1680, 14), (1800, 46)], radius=16, fill=(233, 238, 246))
-    draw.text((1695, 22), "Export PPTX", fill=(26, 115, 232), font=get_font(12, bold=True))
-    draw.text((1840, 18), "✕", fill=(100, 100, 100), font=get_font(18, bold=True))
+    if (promptText) promptText.textContent = '';
+    if (promptPl) promptPl.style.display = 'block';
+    if (sendBtn) sendBtn.classList.remove('active');
+    if (promptBar) promptBar.classList.remove('focused');
 
-    # Main Slide Presentation Stage: x=1010..1870, y=90..870
-    slide_title, bullets, kpis = slide_data[slide_index]
-    draw.rounded_rectangle([(1010, 90), (1870, 870)], radius=16, fill=(15, 23, 42), outline=(51, 65, 85), width=2)
+    const u2 = document.createElement('div');
+    u2.className = 'user-bubble';
+    u2.textContent = P2;
+    messagesDiv.appendChild(u2);
+
+    const a2 = document.createElement('div');
+    a2.className = 'agent-response';
+    a2.innerHTML = `
+      <div class="tool-status-pill">
+        <div class="spinner-ring" id="t2-spinner"></div>
+        <span id="t2-status-text">🌐 Grounding with Google Search (TM Forum ODA & GSMA Standards)...</span>
+      </div>
+      <div class="markdown-body" id="t2-md" style="display:none;"></div>
+    `;
+    messagesDiv.appendChild(a2);
+    await sleep(1100);
+
+    const t2Spin = document.getElementById('t2-spinner');
+    if (t2Spin) t2Spin.outerHTML = '<span style="color:#16a34a; font-size:14px;">✓</span>';
+    const t2Txt = document.getElementById('t2-status-text');
+    if (t2Txt) t2Txt.textContent = 'Grounding completed (140ms)';
+    const t2Md = document.getElementById('t2-md');
+    if (t2Md) {
+      t2Md.style.display = 'block';
+      t2Md.innerHTML = `
+        <p>According to external industry benchmarks and <strong>TM Forum Open Digital Architecture (ODA)</strong> / <strong>GSMA Open Gateway</strong> standards, top-tier telco operators achieve the following operational targets:</p>
+        <ul>
+          <li><strong>High-Maturity Tier (Top 10%):</strong> Autonomous closed-loop resolution rates reach <strong>78% to 85%</strong>, leveraging standard CAMARA network APIs for real-time policy and QoD enforcement.</li>
+          <li><strong>Standard Industry Tier:</strong> Operators average <strong>60% to 70%</strong> operational automation with standard SLA turnaround windows.</li>
+          <li><strong>Architecture Compliance:</strong> Seamless integration with <strong>TM Forum Open APIs</strong> (TMF620, TMF622, TMF641) ensures zero-touch provisioning.</li>
+        </ul>
+        <div class="sources-chip">🌐 Sources (3)</div>
+        <div class="action-row">
+          <span class="action-btn">👍</span>
+          <span class="action-btn">👎</span>
+          <span class="action-btn">📋</span>
+          <span class="action-btn">⋮</span>
+        </div>
+      `;
+    }
+    await sleep(1500);
+
+    // Turn 3
+    if (promptBar) promptBar.classList.add('focused');
+    if (promptPl) promptPl.style.display = 'none';
+    await moveCursor(700, 1010, 300);
+    await typeText('prompt-text', P3, 24);
+    if (sendBtn) sendBtn.classList.add('active');
+    await clickAt(1040, 1020);
+
+    if (promptText) promptText.textContent = '';
+    if (promptPl) promptPl.style.display = 'block';
+    if (sendBtn) sendBtn.classList.remove('active');
+    if (promptBar) promptBar.classList.remove('focused');
+
+    const u3 = document.createElement('div');
+    u3.className = 'user-bubble';
+    u3.textContent = P3;
+    messagesDiv.appendChild(u3);
+
+    const a3 = document.createElement('div');
+    a3.className = 'agent-response';
+    a3.innerHTML = `
+      <div class="tool-status-pill">
+        <div class="spinner-ring" id="t3-spinner"></div>
+        <span id="t3-status-text">📊 Matplotlib Tool render_chart(query, title)...</span>
+      </div>
+      <div class="markdown-body" id="t3-md" style="display:none;"></div>
+    `;
+    messagesDiv.appendChild(a3);
+    await sleep(1200);
+
+    const t3Spin = document.getElementById('t3-spinner');
+    if (t3Spin) t3Spin.outerHTML = '<span style="color:#16a34a; font-size:14px;">✓</span>';
+    const t3Txt = document.getElementById('t3-status-text');
+    if (t3Txt) t3Txt.textContent = 'Chart generated & saved as visual artifact';
+    const t3Md = document.getElementById('t3-md');
+    if (t3Md) {
+      t3Md.style.display = 'block';
+      let chartImgHtml = '';
+      if (CHART_B64) {
+        chartImgHtml = `<div class="chart-card"><img src="data:image/png;base64,${CHART_B64}" alt="Operational Trend Chart"/></div>`;
+      }
+      t3Md.innerHTML = `
+        <p>I have rendered a monthly performance trend and SLA compliance visualization for <strong>${SEARCH_QUERY}</strong> based on BigQuery historical records.</p>
+        ${chartImgHtml}
+        <ul>
+          <li><strong>Upward Trajectory:</strong> Consistent month-over-month performance uplift across all reporting periods.</li>
+          <li><strong>Exceeded Target:</strong> Surpassed target operational SLA threshold across consecutive quarterly cycles.</li>
+          <li><strong>Anomaly Calibration:</strong> Real-time telemetry thresholds have been auto-tuned to prevent false positive escalations.</li>
+        </ul>
+        <p style="color:#16a34a; font-weight:600; font-size:13px;">Artifact Status: Stored in session storage.</p>
+        <div class="action-row">
+          <span class="action-btn">👍</span>
+          <span class="action-btn">👎</span>
+          <span class="action-btn" id="t3-copy-btn">📋</span>
+          <span class="action-btn">⋮</span>
+        </div>
+      `;
+    }
+    await sleep(1500);
+
+    // Turn 4
+    if (promptBar) promptBar.classList.add('focused');
+    if (promptPl) promptPl.style.display = 'none';
+    await moveCursor(700, 1010, 300);
+    await typeText('prompt-text', P4, 22);
+    if (sendBtn) sendBtn.classList.add('active');
+    await clickAt(1040, 1020);
+
+    if (promptText) promptText.textContent = '';
+    if (promptPl) promptPl.style.display = 'block';
+    if (sendBtn) sendBtn.classList.remove('active');
+    if (promptBar) promptBar.classList.remove('focused');
+
+    const u4 = document.createElement('div');
+    u4.className = 'user-bubble';
+    u4.textContent = P4;
+    messagesDiv.appendChild(u4);
+
+    const a4 = document.createElement('div');
+    a4.className = 'agent-response';
+    a4.innerHTML = `
+      <div class="markdown-body" id="t4-md">
+        <p><strong>Slide 1: Executive Summary & Performance</strong><br>• Core KPI: ${SEARCH_QUERY} achieved 95.6% operational compliance across all active network clusters.<br>• Financial Impact: $214,000 estimated quarterly cost avoidance.</p>
+        <p><strong>Slide 2: Regional Cluster SLA Performance</strong><br>• Metro North: 96.2% efficiency (exceeded baseline target by +4.2%).<br>• Metro South: 95.1% SLA compliance.</p>
+        <p><strong>Slide 3: TM Forum ODA & GSMA Open Gateway Alignment</strong><br>• Full compliance with TM Forum Open Digital Architecture (ODA) zero-touch management.<br>• CAMARA API standard integration for automated QoD routing.</p>
+        <p><strong>Slide 4: Strategic Recommendations & Action Plan</strong><br>• Phase 1 Optimization: Expand automated anomaly threshold tuning.<br>• Phase 2 Scaling: Elevate autonomous closed-loop resolution.</p>
+        <div class="action-row">
+          <span class="action-btn" id="t4-copy-btn">📋 Copy Slide Text</span>
+        </div>
+      </div>
+    `;
+    messagesDiv.appendChild(a4);
+    await sleep(1200);
+
+    await moveCursor(380, 940, 350);
+    if (tooltip) {
+      tooltip.style.left = '380px';
+      tooltip.style.top = '910px';
+      tooltip.style.display = 'block';
+    }
+    await clickAt(380, 940);
+    await sleep(600);
+    if (tooltip) tooltip.style.display = 'none';
+
+    await moveCursor(120, 70, 400);
+    const newChatBtn = document.getElementById('sidebar-new-chat');
+    if (newChatBtn) newChatBtn.classList.add('active');
+    await clickAt(120, 70);
+    await sleep(400);
+    if (newChatBtn) newChatBtn.classList.remove('active');
+
+    messagesDiv.innerHTML = '';
+    if (aHero) aHero.style.display = 'none';
+    if (vDir) vDir.style.display = 'none';
     
-    draw.rounded_rectangle([(1010, 90), (1870, 170)], radius=16, fill=(30, 41, 59))
-    draw.text((1050, 115), f"Slide {slide_index + 1} of 4: {slide_title}", fill=(56, 189, 248), font=get_font(22, bold=True))
-    draw.text((1720, 120), "Cymbal Telco AI", fill=(148, 163, 184), font=get_font(14, bold=False))
+    await moveCursor(360, 1020, 350);
+    const toolsDrop = document.getElementById('tools-dropdown');
+    if (toolsDrop) toolsDrop.style.display = 'flex';
+    await sleep(400);
 
-    if kpis:
-        kpi_x = 1050
-        for k_label, k_val in kpis:
-            draw.rounded_rectangle([(kpi_x, 200), (kpi_x + 240, 290)], radius=10, fill=(30, 41, 59), outline=(51, 65, 85))
-            draw.text((kpi_x + 20, 215), k_label, fill=(148, 163, 184), font=get_font(13))
-            draw.text((kpi_x + 20, 242), k_val, fill=(74, 222, 128), font=get_font(20, bold=True))
-            kpi_x += 270
+    await moveCursor(280, 960, 300);
+    await clickAt(280, 960);
+    if (toolsDrop) toolsDrop.style.display = 'none';
+    const canvasPill = document.getElementById('canvas-active-pill');
+    if (canvasPill) canvasPill.style.display = 'inline-flex';
+    if (promptPl) promptPl.textContent = 'Create a canvas to write your thoughts';
+    await sleep(500);
 
-    b_y = 330 if kpis else 220
-    for bullet in bullets:
-        draw.rounded_rectangle([(1050, b_y), (1830, b_y + 85)], radius=10, fill=(30, 41, 59), outline=(51, 65, 85))
-        draw.text((1080, b_y + 20), "• " + bullet[0], fill=(248, 250, 252), font=get_font(16, bold=True))
-        if len(bullet) > 1:
-            draw.text((1098, b_y + 48), bullet[1], fill=(203, 213, 225), font=get_font(14))
-        b_y += 105
+    if (promptBar) promptBar.classList.add('focused');
+    if (promptPl) promptPl.style.display = 'none';
+    if (promptText) promptText.textContent = `create a 4 slide presentation with below content:
 
-    # Bottom Slide Thumbnail Rail: x=1010..1870, y=900..1050
-    draw.rounded_rectangle([(1010, 900), (1870, 1050)], radius=12, fill=(255, 255, 255), outline=(218, 220, 224))
+**Slide 1: Executive Summary & Performance**
+* Core KPI: ${SEARCH_QUERY} achieved 95.6% operational compliance...`;
+    if (sendBtn) sendBtn.classList.add('active');
+    await sleep(800);
+    await clickAt(1040, 1020);
+
+    if (promptText) promptText.textContent = '';
+    if (promptPl) promptPl.style.display = 'block';
+    if (sendBtn) sendBtn.classList.remove('active');
+    if (promptBar) promptBar.classList.remove('focused');
+
+    const u5 = document.createElement('div');
+    u5.className = 'user-bubble';
+    u5.textContent = `create a 4 slide presentation with below content:
+
+**Slide 1: Executive Summary & Performance**...`;
+    messagesDiv.appendChild(u5);
+
+    const a5 = document.createElement('div');
+    a5.className = 'agent-response';
+    a5.innerHTML = `
+      <div class="tool-status-pill">
+        <span style="color:#16a34a; font-size:14px;">✓</span>
+        <span>Transferring to Slidegen • Presentation Deck Generated</span>
+      </div>
+      <div class="markdown-body">
+        <p>I have generated a 4-slide executive presentation deck for <strong>${SEARCH_QUERY}</strong>. You can view and edit the live presentation on the right pane.</p>
+      </div>
+    `;
+    messagesDiv.appendChild(a5);
+
+    const canvasPane = document.getElementById('canvas-pane');
+    if (canvasPane) canvasPane.classList.add('open');
+    renderSlide(0);
+    await sleep(1800);
+
+    await moveCursor(1410, 1030, 350);
+    await clickAt(1410, 1030);
+    renderSlide(1);
+    await sleep(1800);
+
+    await moveCursor(1560, 1030, 350);
+    await clickAt(1560, 1030);
+    renderSlide(2);
+    await sleep(1800);
+
+    await moveCursor(1710, 1030, 350);
+    await clickAt(1710, 1030);
+    renderSlide(3);
+    await sleep(1800);
+
+    await moveCursor(500, 500, 350);
+    const scrollArea = document.getElementById('chat-scroll-area');
+    if (scrollArea) {
+      for (let i = 0; i < 20; i++) {
+        scrollArea.scrollTop -= 40;
+        await sleep(30);
+      }
+      await sleep(1000);
+
+      for (let i = 0; i < 25; i++) {
+        scrollArea.scrollTop += 50;
+        await sleep(30);
+      }
+      await sleep(1200);
+    }
+
+    console.log("🎉 Gemini Enterprise Demo Simulation Completed Successfully!");
+  } catch (err) {
+    console.error("Simulation error:", err);
+  } finally {
+    window.__DEMO_COMPLETE__ = true;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  runFullDemo();
+});
+</script>
+</body>
+</html>"""
+
+    html_content = html_template.replace("__DISPLAY_NAME__", html.escape(display_name))
+    html_content = html_content.replace("__CLEAN_TITLE__", html.escape(clean_title))
+    html_content = html_content.replace("__DOMAIN_ICON__", domain_icon)
+    html_content = html_content.replace("__AGENT_DESC__", html.escape(agent_desc))
+    html_content = html_content.replace("__SLIDES_DATA_JSON__", json.dumps(slides_data))
+    html_content = html_content.replace("__P1_JSON__", json.dumps(p1))
+    html_content = html_content.replace("__P2_JSON__", json.dumps(p2))
+    html_content = html_content.replace("__P3_JSON__", json.dumps(p3))
+    html_content = html_content.replace("__P4_JSON__", json.dumps(p4))
+    html_content = html_content.replace("__CHART_B64_JSON__", json.dumps(chart_b64))
+    html_content = html_content.replace("__SEARCH_QUERY_JSON__", json.dumps(clean_title))
+
+    return html_content
+
+
+async def record_single_agent_browser_simulation(
+    agent_name: str,
+    domain: str,
+    prompts: list[str],
+    output_dir: Path,
+    resolution: str = "1080p"
+) -> Path:
+    """Renders and records the Gemini Enterprise walkthrough simulation using Playwright Chromium."""
+    domain_output_dir = output_dir / domain
+    domain_output_dir.mkdir(parents=True, exist_ok=True)
+    target_mp4 = domain_output_dir / f"{agent_name}.mp4"
     
-    thumb_x = 1040
-    for idx in range(4):
-        is_active = (idx == slide_index)
-        border_col = (26, 115, 232) if is_active else (218, 220, 224)
-        bg_col = (232, 240, 254) if is_active else (248, 249, 250)
-        draw.rounded_rectangle([(thumb_x, 915), (thumb_x + 180, 1035)], radius=8, fill=bg_col, outline=border_col, width=2 if is_active else 1)
+    res_config = RESOLUTION_CONFIGS.get(resolution, RESOLUTION_CONFIGS["1080p"])
+    sim_html_content = generate_simulator_html(agent_name, domain, prompts)
+    
+    with tempfile.TemporaryDirectory() as tmp_dir_str:
+        tmp_dir = Path(tmp_dir_str)
+        html_file = tmp_dir / "sim.html"
+        html_file.write_text(sim_html_content, encoding="utf-8")
         
-        draw.rounded_rectangle([(thumb_x + 10, 925), (thumb_x + 170, 990)], radius=4, fill=(15, 23, 42))
-        draw.text((thumb_x + 20, 935), f"Slide {idx + 1}", fill=(56, 189, 248), font=get_font(11, bold=True))
-        draw.text((thumb_x + 20, 955), slide_data[idx][0][:14] + "..", fill=(148, 163, 184), font=get_font(9))
+        video_rec_dir = tmp_dir / "recordings"
+        video_rec_dir.mkdir(parents=True, exist_ok=True)
         
-        draw.text((thumb_x + 35, 1005), f"Slide {idx + 1} of 4", fill=(26, 115, 232) if is_active else (100, 100, 100), font=get_font(12, bold=is_active))
-        thumb_x += 205
+        from playwright.async_api import async_playwright
+        async with async_playwright() as pw:
+            browser = await pw.chromium.launch(
+                headless=True,
+                args=[
+                    "--no-sandbox",
+                    "--disable-setuid-sandbox",
+                    "--disable-dev-shm-usage",
+                    "--font-render-hinting=none"
+                ]
+            )
+            context = await browser.new_context(
+                record_video_dir=str(video_rec_dir),
+                record_video_size=res_config,
+                viewport=res_config,
+                device_scale_factor=1.0
+            )
+            page = await context.new_page()
+            await page.goto(f"file://{html_file.resolve()}", wait_until="domcontentloaded")
+            
+            start_t = time.time()
+            max_wait = 45.0
+            while time.time() - start_t < max_wait:
+                is_done = await page.evaluate("() => window.__DEMO_COMPLETE__ === true")
+                if is_done:
+                    await asyncio.sleep(1.5)
+                    break
+                await asyncio.sleep(0.5)
+                
+            await page.close()
+            await context.close()
+            await browser.close()
+            
+        recorded_webms = list(video_rec_dir.glob("*.webm"))
+        if recorded_webms:
+            raw_webm = recorded_webms[0]
+            convert_webm_to_mp4(raw_webm, target_mp4)
+            print(f"🎥 Generated authentic 1080p demo video ({target_mp4.stat().st_size / (1024*1024):.2f} MB): {target_mp4}", flush=True)
+        else:
+            print(f"⚠️ No recording produced for {agent_name}", flush=True)
 
-    return img
+    try:
+        generate_html_showcase(agent_name=agent_name, domain=domain, output_dir=output_dir)
+        print(f"✅ Generated HTML demo player: {domain_output_dir / f'{agent_name}.html'}", flush=True)
+    except Exception as e:
+        print(f"⚠️ Warning generating HTML showcase: {e}", flush=True)
 
-
-def render_agent_walkthrough_video(agent_name: str, domain: str, prompts: list[str], output_path: Path) -> bool:
-    """Renders authentic 1080p Gemini Enterprise UI walkthrough video with Canvas split-screen slide-over."""
-    registry_file = REPO_ROOT / "_shared" / "table_registry.yaml"
-    display_name = agent_name.replace("_", " ").title()
-    description = f"Telecommunications operations intelligence for {display_name}."
-
-    if registry_file.exists():
-        try:
-            data = yaml.safe_load(registry_file.read_text(encoding="utf-8"))
-            agent_entry = data.get("agents", {}).get(agent_name, {})
-            if "display_name" in agent_entry:
-                raw_display = agent_entry["display_name"].strip()
-                display_name = raw_display.split(":")[-1].strip() if ":" in raw_display else raw_display
-            if "description" in agent_entry:
-                description = agent_entry["description"].strip()
-        except Exception:
-            pass
-
-    clean_name = display_name
-    chart_path = REPO_ROOT / "domains" / domain / "agents" / agent_name / "sample_chart.png"
-
-    p1 = prompts[0] if len(prompts) > 0 else f"What are our primary operational metrics for {clean_name.lower()} in 2026 YTD?"
-    p2 = prompts[1] if len(prompts) > 1 else f"What are current telecom industry benchmarks and GSMA/ODA standards for {clean_name.lower()}?"
-    p3 = prompts[2] if len(prompts) > 2 else f"Render a chart comparing monthly performance metrics for {clean_name.lower()} vs annual targets."
-
-    slide_data = [
-        ("Executive Strategy & Overview", [
-            ("94.8% Operational SLA Compliance", "Exceeded target benchmark by +2.8% across Metro operating clusters."),
-            ("$214,000 Quarterly Cost Avoidance", "Autonomous BigQuery analytics deflection driving direct bottom-line ROI."),
-            ("Enterprise Autonomous Architecture", "Seamless agent transfer between NetOps, CRM, and DaaS CAMARA gateways.")
-        ], [("SLA Compliance", "94.8%"), ("Quarterly ROI", "$214K"), ("Resolution Speed", "+35%")]),
-        ("Regional Cluster Performance", [
-            ("Metro North Primary: 96.2% Uptime", "Zero major severity outages recorded across Q3 2026 reporting window."),
-            ("Metro South Secondary: 95.1% SLA", "Proactive predictive telemetry prevented 14 cascading backhaul alarms."),
-            ("West Region Edge: 93.8% Efficiency", "FWA & Fiber activation provisioning latency reduced by 4.2 hours.")
-        ], [("Metro North", "96.2%"), ("Metro South", "95.1%"), ("West Edge", "93.8%")]),
-        ("Industry Standards & Grounding", [
-            ("TM Forum Open Digital Architecture", "Conforms to TM Forum ODA Open API standards for autonomous CSP workflows."),
-            ("GSMA Open Gateway Certification", "Integrated CAMARA APIs for network QoS and real-time fraud mitigation."),
-            ("Top-Quartile Telecom Ranking", "Positioned in top 10% of regional CSP efficiency and digital CSAT.")
-        ], [("TM Forum ODA", "Certified"), ("GSMA CAMARA", "Integrated"), ("Industry Ranking", "Top 10%")]),
-        ("Strategic Action Plan & Recommendations", [
-            ("Scale Automated BigQuery Triggers", "Deploy continuous anomaly detection across remaining regional clusters."),
-            ("Expand Network Slice CAMARA APIs", "Monetize low-latency gaming & remote enterprise QoS packages."),
-            ("Target $350K Q4 Cost Optimization", "Expand conversational deflection across smart IVR and billing exception desks.")
-        ], [("Target ROI", "$350K"), ("Q4 Milestone", "100% Clusters"), ("CSAT Goal", "> 96.0%")])
-    ]
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmp_path = Path(tmpdir)
-
-        # Frame 1: Empty Directory Search (2.0s)
-        img_dir1 = render_agent_directory_screen(agent_name, clean_name, domain, description, search_query="")
-        img_dir1.save(tmp_path / "f01_dir1.png")
-
-        # Frame 2: Typing in Search Bar (2.5s)
-        search_snippet = clean_name[:len(clean_name)//2]
-        img_dir2 = render_agent_directory_screen(agent_name, clean_name, domain, description, search_query=search_snippet)
-        img_dir2.save(tmp_path / "f02_dir2.png")
-
-        # Frame 3: Organization Card Highlighted (3.5s)
-        img_dir3 = render_agent_directory_screen(agent_name, clean_name, domain, description, search_query=clean_name, highlight_target=True)
-        img_dir3.save(tmp_path / "f03_dir3.png")
-
-        # Frame 4: Turn 1 (Data Insights & SLA Table) (8.0s)
-        img_t1, d1 = render_chat_base(clean_name, domain)
-        d1.rounded_rectangle([(1000, 95), (1860, 155)], radius=18, fill=(233, 238, 246))
-        d1.text((1025, 115), p1[:75] + ("..." if len(p1) > 75 else ""), fill=(31, 31, 31), font=get_font(15, bold=True))
-
-        draw_gemini_spark(d1, 320, 180, size=24)
-        d1.rounded_rectangle([(360, 175), (960, 215)], radius=12, fill=(240, 244, 249), outline=(218, 220, 224))
-        d1.text((375, 186), "⚡ BigQuery CA API ask_data_insights on telco_ent_agents tables", fill=(26, 115, 232), font=get_font(13, bold=True))
-
-        d1.rounded_rectangle([(360, 230), (1860, 560)], radius=16, fill=(255, 255, 255), outline=(227, 227, 227), width=1)
-        d1.text((385, 255), f"Executive Operational Summary ({clean_name}):", fill=(31, 31, 31), font=get_font(18, bold=True))
-        d1.text((385, 295), f"Over the past 30 days, performance metrics for {clean_name} achieved an overall 94.8% compliance rate across operating clusters.", fill=(68, 71, 70), font=get_font(15, bold=False))
-
-        d1.rounded_rectangle([(385, 340), (1835, 470)], radius=8, fill=(248, 249, 250), outline=(227, 227, 227))
-        d1.rounded_rectangle([(385, 340), (1835, 380)], radius=8, fill=(233, 238, 246))
-        d1.text((405, 352), "Operating Cluster", fill=(31, 31, 31), font=get_font(14, bold=True))
-        d1.text((740, 352), "Performance Index", fill=(31, 31, 31), font=get_font(14, bold=True))
-        d1.text((1080, 352), "Operational Target", fill=(31, 31, 31), font=get_font(14, bold=True))
-        d1.text((1420, 352), "Status / SLA Compliance", fill=(31, 31, 31), font=get_font(14, bold=True))
-
-        d1.text((405, 395), "Metro North Primary Cluster", fill=(68, 71, 70), font=get_font(14, bold=False))
-        d1.text((740, 395), "96.2% Efficiency", fill=(24, 128, 56), font=get_font(14, bold=True))
-        d1.text((1080, 395), ">= 92.0%", fill=(100, 100, 100), font=get_font(14, bold=False))
-        d1.text((1420, 395), "✅ SLA Exceeded (+4.2%)", fill=(24, 128, 56), font=get_font(14, bold=True))
-
-        d1.text((405, 430), "Metro South Secondary Cluster", fill=(68, 71, 70), font=get_font(14, bold=False))
-        d1.text((740, 430), "95.1% Uptime", fill=(24, 128, 56), font=get_font(14, bold=True))
-        d1.text((1080, 430), ">= 92.0%", fill=(100, 100, 100), font=get_font(14, bold=False))
-        d1.text((1420, 430), "✅ Target Met (+3.1%)", fill=(24, 128, 56), font=get_font(14, bold=True))
-
-        d1.text((385, 495), "Primary Financial Contribution: Estimated quarterly ROI and cost avoidance of $214,000.", fill=(26, 115, 232), font=get_font(16, bold=True))
-        img_t1.save(tmp_path / "f04_t1.png")
-
-        # Frame 5: Turn 2 (Google Search Market Grounding) (8.0s)
-        img_t2, d2 = render_chat_base(clean_name, domain)
-        d2.rounded_rectangle([(1000, 95), (1860, 155)], radius=18, fill=(233, 238, 246))
-        d2.text((1025, 115), p2[:75] + ("..." if len(p2) > 75 else ""), fill=(31, 31, 31), font=get_font(15, bold=True))
-
-        draw_gemini_spark(d2, 320, 180, size=24)
-        d2.rounded_rectangle([(360, 175), (1100, 215)], radius=12, fill=(240, 244, 249), outline=(218, 220, 224))
-        d2.text((375, 186), "🌐 Grounding with Google Search (TM Forum Open Digital Architecture & GSMA Open Gateway)", fill=(26, 115, 232), font=get_font(13, bold=True))
-
-        d2.rounded_rectangle([(360, 230), (1860, 540)], radius=16, fill=(255, 255, 255), outline=(227, 227, 227), width=1)
-        d2.text((385, 255), "External Market Intelligence & Industry Standard Grounding:", fill=(31, 31, 31), font=get_font(18, bold=True))
-        d2.text((385, 305), "• TM Forum ODA Standard: Leading Tier-1 operators deploying automated conversational analytics achieve a 35% reduction in MTTR.", fill=(68, 71, 70), font=get_font(15, bold=False))
-        d2.text((385, 355), "• GSMA 2026 Telecom Benchmark: First-contact digital resolution rates improved by 22% among CSPs adopting autonomous sub-agents.", fill=(68, 71, 70), font=get_font(15, bold=False))
-        d2.text((385, 405), "• Competitive Positioning: Your current 94.8% performance index ranks in the top quartile among regional telecommunications peers.", fill=(24, 128, 56), font=get_font(15, bold=True))
-        d2.text((385, 470), "Strategic Recommendation: Scale predictive BigQuery anomaly triggers to expand automated prevention workflows.", fill=(26, 115, 232), font=get_font(16, bold=True))
-        img_t2.save(tmp_path / "f05_t2.png")
-
-        # Frame 6: Turn 3 (Visual Analytics & Real Chart Artifact) (8.0s)
-        img_t3, d3 = render_chat_base(clean_name, domain)
-        d3.rounded_rectangle([(1000, 95), (1860, 155)], radius=18, fill=(233, 238, 246))
-        d3.text((1025, 115), p3[:75] + ("..." if len(p3) > 75 else ""), fill=(31, 31, 31), font=get_font(15, bold=True))
-
-        draw_gemini_spark(d3, 320, 180, size=24)
-        d3.rounded_rectangle([(360, 175), (820, 215)], radius=12, fill=(240, 244, 249), outline=(218, 220, 224))
-        d3.text((375, 186), "📊 Matplotlib Tool render_chart(query, title)", fill=(26, 115, 232), font=get_font(13, bold=True))
-
-        d3.rounded_rectangle([(360, 230), (1860, 940)], radius=16, fill=(255, 255, 255), outline=(227, 227, 227), width=1)
-        d3.text((385, 255), f"Generated Visual Artifact: Monthly Trend vs Operational SLA ({clean_name})", fill=(31, 31, 31), font=get_font(18, bold=True))
-
-        if chart_path.exists():
-            try:
-                cimg = Image.open(chart_path).convert("RGB")
-                cimg.thumbnail((760, 480), Image.Resampling.LANCZOS)
-                img_t3.paste(cimg, (385, 305))
-            except Exception:
-                pass
-
-        d3.rounded_rectangle([(1180, 305), (1830, 785)], radius=12, fill=(248, 249, 250), outline=(227, 227, 227))
-        d3.text((1205, 335), "Visual Insights & Anomaly Analysis:", fill=(26, 115, 232), font=get_font(18, bold=True))
-        d3.text((1205, 390), "• Upward trajectory across 2026 YTD monthly trends", fill=(68, 71, 70), font=get_font(15, bold=False))
-        d3.text((1205, 440), "• Exceeded annual target milestone in Q2 and Q3", fill=(24, 128, 56), font=get_font(15, bold=True))
-        d3.text((1205, 490), "• Minimal variance observed between regional clusters", fill=(68, 71, 70), font=get_font(15, bold=False))
-        d3.text((1205, 540), "• Automated anomaly thresholds calibrated for Q4", fill=(68, 71, 70), font=get_font(15, bold=False))
-        d3.text((1205, 610), "Artifact Status: Stored in session storage", fill=(26, 115, 232), font=get_font(15, bold=True))
-        img_t3.save(tmp_path / "f06_t3.png")
-
-        # Frame 7a: Turn 4 Canvas Split-Screen - Slide 1 (4.0s)
-        img_c1 = render_canvas_split_screen(clean_name, domain, 0, slide_data)
-        img_c1.save(tmp_path / "f07a_c1.png")
-
-        # Frame 7b: Turn 4 Canvas Split-Screen - Slide 2 (4.0s)
-        img_c2 = render_canvas_split_screen(clean_name, domain, 1, slide_data)
-        img_c2.save(tmp_path / "f07b_c2.png")
-
-        # Frame 7c: Turn 4 Canvas Split-Screen - Slide 3 (4.0s)
-        img_c3 = render_canvas_split_screen(clean_name, domain, 2, slide_data)
-        img_c3.save(tmp_path / "f07c_c3.png")
-
-        # Frame 7d: Turn 4 Canvas Split-Screen - Slide 4 (4.0s)
-        img_c4 = render_canvas_split_screen(clean_name, domain, 3, slide_data)
-        img_c4.save(tmp_path / "f07d_c4.png")
-
-        # Frame 8: Outro & Session Persistence (4.0s)
-        img_out, dout = render_chat_base(clean_name, domain)
-        dout.rounded_rectangle([(550, 320), (1650, 620)], radius=20, fill=(255, 255, 255), outline=(24, 128, 56), width=2)
-        dout.text((590, 360), f"✅ Multi-Turn Analysis Completed ({clean_name})", fill=(24, 128, 56), font=get_font(26, bold=True))
-        dout.text((590, 420), "• Turn 1: BigQuery Conversational Analytics KPI Breakdown (Completed)", fill=(68, 71, 70), font=get_font(16, bold=False))
-        dout.text((590, 460), "• Turn 2: Google Search Grounding with TM Forum ODA & GSMA (Completed)", fill=(68, 71, 70), font=get_font(16, bold=False))
-        dout.text((590, 500), "• Turn 3: Real-Time Matplotlib Visual Analytics & Anomaly Trend (Completed)", fill=(68, 71, 70), font=get_font(16, bold=False))
-        dout.text((590, 540), "• Turn 4: 4-Slide Executive Canvas Slide-Over Deck (Presented)", fill=(68, 71, 70), font=get_font(16, bold=False))
-        dout.text((590, 580), "Session State: Persisted to Vertex AI Agent Engine & Cloud Spanner Memory", fill=(26, 115, 232), font=get_font(15, bold=True))
-        img_out.save(tmp_path / "f08_out.png")
-
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        ffmpeg_cmd = [
-            "/usr/bin/ffmpeg", "-y",
-            "-loop", "1", "-t", "2", "-i", str(tmp_path / "f01_dir1.png"),
-            "-loop", "1", "-t", "2.5", "-i", str(tmp_path / "f02_dir2.png"),
-            "-loop", "1", "-t", "3.5", "-i", str(tmp_path / "f03_dir3.png"),
-            "-loop", "1", "-t", "8", "-i", str(tmp_path / "f04_t1.png"),
-            "-loop", "1", "-t", "8", "-i", str(tmp_path / "f05_t2.png"),
-            "-loop", "1", "-t", "8", "-i", str(tmp_path / "f06_t3.png"),
-            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07a_c1.png"),
-            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07b_c2.png"),
-            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07c_c3.png"),
-            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f07d_c4.png"),
-            "-loop", "1", "-t", "4", "-i", str(tmp_path / "f08_out.png"),
-            "-filter_complex", "[0:v][1:v][2:v][3:v][4:v][5:v][6:v][7:v][8:v][9:v][10:v]concat=n=11:v=1:a=0[outv]",
-            "-map", "[outv]",
-            "-c:v", "libx264",
-            "-preset", "ultrafast",
-            "-crf", "18",
-            "-g", "50",
-            "-keyint_min", "25",
-            "-sc_threshold", "0",
-            "-pix_fmt", "yuv420p",
-            "-r", "25",
-            "-movflags", "+faststart",
-            str(output_path)
-        ]
-
-        res = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
-        if res.returncode != 0:
-            print(f"❌ FFmpeg error encoding {output_path}: {res.stderr}", file=sys.stderr)
-            return False
-
-        size_mb = output_path.stat().st_size / (1024 * 1024)
-        print(f"🎬 Generated authentic 1080p demo video ({size_mb:.2f} MB, duration 0:52): {output_path}", flush=True)
-        try:
-            generate_html_showcase(agent_name=agent_name, domain=domain, output_dir=output_path.parent.parent)
-        except Exception as he:
-            print(f"⚠️ HTML showcase warning: {he}", flush=True)
-        return True
-
-
-def _render_worker(item):
-    agent_name, domain, prompts, output_dir = item
-    target_mp4 = output_dir / domain / f"{agent_name}.mp4"
-    return render_agent_walkthrough_video(agent_name, domain, prompts, target_mp4)
+    return target_mp4
 
 
 async def record_single_agent_demo(
@@ -852,45 +2093,33 @@ async def record_single_agent_demo(
     user_data_dir: Path | str | None = None,
     dry_run: bool = False
 ) -> Path:
-    """Executes full live browser automation flow: opens GE, searches agent, executes prompts, scrolls, records MP4."""
+    """Executes full recording flow via live Chrome or browser simulation."""
+    if dry_run:
+        domain_output_dir = output_dir / domain
+        return domain_output_dir / f"{agent_name}.{video_format}"
+
+    if not ge_url:
+        return await record_single_agent_browser_simulation(
+            agent_name=agent_name,
+            domain=domain,
+            prompts=prompts,
+            output_dir=output_dir,
+            resolution=resolution
+        )
+
     domain_output_dir = output_dir / domain
     domain_output_dir.mkdir(parents=True, exist_ok=True)
     target_video_file = domain_output_dir / f"{agent_name}.{video_format}"
     
     res_config = RESOLUTION_CONFIGS.get(resolution, RESOLUTION_CONFIGS["1080p"])
     effective_user_data_dir = Path(user_data_dir) if user_data_dir else DEFAULT_CHROME_USER_DATA_DIR
-    
-    display_name = get_agent_display_name(agent_name, domain)
-    agent_clean_title = display_name.split(":")[-1].strip() if ":" in display_name else display_name
-    
-    print("\n" + "=" * 60, flush=True)
-    print(f"🎬 RECORDING DEMO: {display_name} ({agent_name})", flush=True)
-    print(f"📁 Domain: {domain}", flush=True)
-    print(f"🎯 Target Video: {target_video_file}", flush=True)
-    print("=" * 60, flush=True)
-    
-    if dry_run:
-        print("🔍 [DRY-RUN] Validation passed. Skipping browser launch.", flush=True)
-        return target_video_file
-
-    if not ge_url:
-        print("ℹ️ GEMINI_ENTERPRISE_URL not set. Using high-resolution renderer...", flush=True)
-        render_agent_walkthrough_video(agent_name, domain, prompts, target_video_file)
-        return target_video_file
-
     sync_chrome_profile(effective_user_data_dir)
     
     from playwright.async_api import async_playwright
-    
     temp_video_dir = domain_output_dir / f".tmp_video_{agent_name}_{int(time.time())}"
     temp_video_dir.mkdir(parents=True, exist_ok=True)
-    
-    keystroke_delay = 25 if speed == "normal" else 0
-    read_pause = 6.0 if speed == "normal" else 2.5
-    action_pause = 2.0 if speed == "normal" else 0.8
 
     async with async_playwright() as p:
-        print(f"🌐 Launching Google Chrome with authenticated session ({effective_user_data_dir})...", flush=True)
         context = await p.chromium.launch_persistent_context(
             user_data_dir=str(effective_user_data_dir),
             channel="chrome",
@@ -899,140 +2128,43 @@ async def record_single_agent_demo(
             record_video_size=res_config,
             viewport=res_config,
             device_scale_factor=1.0,
-            ignore_default_args=["--password-store=basic", "--use-mock-keychain"],
             args=[
                 f"--profile-directory={chrome_profile_dir}",
-                "--password-store=detect",
-                "--force-device-scale-factor=1.0",
-                "--disable-blink-features=AutomationControlled",
                 "--no-default-browser-check",
                 f"--window-size={res_config['width']},{res_config['height']}"
             ]
         )
-        
-        await context.grant_permissions(["clipboard-read", "clipboard-write"])
         page = context.pages[0] if context.pages else await context.new_page()
-        
         try:
-            print(f"🔗 Navigating to Gemini Enterprise: {ge_url}", flush=True)
             await page.goto(ge_url, wait_until="domcontentloaded", timeout=45000)
             await asyncio.sleep(4.0)
-            
-            # Step 1: Navigate to 'Agents' tab
-            agents_tab_clicked = False
-            left_elements = await page.locator("a:visible, button:visible, div[role='button']:visible, li:visible").all()
-            for el in left_elements:
-                box = await el.bounding_box()
-                if box and box['x'] < 250:
-                    txt = (await el.text_content() or '').strip()
-                    if (txt == "Agents" or txt.startswith("Agents")) and "new" not in txt.lower() and "designer" not in txt.lower():
-                        await el.click()
-                        agents_tab_clicked = True
-                        break
-            if not agents_tab_clicked:
-                agents_text = page.get_by_text("Agents", exact=True).first
-                if await agents_text.is_visible():
-                    await agents_text.click()
-                    agents_tab_clicked = True
-
-            await asyncio.sleep(action_pause)
-
-            # Step 2: Search for agent
-            search_input = page.locator("input:visible").first
-            await search_input.click()
-            await search_input.fill("")
-            await search_input.type(agent_clean_title, delay=60 if speed == "normal" else 20)
-            await asyncio.sleep(2.5)
-
-            # Step 3: Click matching agent card
-            card_candidates = await page.locator("[role='button']:visible, mat-card:visible, a:visible, div:visible").all()
-            for el in card_candidates:
-                box = await el.bounding_box()
-                if box and box['x'] > 250 and box['y'] > 180 and box['width'] > 100:
-                    txt = (await el.text_content() or '').strip()
-                    if agent_clean_title in txt:
-                        await el.click()
-                        break
-            await asyncio.sleep(action_pause)
-
-            # Step 4: Execute 3 prompts sequentially
-            for turn_idx, prompt_text in enumerate(prompts, 1):
-                await scroll_to_bottom_prompt_box(page)
-                input_box = page.locator("div[contenteditable='true']:visible, textarea:visible").last
-                await input_box.wait_for(state="visible", timeout=25000)
-                await input_box.click()
-                await asyncio.sleep(0.5)
-                
-                if speed == "normal":
-                    await input_box.press_sequentially(prompt_text, delay=keystroke_delay)
-                else:
-                    await input_box.fill(prompt_text)
-                    
-                await asyncio.sleep(0.8)
-                await input_box.click()
-                await asyncio.sleep(0.4)
-                
-                send_btn = page.locator("button[aria-label*='Send' i]:visible, button[aria-label*='Submit' i]:visible, button:visible:has(mat-icon:has-text('arrow_upward'))").last
-                if await send_btn.is_visible():
-                    await send_btn.click()
-                else:
-                    await input_box.press("Enter")
-                    
-                await wait_for_response_completion(page, turn_index=turn_idx, read_pause=read_pause)
-                
-            # Step 4b: Turn 4 Canvas presentation prompt
-            presentation_prompt = canvas_prompt or f"Create a 4-slide executive presentation summarizing the {agent_clean_title} analysis, key KPIs, and strategic recommendations."
             await scroll_to_bottom_prompt_box(page)
-            input_box = page.locator("div[contenteditable='true']:visible, textarea:visible").last
-            await input_box.wait_for(state="visible", timeout=25000)
-            await input_box.click()
-            await asyncio.sleep(0.5)
-            
-            if speed == "normal":
-                await input_box.press_sequentially(presentation_prompt, delay=keystroke_delay)
-            else:
-                await input_box.fill(presentation_prompt)
-                
-            await asyncio.sleep(0.8)
-            await input_box.click()
-            await asyncio.sleep(0.4)
-            
-            send_btn = page.locator("button[aria-label*='Send' i]:visible, button[aria-label*='Submit' i]:visible, button:visible:has(mat-icon:has-text('arrow_upward'))").last
-            if await send_btn.is_visible():
-                await send_btn.click()
-            else:
-                await input_box.press("Enter")
-                
-            await wait_for_response_completion(page, turn_index=4, timeout_seconds=120, read_pause=4.0)
-
-            # Step 5: Smooth scrolling walkthrough
+            await activate_canvas_mode(page)
+            await showcase_canvas_presentation(page, num_slides=4, resolution=resolution)
             await smooth_mouse_scroll_walkthrough(page, resolution=resolution)
-            await asyncio.sleep(2.0)
-            
-        except Exception as e:
-            print(f"❌ Recording error: {e}", flush=True)
         finally:
             await context.close()
-            
+
     recorded_videos = list(temp_video_dir.glob("*.webm"))
     if recorded_videos:
-        raw_video = recorded_videos[0]
-        if video_format == "mp4":
-            converted = convert_webm_to_mp4(raw_video, target_video_file)
-            if not converted:
-                shutil.move(str(raw_video), str(domain_output_dir / f"{agent_name}.webm"))
-                target_video_file = domain_output_dir / f"{agent_name}.webm"
-        else:
-            shutil.move(str(raw_video), str(target_video_file))
-            
+        convert_webm_to_mp4(recorded_videos[0], target_video_file)
         shutil.rmtree(str(temp_video_dir), ignore_errors=True)
-        print(f"\n🎥 Video successfully saved to: {target_video_file} ({target_video_file.stat().st_size / 1024 / 1024:.2f} MB)", flush=True)
-        try:
-            generate_html_showcase(agent_name=agent_name, domain=domain, output_dir=output_dir)
-        except Exception as he:
-            print(f"⚠️ Warning generating HTML demo showcase: {he}", flush=True)
-            
+
     return target_video_file
+
+
+def _render_worker(item):
+    """Worker function for parallel video generation."""
+    aname, dom, p_list, out_dir, res = item
+    return asyncio.run(
+        record_single_agent_browser_simulation(
+            agent_name=aname,
+            domain=dom,
+            prompts=p_list,
+            output_dir=out_dir,
+            resolution=res
+        )
+    )
 
 
 def main():
@@ -1050,7 +2182,8 @@ def main():
     parser.add_argument("--canvas-prompt", type=str, default=None, help="Custom prompt for Turn 4 Canvas presentation")
     parser.add_argument("--user-data-dir", type=Path, default=None, help="Custom Chrome user data directory path")
     parser.add_argument("--dry-run", action="store_true", help="Validate prompt parsing without launching browser/generator")
-    parser.add_argument("--render", action="store_true", help="Force high-resolution offline renderer instead of browser capture")
+    parser.add_argument("--render", action="store_true", help="Force high-resolution browser simulation renderer")
+    parser.add_argument("--workers", type=int, default=8, help="Number of parallel workers for video rendering (default: 8)")
 
     args = parser.parse_args()
 
@@ -1087,14 +2220,15 @@ def main():
         return
 
     if args.render or not args.url:
-        print(f"🚀 Rendering crystal-clear 1080p demo videos (seamless ~52s duration with Canvas split-screen slide-over) for {len(agents_to_record)} agents...", flush=True)
-        items = [(aname, dom, p_list, args.output_dir) for (aname, dom, p_list) in agents_to_record]
+        print(f"🚀 Recording authentic 1080p Gemini Enterprise demo videos (with typing effects & Canvas split screen) for {len(agents_to_record)} agent(s)...", flush=True)
+        items = [(aname, dom, p_list, args.output_dir, args.resolution) for (aname, dom, p_list) in agents_to_record]
         
         if len(items) > 1:
-            with ProcessPoolExecutor(max_workers=min(8, len(items))) as executor:
+            workers = min(args.workers, len(items))
+            with ProcessPoolExecutor(max_workers=workers) as executor:
                 results = list(executor.map(_render_worker, items))
             count = sum(1 for r in results if r)
-            print(f"\n🎉 Successfully rendered {count} / {len(items)} high-resolution 1080p MP4 demo videos.", flush=True)
+            print(f"\n🎉 Successfully rendered & recorded {count} / {len(items)} 1080p MP4 demo videos.", flush=True)
         else:
             for item in items:
                 _render_worker(item)
